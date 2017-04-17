@@ -43,6 +43,8 @@ namespace FispApp
 		std::unique_ptr<FispAppMain> m_main;
 		bool m_windowClosed;
 		bool m_windowVisible;
+
+		Platform::Agile<Windows::UI::Core::CoreWindow>	m_window;
 	};
 }
 

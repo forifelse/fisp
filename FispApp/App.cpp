@@ -162,7 +162,8 @@ void App::OnResuming(Platform::Object^ sender, Platform::Object^ args)
 
 void App::OnWindowSizeChanged(CoreWindow^ sender, WindowSizeChangedEventArgs^ args)
 {
-	GetDeviceResources()->SetLogicalSize(Size(sender->Bounds.Width, sender->Bounds.Height));
+	//GetDeviceResources()->SetLogicalSize(Size(sender->Bounds.Width, sender->Bounds.Height));
+	GetDeviceResources()->SetLogicalSize(sender->Bounds.Width, sender->Bounds.Height);
 	m_main->OnWindowSizeChanged();
 }
 
@@ -174,6 +175,8 @@ void App::OnVisibilityChanged(CoreWindow^ sender, VisibilityChangedEventArgs^ ar
 void App::OnWindowClosed(CoreWindow^ sender, CoreWindowEventArgs^ args)
 {
 	m_windowClosed = true;
+
+	m_window = sender;
 }
 
 // DisplayInformation event handlers.
@@ -184,7 +187,7 @@ void App::OnDpiChanged(DisplayInformation^ sender, Object^ args)
 	// if it is being scaled for high resolution devices. Once the DPI is set on DeviceResources,
 	// you should always retrieve it using the GetDpi method.
 	// See DeviceResources.cpp for more details.
-	GetDeviceResources()->SetDpi(sender->LogicalDpi);
+	GetDeviceResources()->SetDpi(sender->LogicalDpi, m_window->Bounds.Width, m_window->Bounds.Height);
 	m_main->OnWindowSizeChanged();
 }
 
@@ -221,7 +224,9 @@ std::shared_ptr<DX::DeviceResources> App::GetDeviceResources()
 	if (m_deviceResources == nullptr)
 	{
 		m_deviceResources = std::make_shared<DX::DeviceResources>();
-		m_deviceResources->SetWindow(CoreWindow::GetForCurrentThread());
+		Windows::UI::Core::CoreWindow^ window = CoreWindow::GetForCurrentThread();
+		Platform::Agile<Windows::UI::Core::CoreWindow>	wnd(window);
+		m_deviceResources->SetWindow(reinterpret_cast<IUnknown*>(wnd.Get()), window->Bounds.Width, window->Bounds.Height);
 		m_main->CreateRenderers(m_deviceResources);
 	}
 	return m_deviceResources;
