@@ -68,21 +68,10 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
         NAME_D3D12_OBJECT(m_rootSignature);
 	}
 
-	m_vsBlob = loadFile("SampleVertexShader.cso");
-	m_psBlob = loadFile("SamplePixelShader.cso");
-
-	// Load shaders asynchronously.
-	auto createVSTask = ReadDataAsync(L"SampleVertexShader.cso").then([this](std::vector<byte>& fileData) {
-		//m_vertexShader = fileData;
-	});
-
-	auto createPSTask = ReadDataAsync(L"SamplePixelShader.cso").then([this](std::vector<byte>& fileData) {
-		//m_pixelShader = fileData;
-	});
-
+	Blob vsBlob = loadFile("SampleVertexShader.cso");
+	Blob psBlob = loadFile("SamplePixelShader.cso");
 
 	// Create the pipeline state once the shaders are loaded.
-	auto createPipelineStateTask = (createPSTask && createVSTask).then([this]() {
 
 		static const D3D12_INPUT_ELEMENT_DESC inputLayout[] =
 		{
@@ -93,10 +82,8 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC state = {};
 		state.InputLayout = { inputLayout, _countof(inputLayout) };
 		state.pRootSignature = m_rootSignature.Get();
-        state.VS = CD3DX12_SHADER_BYTECODE(m_vsBlob.ptr, m_vsBlob.size);
-        state.PS = CD3DX12_SHADER_BYTECODE(m_psBlob.ptr, m_psBlob.size);
-        //state.VS = CD3DX12_SHADER_BYTECODE(&m_vertexShader[0], m_vertexShader.size());
-        //state.PS = CD3DX12_SHADER_BYTECODE(&m_pixelShader[0], m_pixelShader.size());
+        state.VS = CD3DX12_SHADER_BYTECODE(vsBlob.ptr, vsBlob.size);
+        state.PS = CD3DX12_SHADER_BYTECODE(psBlob.ptr, psBlob.size);
 		state.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 		state.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 		state.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
@@ -107,19 +94,14 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 		state.DSVFormat = m_deviceResources->GetDepthBufferFormat();
 		state.SampleDesc.Count = 1;
 
-		//HRESULT hr = m_deviceResources->GetD3DDevice()->CreateGraphicsPipelineState(&state, IID_PPV_ARGS(&m_pipelineState));
 		DX::ThrowIfFailed(m_deviceResources->GetD3DDevice()->CreateGraphicsPipelineState(&state, IID_PPV_ARGS(&m_pipelineState)));
 
 		// Shader data can be deleted once the pipeline state is created.
-		//m_vertexShader.clear();
-		//m_pixelShader.clear();
-		m_vsBlob.destroy();
-		m_psBlob.destroy();
-	});
+		vsBlob.destroy();
+		psBlob.destroy();
 
 	// Create and upload cube geometry resources to the GPU.
-	auto createAssetsTask = createPipelineStateTask.then([this]() {
-		auto d3dDevice = m_deviceResources->GetD3DDevice();
+		d3dDevice = m_deviceResources->GetD3DDevice();
 
 		// Create a command list.
 		DX::ThrowIfFailed(d3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_deviceResources->GetCommandAllocator(), m_pipelineState.Get(), IID_PPV_ARGS(&m_commandList)));
@@ -303,11 +285,8 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 
 		// Wait for the command list to finish executing; the vertex/index buffers need to be uploaded to the GPU before the upload resources go out of scope.
 		m_deviceResources->WaitForGpu();
-	});
 
-	createAssetsTask.then([this]() {
 		m_loadingComplete = true;
-	});
 }
 
 // Initializes view parameters when the window size changes.

@@ -71,8 +71,8 @@ namespace FispApp
 		D3D12_RECT											m_scissorRect;
 		std::vector<byte>									m_vertexShader;
 		std::vector<byte>									m_pixelShader;
-		Blob												m_vsBlob;
-		Blob												m_psBlob;
+		//Blob												m_vsBlob;
+		//Blob												m_psBlob;
 		D3D12_VERTEX_BUFFER_VIEW							m_vertexBufferView;
 		D3D12_INDEX_BUFFER_VIEW								m_indexBufferView;
 
