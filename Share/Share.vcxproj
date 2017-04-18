@@ -145,6 +145,14 @@
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\define.h" />
+    <ClInclude Include="include\fileio.h" />
+    <ClInclude Include="include\useShare.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\fileio.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

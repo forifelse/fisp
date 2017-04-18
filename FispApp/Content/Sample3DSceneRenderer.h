@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "../Share/include/useShare.h"
 #include "../Render/include/useRender.h"
 #include "ShaderStructures.h"
 
@@ -46,6 +47,9 @@ namespace FispApp
 		void LoadState();
 		void Rotate(float radians);
 
+		//
+		Blob loadFile(const std::string& strFile);
+
 	private:
 		// Constant buffers must be 256-byte aligned.
 		static const UINT c_alignedConstantBufferSize = (sizeof(ModelViewProjectionConstantBuffer) + 255) & ~255;
@@ -67,6 +71,8 @@ namespace FispApp
 		D3D12_RECT											m_scissorRect;
 		std::vector<byte>									m_vertexShader;
 		std::vector<byte>									m_pixelShader;
+		Blob												m_vsBlob;
+		Blob												m_psBlob;
 		D3D12_VERTEX_BUFFER_VIEW							m_vertexBufferView;
 		D3D12_INDEX_BUFFER_VIEW								m_indexBufferView;
 
