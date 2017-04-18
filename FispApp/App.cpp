@@ -193,7 +193,8 @@ void App::OnDpiChanged(DisplayInformation^ sender, Object^ args)
 
 void App::OnOrientationChanged(DisplayInformation^ sender, Object^ args)
 {
-	GetDeviceResources()->SetCurrentOrientation(sender->CurrentOrientation);
+	DX::EDisplayOrientation eOri = (DX::EDisplayOrientation)getOrientation(sender->CurrentOrientation);
+	GetDeviceResources()->SetCurrentOrientation(eOri);
 	m_main->OnWindowSizeChanged();
 }
 
@@ -226,8 +227,37 @@ std::shared_ptr<DX::DeviceResources> App::GetDeviceResources()
 		m_deviceResources = std::make_shared<DX::DeviceResources>();
 		Windows::UI::Core::CoreWindow^ window = CoreWindow::GetForCurrentThread();
 		Platform::Agile<Windows::UI::Core::CoreWindow>	wnd(window);
-		m_deviceResources->SetWindow(reinterpret_cast<IUnknown*>(wnd.Get()), window->Bounds.Width, window->Bounds.Height);
+		DisplayInformation^ di = DisplayInformation::GetForCurrentView();
+		DX::EDisplayOrientation eNat = (DX::EDisplayOrientation)getOrientation(di->NativeOrientation);
+		DX::EDisplayOrientation eCur = (DX::EDisplayOrientation)getOrientation(di->CurrentOrientation);
+		m_deviceResources->SetWindow(reinterpret_cast<IUnknown*>(wnd.Get()), window->Bounds.Width, window->Bounds.Height, eNat, eCur, di->LogicalDpi);
 		m_main->CreateRenderers(m_deviceResources);
 	}
 	return m_deviceResources;
+}
+
+WORD App::getOrientation(const Windows::Graphics::Display::DisplayOrientations& eOri)
+{
+	DX::EDisplayOrientation eCur = DX::EDisplayOrientation::DisplayOrientation_None;
+	switch (eOri)
+	{
+	case DisplayOrientations::None:
+		eCur = DX::EDisplayOrientation::DisplayOrientation_None;
+		break;
+	case DisplayOrientations::Landscape:
+		eCur = DX::EDisplayOrientation::DisplayOrientation_Landscape;
+		break;
+	case DisplayOrientations::Portrait:
+		eCur = DX::EDisplayOrientation::DisplayOrientation_Portrait;
+		break;
+	case DisplayOrientations::LandscapeFlipped:
+		eCur = DX::EDisplayOrientation::DisplayOrientation_LandscapeFlipped;
+		break;
+	case DisplayOrientations::PortraitFlipped:
+		eCur = DX::EDisplayOrientation::DisplayOrientation_PortraitFlipped;
+		break;
+	default:
+		eCur = DX::EDisplayOrientation::DisplayOrientation_None;
+	}
+	return (WORD)eCur;
 }

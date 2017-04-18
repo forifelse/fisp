@@ -5,10 +5,10 @@
 using namespace DirectX;
 using namespace Microsoft::WRL;
 using namespace Windows::Foundation;
-using namespace Windows::Graphics::Display;
-using namespace Windows::UI::Core;
-using namespace Windows::UI::Xaml::Controls;
-using namespace Platform;
+//using namespace Windows::Graphics::Display;
+//using namespace Windows::UI::Core;
+//using namespace Windows::UI::Xaml::Controls;
+//using namespace Platform;
 
 namespace DisplayMetrics
 {
@@ -79,8 +79,8 @@ DX::DeviceResources::DeviceResources(DXGI_FORMAT backBufferFormat, DXGI_FORMAT d
 	m_OutWidth(0.f),
 	m_OutHeight(0.f),
 	m_wnd(nullptr),
-	m_nativeOrientation(DisplayOrientations::None),
-	m_currentOrientation(DisplayOrientations::None),
+	m_eCurrentRotation(EDisplayOrientation::DisplayOrientation_None),
+	m_eNativeRotation(EDisplayOrientation::DisplayOrientation_None),
 	m_dpi(-1.0f),
 	m_effectiveDpi(-1.0f),
 	m_deviceRemoved(false)
@@ -280,7 +280,7 @@ void DX::DeviceResources::CreateWindowSizeDependentResources()
 		break;
 
 	default:
-		throw ref new FailureException();
+		throw std::exception();
 	}
 
 	DX::ThrowIfFailed(
@@ -368,16 +368,15 @@ void DX::DeviceResources::UpdateRenderTargetSize()
 	m_OutHeight = max(m_OutHeight, 1);
 }
 
-void DX::DeviceResources::SetWindow(IUnknown* pWnd, float cx, float cy)
+void DX::DeviceResources::SetWindow(IUnknown* pWnd, float cx, float cy, const EDisplayOrientation& eNative, const EDisplayOrientation& eCurrent, float dpi)
 {
 	m_wnd = pWnd;
 	m_LgcWidth = cx;
 	m_LgcHeight = cy;
-	DisplayInformation^ currentDisplayInformation = DisplayInformation::GetForCurrentView();
-	m_nativeOrientation = currentDisplayInformation->NativeOrientation;
-	m_currentOrientation = currentDisplayInformation->CurrentOrientation;
-	m_dpi = currentDisplayInformation->LogicalDpi;
-
+	m_eCurrentRotation = eCurrent;
+	m_eNativeRotation = eNative;
+	m_dpi = dpi;
+	//
 	CreateWindowSizeDependentResources();
 }
 
@@ -399,19 +398,18 @@ void DX::DeviceResources::SetDpi(float dpi, float cx, float cy)
 		m_dpi = dpi;
 
 		// When the display DPI changes, the logical size of the window (measured in Dips) also changes and needs to be updated.
-		m_LgcWidth = cx;// m_window->Bounds.Width;
-		m_LgcHeight = cy;// m_window->Bounds.Height;
+		m_LgcWidth = cx;
+		m_LgcHeight = cy;
 
 		CreateWindowSizeDependentResources();
 	}
 }
 
-// This method is called in the event handler for the OrientationChanged event.
-void DX::DeviceResources::SetCurrentOrientation(DisplayOrientations currentOrientation)
+void DX::DeviceResources::SetCurrentOrientation(const EDisplayOrientation& eCurrentRotation)
 {
-	if (m_currentOrientation != currentOrientation)
+	if (m_eCurrentRotation != eCurrentRotation)
 	{
-		m_currentOrientation = currentOrientation;
+		m_eCurrentRotation = eCurrentRotation;
 		CreateWindowSizeDependentResources();
 	}
 }
@@ -521,45 +519,45 @@ DXGI_MODE_ROTATION DX::DeviceResources::ComputeDisplayRotation()
 
 	// Note: NativeOrientation can only be Landscape or Portrait even though
 	// the DisplayOrientations enum has other values.
-	switch (m_nativeOrientation)
+	switch (m_eNativeRotation)
 	{
-	case DisplayOrientations::Landscape:
-		switch (m_currentOrientation)
+	case EDisplayOrientation::DisplayOrientation_Landscape:
+		switch (m_eCurrentRotation)
 		{
-		case DisplayOrientations::Landscape:
+		case EDisplayOrientation::DisplayOrientation_Landscape:
 			rotation = DXGI_MODE_ROTATION_IDENTITY;
 			break;
 
-		case DisplayOrientations::Portrait:
+		case EDisplayOrientation::DisplayOrientation_Portrait:
 			rotation = DXGI_MODE_ROTATION_ROTATE270;
 			break;
 
-		case DisplayOrientations::LandscapeFlipped:
+		case EDisplayOrientation::DisplayOrientation_LandscapeFlipped:
 			rotation = DXGI_MODE_ROTATION_ROTATE180;
 			break;
 
-		case DisplayOrientations::PortraitFlipped:
+		case EDisplayOrientation::DisplayOrientation_PortraitFlipped:
 			rotation = DXGI_MODE_ROTATION_ROTATE90;
 			break;
 		}
 		break;
 
-	case DisplayOrientations::Portrait:
-		switch (m_currentOrientation)
+	case EDisplayOrientation::DisplayOrientation_Portrait:
+		switch (m_eCurrentRotation)
 		{
-		case DisplayOrientations::Landscape:
+		case EDisplayOrientation::DisplayOrientation_Landscape:
 			rotation = DXGI_MODE_ROTATION_ROTATE90;
 			break;
 
-		case DisplayOrientations::Portrait:
+		case EDisplayOrientation::DisplayOrientation_Portrait:
 			rotation = DXGI_MODE_ROTATION_IDENTITY;
 			break;
 
-		case DisplayOrientations::LandscapeFlipped:
+		case EDisplayOrientation::DisplayOrientation_LandscapeFlipped:
 			rotation = DXGI_MODE_ROTATION_ROTATE270;
 			break;
 
-		case DisplayOrientations::PortraitFlipped:
+		case EDisplayOrientation::DisplayOrientation_PortraitFlipped:
 			rotation = DXGI_MODE_ROTATION_ROTATE180;
 			break;
 		}

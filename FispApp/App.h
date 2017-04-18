@@ -35,6 +35,9 @@ namespace FispApp
 		void OnOrientationChanged(Windows::Graphics::Display::DisplayInformation^ sender, Platform::Object^ args);
 		void OnDisplayContentsInvalidated(Windows::Graphics::Display::DisplayInformation^ sender, Platform::Object^ args);
 
+		//
+		WORD getOrientation(const Windows::Graphics::Display::DisplayOrientations& eOri);
+
 	private:
 		// Private accessor for m_deviceResources, protects against device removed errors.
 		std::shared_ptr<DX::DeviceResources> GetDeviceResources();

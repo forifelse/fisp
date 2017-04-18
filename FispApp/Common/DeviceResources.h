@@ -2,6 +2,16 @@
 
 namespace DX
 {
+	
+	enum EDisplayOrientation
+	{
+		DisplayOrientation_None = 0,
+		DisplayOrientation_Landscape = 1,
+		DisplayOrientation_Portrait = 2,
+		DisplayOrientation_LandscapeFlipped = 3,
+		DisplayOrientation_PortraitFlipped = 4
+	};
+
 	static const UINT c_frameCount = 3;		// Use triple buffering.
 
 	// Controls all the DirectX device resources.
@@ -9,9 +19,9 @@ namespace DX
 	{
 	public:
 		DeviceResources(DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT);
-		void SetWindow(IUnknown* pWnd, float cx, float cy);
+		void SetWindow(IUnknown* pWnd, float cx, float cy, const EDisplayOrientation& eNative, const EDisplayOrientation& eCurrent, float dpi);
 		void SetLogicalSize(float cx, float cy);
-		void SetCurrentOrientation(Windows::Graphics::Display::DisplayOrientations currentOrientation);
+		void SetCurrentOrientation(const EDisplayOrientation& eCurrentRotation);
 		void SetDpi(float dpi, float cx, float cy);
 		void ValidateDevice();
 		void Present();
@@ -84,12 +94,11 @@ namespace DX
 		IUnknown*										m_wnd;
 
 		// Cached device properties.
-		//Windows::Foundation::Size						m_d3dRenderTargetSize;
 		float											m_RTWidth, m_RTHeight;
 		float											m_OutWidth, m_OutHeight;
 		float											m_LgcWidth, m_LgcHeight;
-		Windows::Graphics::Display::DisplayOrientations	m_nativeOrientation;
-		Windows::Graphics::Display::DisplayOrientations	m_currentOrientation;
+		EDisplayOrientation								m_eCurrentRotation;
+		EDisplayOrientation								m_eNativeRotation;
 		float											m_dpi;
 
 		// This is the DPI that will be reported back to the app. It takes into account whether the app supports high resolution screens or not.
