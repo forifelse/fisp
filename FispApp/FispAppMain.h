@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include "Common\StepTimer.h"
-#include "Common\DeviceResources.h"
+#include "../Render/include/useRender.h"
 #include "Content\Sample3DSceneRenderer.h"
 
 // Renders Direct3D content on the screen.

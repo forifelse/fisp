@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "FispAppMain.h"
-#include "Common\DirectXHelper.h"
+#include "../Render/include/useRender.h"
 
 using namespace FispApp;
 using namespace Windows::Foundation;

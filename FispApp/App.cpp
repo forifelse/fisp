@@ -162,7 +162,6 @@ void App::OnResuming(Platform::Object^ sender, Platform::Object^ args)
 
 void App::OnWindowSizeChanged(CoreWindow^ sender, WindowSizeChangedEventArgs^ args)
 {
-	//GetDeviceResources()->SetLogicalSize(Size(sender->Bounds.Width, sender->Bounds.Height));
 	GetDeviceResources()->SetLogicalSize(sender->Bounds.Width, sender->Bounds.Height);
 	m_main->OnWindowSizeChanged();
 }

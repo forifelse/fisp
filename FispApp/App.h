@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "pch.h"
-#include "Common\DeviceResources.h"
+#include "../Render/include/useRender.h"
 #include "FispAppMain.h"
 
 namespace FispApp

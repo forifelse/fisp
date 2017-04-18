@@ -36,5 +36,16 @@
     <ClInclude Include="include\pch.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DeviceResources.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\useRender.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\DeviceResources.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

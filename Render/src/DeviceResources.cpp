@@ -1,14 +1,10 @@
-﻿#include "pch.h"
-#include "DeviceResources.h"
-#include "DirectXHelper.h"
+﻿#include "../include/pch.h"
+#include "../include/DeviceResources.h"
+#include "../include/DirectXHelper.h"
 
 using namespace DirectX;
 using namespace Microsoft::WRL;
 using namespace Windows::Foundation;
-//using namespace Windows::Graphics::Display;
-//using namespace Windows::UI::Core;
-//using namespace Windows::UI::Xaml::Controls;
-//using namespace Platform;
 
 namespace DisplayMetrics
 {
