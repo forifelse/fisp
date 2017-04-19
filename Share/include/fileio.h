@@ -10,8 +10,8 @@ namespace fisp
 	{
 		struct Blob
 		{
-			byte*	ptr;
-			ulong	size;
+			byte*	ptr = nullptr;
+			ulong	size = 0;
 
 			Blob():ptr(nullptr),size(0) {}
 			~Blob() { ptr = nullptr; size = 0; }
