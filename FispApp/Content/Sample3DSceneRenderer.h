@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../Share/include/useShare.h"
+#include "../Utility/include/useUtility.h"
 #include "../Render/include/useRender.h"
 #include "ShaderStructures.h"
 
