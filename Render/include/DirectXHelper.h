@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include <assert.h>
 #include <ppltasks.h>	// For create_task
 
 namespace DX
@@ -10,7 +10,8 @@ namespace DX
 		{
 			// Set a breakpoint on this line to catch Win32 API errors.
 			//throw Platform::Exception::CreateException(hr);
-			throw std::exception();
+			assert(0);
+			//assert(__FILE__ ## __LINE__);
 		}
 	}
 

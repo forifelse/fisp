@@ -6,16 +6,22 @@
 
 namespace fisp
 {
-	namespace share
+	namespace utility
 	{
 		struct Blob
 		{
-			byte*	ptr;
-			ulong	size;
+			byte*	ptr = nullptr;
+			ulong	size = 0;
 
 			Blob():ptr(nullptr),size(0) {}
 			~Blob() { ptr = nullptr; size = 0; }
 			void destroy() { delptr(ptr); size = 0; }
+		};
+
+		class FileStream
+		{
+		public:
+			Blob loadFile(const std::string& strFile);
 		};
 	}
 }
