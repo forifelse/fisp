@@ -21,7 +21,7 @@ namespace fisp
 		class FileStream
 		{
 		public:
-			Blob loadFile(const std::string& strFile);
+			static Blob loadFile(const std::string& strFile);
 		};
 	}
 }
