@@ -14,19 +14,19 @@ using namespace Windows::Foundation;
 using namespace Windows::Storage;
 
 // Indices into the application state map.
-Platform::String^ AngleKey = "Angle";
-Platform::String^ TrackingKey = "Tracking";
+//Platform::String^ AngleKey = "Angle";
+//Platform::String^ TrackingKey = "Tracking";
 
 // Loads vertex and pixel shaders from files and instantiates the cube geometry.
 Sample3DSceneRenderer::Sample3DSceneRenderer(const std::shared_ptr<DX::DeviceResources>& deviceResources) :
 	m_loadingComplete(false),
 	m_radiansPerSecond(XM_PIDIV4),	// rotate 45 degrees per second
-	m_angle(0),
-	m_tracking(false),
+	//m_angle(0),
+	//m_tracking(false),
 	m_mappedConstantBuffer(nullptr),
 	m_deviceResources(deviceResources)
 {
-	LoadState();
+	//LoadState();
 	ZeroMemory(&m_constantBufferData, sizeof(m_constantBufferData));
 
 	CreateDeviceDependentResources();
@@ -68,8 +68,8 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
         NAME_D3D12_OBJECT(m_rootSignature);
 	}
 
-	Blob vsBlob = loadFile("SampleVertexShader.cso");
-	Blob psBlob = loadFile("SamplePixelShader.cso");
+	Blob vsBlob = FileStream::loadFile("SampleVertexShader.cso");
+	Blob psBlob = FileStream::loadFile("SamplePixelShader.cso");
 
 	// Create the pipeline state once the shaders are loaded.
 
@@ -342,13 +342,13 @@ void Sample3DSceneRenderer::Update(DX::StepTimer const& timer)
 {
 	if (m_loadingComplete)
 	{
-		if (!m_tracking)
-		{
-			// Rotate the cube a small amount.
-			m_angle += static_cast<float>(timer.GetElapsedSeconds()) * m_radiansPerSecond;
+		//if (!m_tracking)
+		//{
+		//	// Rotate the cube a small amount.
+		//	m_angle += static_cast<float>(timer.GetElapsedSeconds()) * m_radiansPerSecond;
 
-			Rotate(m_angle);
-		}
+		//	Rotate(m_angle);
+		//}
 
 		// Update the constant buffer resource.
 		UINT8* destination = m_mappedConstantBuffer + (m_deviceResources->GetCurrentFrameIndex() * c_alignedConstantBufferSize);
@@ -356,39 +356,39 @@ void Sample3DSceneRenderer::Update(DX::StepTimer const& timer)
 	}
 }
 
-// Saves the current state of the renderer.
-void Sample3DSceneRenderer::SaveState()
-{
-	auto state = ApplicationData::Current->LocalSettings->Values;
-
-	if (state->HasKey(AngleKey))
-	{
-		state->Remove(AngleKey);
-	}
-	if (state->HasKey(TrackingKey))
-	{
-		state->Remove(TrackingKey);
-	}
-
-	state->Insert(AngleKey, PropertyValue::CreateSingle(m_angle));
-	state->Insert(TrackingKey, PropertyValue::CreateBoolean(m_tracking));
-}
-
-// Restores the previous state of the renderer.
-void Sample3DSceneRenderer::LoadState()
-{
-	auto state = ApplicationData::Current->LocalSettings->Values;
-	if (state->HasKey(AngleKey))
-	{
-		m_angle = safe_cast<IPropertyValue^>(state->Lookup(AngleKey))->GetSingle();
-		state->Remove(AngleKey);
-	}
-	if (state->HasKey(TrackingKey))
-	{
-		m_tracking = safe_cast<IPropertyValue^>(state->Lookup(TrackingKey))->GetBoolean();
-		state->Remove(TrackingKey);
-	}
-}
+//// Saves the current state of the renderer.
+//void Sample3DSceneRenderer::SaveState()
+//{
+//	auto state = ApplicationData::Current->LocalSettings->Values;
+//
+//	if (state->HasKey(AngleKey))
+//	{
+//		state->Remove(AngleKey);
+//	}
+//	if (state->HasKey(TrackingKey))
+//	{
+//		state->Remove(TrackingKey);
+//	}
+//
+//	state->Insert(AngleKey, PropertyValue::CreateSingle(m_angle));
+//	state->Insert(TrackingKey, PropertyValue::CreateBoolean(m_tracking));
+//}
+//
+//// Restores the previous state of the renderer.
+//void Sample3DSceneRenderer::LoadState()
+//{
+//	auto state = ApplicationData::Current->LocalSettings->Values;
+//	if (state->HasKey(AngleKey))
+//	{
+//		m_angle = safe_cast<IPropertyValue^>(state->Lookup(AngleKey))->GetSingle();
+//		state->Remove(AngleKey);
+//	}
+//	if (state->HasKey(TrackingKey))
+//	{
+//		m_tracking = safe_cast<IPropertyValue^>(state->Lookup(TrackingKey))->GetBoolean();
+//		state->Remove(TrackingKey);
+//	}
+//}
 
 // Rotate the 3D cube model a set amount of radians.
 void Sample3DSceneRenderer::Rotate(float radians)
@@ -397,27 +397,27 @@ void Sample3DSceneRenderer::Rotate(float radians)
 	XMStoreFloat4x4(&m_constantBufferData.model, XMMatrixTranspose(XMMatrixRotationY(radians)));
 }
 
-void Sample3DSceneRenderer::StartTracking()
-{
-	m_tracking = true;
-}
-
-// When tracking, the 3D cube can be rotated around its Y axis by tracking pointer position relative to the output screen width.
-void Sample3DSceneRenderer::TrackingUpdate(float positionX)
-{
-	if (m_tracking)
-	{
-		float cx, cy;
-		m_deviceResources->OutSize(cx, cy);
-		float radians = XM_2PI * 2.0f * positionX / cx;
-		Rotate(radians);
-	}
-}
-
-void Sample3DSceneRenderer::StopTracking()
-{
-	m_tracking = false;
-}
+//void Sample3DSceneRenderer::StartTracking()
+//{
+//	m_tracking = true;
+//}
+//
+//// When tracking, the 3D cube can be rotated around its Y axis by tracking pointer position relative to the output screen width.
+//void Sample3DSceneRenderer::TrackingUpdate(float positionX)
+//{
+//	if (m_tracking)
+//	{
+//		float cx, cy;
+//		m_deviceResources->OutSize(cx, cy);
+//		float radians = XM_2PI * 2.0f * positionX / cx;
+//		Rotate(radians);
+//	}
+//}
+//
+//void Sample3DSceneRenderer::StopTracking()
+//{
+//	m_tracking = false;
+//}
 
 // Renders one frame using the vertex and pixel shaders.
 bool Sample3DSceneRenderer::Render()
@@ -485,23 +485,23 @@ bool Sample3DSceneRenderer::Render()
 	return true;
 }
 
-Blob Sample3DSceneRenderer::loadFile(const std::string& strFile)
-{
-	Blob blob;
-	if (strFile.length() <= 0)
-		return blob;
-	std::fstream fs;
-	fs.open(strFile.c_str(), std::ios::basic_ios::binary | std::ios::basic_ios::in);
-	if (!fs.is_open())
-		return blob;
-	//fs.seekg(0);
-	//unsigned long idx = fs.tellg();
-	fs.seekg(0, std::ios::end);
-	blob.size = (unsigned long)fs.tellg();
-	blob.ptr = new byte[blob.size + 1];
-	fs.seekg(0);
-	fs.read((char*)blob.ptr, blob.size);
-	blob.ptr[blob.size] = '\0';
-
-	return blob;
-}
+//Blob Sample3DSceneRenderer::loadFile(const std::string& strFile)
+//{
+//	Blob blob;
+//	if (strFile.length() <= 0)
+//		return blob;
+//	std::fstream fs;
+//	fs.open(strFile.c_str(), std::ios::basic_ios::binary | std::ios::basic_ios::in);
+//	if (!fs.is_open())
+//		return blob;
+//	//fs.seekg(0);
+//	//unsigned long idx = fs.tellg();
+//	fs.seekg(0, std::ios::end);
+//	blob.size = (unsigned long)fs.tellg();
+//	blob.ptr = new byte[blob.size + 1];
+//	fs.seekg(0);
+//	fs.read((char*)blob.ptr, blob.size);
+//	blob.ptr[blob.size] = '\0';
+//
+//	return blob;
+//}

@@ -44,4 +44,12 @@
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader\SamplePixelShader.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\SampleVertexShader.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>

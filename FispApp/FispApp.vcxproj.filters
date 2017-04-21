@@ -11,9 +11,6 @@
     <ClInclude Include="Content\Sample3DSceneRenderer.h">
       <Filter>Content</Filter>
     </ClInclude>
-    <ClInclude Include="Content\ShaderStructures.h">
-      <Filter>Content</Filter>
-    </ClInclude>
     <ClCompile Include="Content\Sample3DSceneRenderer.cpp">
       <Filter>Content</Filter>
     </ClCompile>
@@ -58,10 +55,10 @@
     <None Include="FispApp_StoreKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Content\SamplePixelShader.hlsl">
+    <FxCompile Include="..\Render\shader\SamplePixelShader.hlsl">
       <Filter>Content</Filter>
     </FxCompile>
-    <FxCompile Include="Content\SampleVertexShader.hlsl">
+    <FxCompile Include="..\Render\shader\SampleVertexShader.hlsl">
       <Filter>Content</Filter>
     </FxCompile>
   </ItemGroup>

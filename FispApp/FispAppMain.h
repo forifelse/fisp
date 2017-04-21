@@ -19,11 +19,19 @@ namespace FispApp
 		void OnResuming();
 		void OnDeviceRemoved();
 
+	protected:
+		void SaveState();
+		void LoadState();
+
 	private:
 		// TODO: Replace with your own content renderers.
 		std::unique_ptr<Sample3DSceneRenderer> m_sceneRenderer;
 
 		// Rendering loop timer.
 		DX::StepTimer m_timer;
+
+		//
+		float	m_angle;
+		bool	m_tracking;
 	};
 }

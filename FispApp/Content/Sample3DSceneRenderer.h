@@ -2,7 +2,7 @@
 
 #include "../Utility/include/useUtility.h"
 #include "../Render/include/useRender.h"
-#include "ShaderStructures.h"
+//#include "ShaderStructures.h"
 
 namespace FispApp
 {
@@ -36,19 +36,20 @@ namespace FispApp
 		void CreateWindowSizeDependentResources();
 		void Update(DX::StepTimer const& timer);
 		bool Render();
-		void SaveState();
+		bool loadingComplete() const { return m_loadingComplete; }
+		//void SaveState();
 
-		void StartTracking();
-		void TrackingUpdate(float positionX);
-		void StopTracking();
-		bool IsTracking() { return m_tracking; }
+		//void StartTracking();
+		//void TrackingUpdate(float positionX);
+		//void StopTracking();
+		//bool IsTracking() { return m_tracking; }
 
-	private:
-		void LoadState();
+	//private:
+		//void LoadState();
 		void Rotate(float radians);
 
 		//
-		Blob loadFile(const std::string& strFile);
+		//Blob loadFile(const std::string& strFile);
 
 	private:
 		// Constant buffers must be 256-byte aligned.
@@ -75,8 +76,8 @@ namespace FispApp
 		// Variables used with the rendering loop.
 		bool	m_loadingComplete;
 		float	m_radiansPerSecond;
-		float	m_angle;
-		bool	m_tracking;
+		//float	m_angle;
+		//bool	m_tracking;
 	};
 }
 
