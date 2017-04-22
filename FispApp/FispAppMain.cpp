@@ -38,7 +38,8 @@ void FispAppMain::Update()
 {
 	// Update scene objects.
 	//
-	m_timer.Tick([&]()
+	m_timer.Tick(nullptr);
+	//m_timer.Tick([&]()
 	{
 		if (m_sceneRenderer->loadingComplete())
 		{
@@ -52,7 +53,8 @@ void FispAppMain::Update()
 		}
 		// TODO: Replace this with your app's content update functions.
 		m_sceneRenderer->Update(m_timer);
-	});
+	}
+	//);
 }
 
 // Renders the current frame according to the current application state.

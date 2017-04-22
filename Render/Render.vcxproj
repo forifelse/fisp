@@ -150,12 +150,14 @@
     <ClInclude Include="include\DeviceResources.h" />
     <ClInclude Include="include\DirectXHelper.h" />
     <ClInclude Include="include\pch.h" />
+    <ClInclude Include="include\Sample3DSceneRenderer.h" />
     <ClInclude Include="include\ShaderStructures.h" />
     <ClInclude Include="include\StepTimer.h" />
     <ClInclude Include="include\useRender.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DeviceResources.cpp" />
+    <ClCompile Include="src\Sample3DSceneRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\SamplePixelShader.hlsl">

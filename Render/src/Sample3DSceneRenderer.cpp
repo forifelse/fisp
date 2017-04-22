@@ -1,17 +1,17 @@
-﻿#include "pch.h"
-#include "Sample3DSceneRenderer.h"
-
-#include "../Render/include/useRender.h"
-#include <ppltasks.h>
-#include <synchapi.h>
+﻿//#include "pch.h"
+#include "../include/Sample3DSceneRenderer.h"
+#include "../include/DirectXHelper.h"
+#include "../../Utility/include/useUtility.h"
+//#include <ppltasks.h>
+//#include <synchapi.h>
 
 using namespace FispApp;
 
-using namespace Concurrency;
+//using namespace Concurrency;
 using namespace DirectX;
 using namespace Microsoft::WRL;
-using namespace Windows::Foundation;
-using namespace Windows::Storage;
+//using namespace Windows::Foundation;
+//using namespace Windows::Storage;
 
 // Indices into the application state map.
 //Platform::String^ AngleKey = "Angle";
@@ -338,7 +338,7 @@ void Sample3DSceneRenderer::CreateWindowSizeDependentResources()
 }
 
 // Called once per frame, rotates the cube and calculates the model and view matrices.
-void Sample3DSceneRenderer::Update(DX::StepTimer const& timer)
+void Sample3DSceneRenderer::Update(StepTimer const& timer)
 {
 	if (m_loadingComplete)
 	{

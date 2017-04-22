@@ -2,6 +2,7 @@
 
 #include <string>
 #include <fstream>
+#include <concrt.h> // share ptr
 
 namespace fisp
 {
