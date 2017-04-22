@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.10
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Share", "Share\Share.vcxproj", "{A7439002-7CAB-403F-880A-03E6CC74E757}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -12,6 +12,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FispApp", "FispApp\FispApp.
 	ProjectSection(ProjectDependencies) = postProject
 		{A7439002-7CAB-403F-880A-03E6CC74E757} = {A7439002-7CAB-403F-880A-03E6CC74E757}
 		{55E97E46-A045-4738-AB4F-41935EDAD123} = {55E97E46-A045-4738-AB4F-41935EDAD123}
+		{6328CF46-672F-467D-A219-62D6F306977C} = {6328CF46-672F-467D-A219-62D6F306977C}
 		{2A4CEC5B-C04E-42D1-A9AE-7F98E703DDD4} = {2A4CEC5B-C04E-42D1-A9AE-7F98E703DDD4}
 	EndProjectSection
 EndProject
@@ -22,6 +23,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Render", "Render\Render.vcx
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utility", "Utility\Utility.vcxproj", "{55E97E46-A045-4738-AB4F-41935EDAD123}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{6328CF46-672F-467D-A219-62D6F306977C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A7439002-7CAB-403F-880A-03E6CC74E757} = {A7439002-7CAB-403F-880A-03E6CC74E757}
+		{55E97E46-A045-4738-AB4F-41935EDAD123} = {55E97E46-A045-4738-AB4F-41935EDAD123}
+		{2A4CEC5B-C04E-42D1-A9AE-7F98E703DDD4} = {2A4CEC5B-C04E-42D1-A9AE-7F98E703DDD4}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{9FED724E-0277-4FDA-84AC-5683D86E318D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,8 +115,23 @@ Global
 		{55E97E46-A045-4738-AB4F-41935EDAD123}.Release|Win64.Build.0 = Release|x64
 		{55E97E46-A045-4738-AB4F-41935EDAD123}.Release|x64.ActiveCfg = Release|x64
 		{55E97E46-A045-4738-AB4F-41935EDAD123}.Release|x64.Build.0 = Release|x64
+		{6328CF46-672F-467D-A219-62D6F306977C}.Debug|ARM.ActiveCfg = Debug|Win32
+		{6328CF46-672F-467D-A219-62D6F306977C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6328CF46-672F-467D-A219-62D6F306977C}.Debug|Win32.Build.0 = Debug|Win32
+		{6328CF46-672F-467D-A219-62D6F306977C}.Debug|Win64.ActiveCfg = Debug|Win32
+		{6328CF46-672F-467D-A219-62D6F306977C}.Debug|x64.ActiveCfg = Debug|x64
+		{6328CF46-672F-467D-A219-62D6F306977C}.Debug|x64.Build.0 = Debug|x64
+		{6328CF46-672F-467D-A219-62D6F306977C}.Release|ARM.ActiveCfg = Release|Win32
+		{6328CF46-672F-467D-A219-62D6F306977C}.Release|Win32.ActiveCfg = Release|Win32
+		{6328CF46-672F-467D-A219-62D6F306977C}.Release|Win32.Build.0 = Release|Win32
+		{6328CF46-672F-467D-A219-62D6F306977C}.Release|Win64.ActiveCfg = Release|Win32
+		{6328CF46-672F-467D-A219-62D6F306977C}.Release|x64.ActiveCfg = Release|x64
+		{6328CF46-672F-467D-A219-62D6F306977C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7E5DE58D-4968-420A-9B6F-F0EB610F9AA0} = {9FED724E-0277-4FDA-84AC-5683D86E318D}
 	EndGlobalSection
 EndGlobal
