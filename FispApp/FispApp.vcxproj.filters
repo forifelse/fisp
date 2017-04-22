@@ -5,9 +5,6 @@
       <UniqueIdentifier>a027dcea-5d9b-453a-a239-41f95a6fa17d</UniqueIdentifier>
       <Extensions>bmp;fbx;gif;jpg;jpeg;tga;tiff;tif;png</Extensions>
     </Filter>
-    <Filter Include="Content">
-      <UniqueIdentifier>baa2285a-e62a-4bc5-8ed5-9a73189f8899</UniqueIdentifier>
-    </Filter>
     <Image Include="Assets\LockScreenLogo.scale-200.png">
       <Filter>Assets</Filter>
     </Image>
@@ -29,6 +26,9 @@
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
       <Filter>Assets</Filter>
     </Image>
+    <Filter Include="shader">
+      <UniqueIdentifier>baa2285a-e62a-4bc5-8ed5-9a73189f8899</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -50,10 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Render\shader\SamplePixelShader.hlsl">
-      <Filter>Content</Filter>
+      <Filter>shader</Filter>
     </FxCompile>
     <FxCompile Include="..\Render\shader\SampleVertexShader.hlsl">
-      <Filter>Content</Filter>
+      <Filter>shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
