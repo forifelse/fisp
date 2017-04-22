@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <assert.h>
 #include <ppltasks.h>	// For create_task
-
+#include "pch.h"
 namespace DX
 {
 	inline void ThrowIfFailed(HRESULT hr)

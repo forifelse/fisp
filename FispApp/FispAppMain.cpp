@@ -37,24 +37,20 @@ void FispAppMain::CreateRenderers(const std::shared_ptr<DX::DeviceResources>& de
 void FispAppMain::Update()
 {
 	// Update scene objects.
-	//
 	m_timer.Tick(nullptr);
-	//m_timer.Tick([&]()
+	//
+	if (m_sceneRenderer->loadingComplete())
 	{
-		if (m_sceneRenderer->loadingComplete())
+		if (!m_tracking)
 		{
-			if (!m_tracking)
-			{
-				// Rotate the cube a small amount.
-				m_angle += static_cast<float>(m_timer.GetElapsedSeconds()) * 0.7853f; //PIDIV4//m_radiansPerSecond;
+			// Rotate the cube a small amount.
+			m_angle += static_cast<float>(m_timer.GetElapsedSeconds()) * 0.7853f; //PIDIV4//m_radiansPerSecond;
 
-				m_sceneRenderer->Rotate(m_angle);
-			}
+			m_sceneRenderer->Rotate(m_angle);
 		}
-		// TODO: Replace this with your app's content update functions.
-		m_sceneRenderer->Update(m_timer);
 	}
-	//);
+	// TODO: Replace this with your app's content update functions.
+	m_sceneRenderer->Update(m_timer);
 }
 
 // Renders the current frame according to the current application state.

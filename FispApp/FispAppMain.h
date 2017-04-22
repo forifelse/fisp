@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "../Render/include/useRender.h"
-//#include "Content\Sample3DSceneRenderer.h"
 
 // Renders Direct3D content on the screen.
 namespace FispApp
