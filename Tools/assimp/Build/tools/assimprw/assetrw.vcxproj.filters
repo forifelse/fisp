@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="imexport.cpp" />
+    <ClCompile Include="..\..\..\tools\assimprw\CompareDump.cpp" />
+    <ClCompile Include="..\..\..\tools\assimprw\ImageExtractor.cpp" />
+    <ClCompile Include="..\..\..\tools\assimprw\Main.cpp" />
+    <ClCompile Include="..\..\..\tools\assimprw\WriteDumb.cpp" />
+    <ClCompile Include="..\..\..\tools\assimprw\Info.cpp" />
+    <ClCompile Include="..\..\..\tools\assimprw\Export.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="imexport.h" />
+    <ClInclude Include="scenedata.h" />
+    <ClInclude Include="..\..\..\tools\assimprw\Main.h" />
+    <ClInclude Include="..\..\..\tools\assimprw\resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\tools\assimprw\assimp.rc" />
+  </ItemGroup>
+</Project>
