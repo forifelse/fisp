@@ -29,6 +29,15 @@
     <ClInclude Include="include\inUtility.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\array.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\map.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\base.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\fileio.cpp">
