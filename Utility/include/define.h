@@ -22,8 +22,13 @@ namespace fisp
 		typedef unsigned long long	uint64;	//typedef unsigned __int64    uint64;
 		//
 		typedef unsigned long		ulong;
+		//
+		typedef unsigned short		word;	//WORD
+		typedef unsigned long		dword;	//DWORD
 
 		//
 #define delptr(ptr) {if(ptr) delete ptr,ptr=nullptr;}
+#define delcom(ptr)	if(ptr){(ptr)->Release(); (ptr)=0;}
+#define delarray(ptr)	if(ptr){delete[] (ptr); (ptr) = 0;}
 	}
 }

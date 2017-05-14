@@ -146,8 +146,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\buffer.h" />
     <ClInclude Include="include\define.h" />
     <ClInclude Include="include\fileio.h" />
+    <ClInclude Include="include\inUtility.h" />
     <ClInclude Include="include\useUtility.h" />
   </ItemGroup>
   <ItemGroup>

@@ -23,6 +23,12 @@
     <ClInclude Include="include\useUtility.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\buffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inUtility.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\fileio.cpp">
