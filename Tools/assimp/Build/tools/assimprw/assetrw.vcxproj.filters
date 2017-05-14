@@ -11,9 +11,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imexport.h" />
-    <ClInclude Include="scenedata.h" />
     <ClInclude Include="..\..\..\tools\assimprw\Main.h" />
     <ClInclude Include="..\..\..\tools\assimprw\resource.h" />
+    <ClInclude Include="..\..\..\..\..\Share\include\scenedata.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\tools\assimprw\assimp.rc" />

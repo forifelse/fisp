@@ -285,10 +285,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="imexport.cpp" />
+    <ClInclude Include="..\..\..\..\..\Share\include\scenedata.h" />
     <ClInclude Include="..\..\..\tools\assimprw\Main.h" />
     <ClInclude Include="..\..\..\tools\assimprw\resource.h" />
     <ClInclude Include="imexport.h" />
-    <ClInclude Include="scenedata.h" />
     <ClCompile Include="..\..\..\tools\assimprw\CompareDump.cpp" />
     <ClCompile Include="..\..\..\tools\assimprw\ImageExtractor.cpp" />
     <ClCompile Include="..\..\..\tools\assimprw\Main.cpp" />
