@@ -17,5 +17,8 @@
     <ClInclude Include="include\useShare.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\scenedata.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
