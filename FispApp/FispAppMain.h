@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "../Utility/include/useUtility.h"
 #include "../Render/include/useRender.h"
 
 // Renders Direct3D content on the screen.
@@ -9,6 +10,7 @@ namespace FispApp
 	{
 	public:
 		FispAppMain();
+		~FispAppMain();
 		void CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources);
 		void Update();
 		bool Render();
@@ -27,7 +29,7 @@ namespace FispApp
 		std::unique_ptr<Sample3DSceneRenderer> m_sceneRenderer;
 
 		// Rendering loop timer.
-		StepTimer m_timer;
+		ITimer*		mpTimer;
 
 		//
 		float	m_angle;

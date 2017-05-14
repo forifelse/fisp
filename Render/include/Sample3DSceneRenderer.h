@@ -18,7 +18,6 @@
 #endif
 
 #include "../../Utility/include/useUtility.h"
-#include "StepTimer.h"
 #include "DeviceResources.h"
 #include "ShaderStructures.h"
 //#include "../Render/include/useRender.h"
@@ -54,7 +53,7 @@ namespace FispApp
 		~Sample3DSceneRenderer();
 		void CreateDeviceDependentResources();
 		void CreateWindowSizeDependentResources();
-		void Update(StepTimer const& timer);
+		void Update();
 		bool Render();
 		bool loadingComplete() const { return m_loadingComplete; }
 		//void SaveState();

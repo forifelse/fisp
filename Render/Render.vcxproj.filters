@@ -26,9 +26,6 @@
     <ClInclude Include="include\ShaderStructures.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\StepTimer.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\pch.h">
       <Filter>include</Filter>
     </ClInclude>
