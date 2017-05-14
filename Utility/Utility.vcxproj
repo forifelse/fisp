@@ -152,11 +152,15 @@
     <ClInclude Include="include\define.h" />
     <ClInclude Include="include\fileio.h" />
     <ClInclude Include="include\inUtility.h" />
+    <ClInclude Include="include\macro.h" />
     <ClInclude Include="include\map.h" />
+    <ClInclude Include="include\timer.h" />
     <ClInclude Include="include\useUtility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\base.cpp" />
     <ClCompile Include="src\fileio.cpp" />
+    <ClCompile Include="src\timer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

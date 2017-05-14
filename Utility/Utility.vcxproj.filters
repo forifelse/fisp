@@ -38,9 +38,21 @@
     <ClInclude Include="include\base.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\macro.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\timer.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\fileio.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\base.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\timer.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

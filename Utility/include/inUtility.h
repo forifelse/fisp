@@ -48,7 +48,7 @@ using namespace std;
 //#include <locale>
 //#include <codecvt>
 //#include "bstinc.h" // include in heard: precmp.h
-//#include "macro.h"
+#include "macro.h"
 #include "define.h"
 
 namespace fisp

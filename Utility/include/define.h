@@ -25,10 +25,13 @@ namespace fisp
 		//
 		typedef unsigned short		word;	//WORD
 		typedef unsigned long		dword;	//DWORD
+		typedef wchar_t				wchar;	//TCHAR WCHAR
 
 		//
 #define delptr(ptr) {if(ptr) delete ptr,ptr=nullptr;}
 #define delcom(ptr)	if(ptr){(ptr)->Release(); (ptr)=0;}
 #define delarray(ptr)	if(ptr){delete[] (ptr); (ptr) = 0;}
+
+
 	}
 }
