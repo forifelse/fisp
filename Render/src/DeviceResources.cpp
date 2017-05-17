@@ -1,10 +1,32 @@
 ﻿#include "../include/pch.h"
 #include "../include/DeviceResources.h"
-#include "../include/DirectXHelper.h"
+#include "../Utility/include/useUtility.h"
 
 using namespace DirectX;
 using namespace Microsoft::WRL;
 using namespace Windows::Foundation;
+
+
+// Converts a length in device-independent pixels (DIPs) to a length in physical pixels.
+inline float ConvertDipsToPixels(float dips, float dpi)
+{
+	static const float dipsPerInch = 96.0f;
+	return floorf(dips * dpi / dipsPerInch + 0.5f); // Round to nearest integer.
+}
+
+// Assign a name to the object to aid with debugging.
+#if defined(_DEBUG)
+inline void SetName(ID3D12Object* pObject, LPCWSTR name)
+{
+	pObject->SetName(name);
+}
+#else
+inline void SetName(ID3D12Object*, LPCWSTR)
+{
+}
+#endif
+// Assigns the name of the variable as the name of the object.
+#define NAME_D3D12_OBJECT(x) SetName(x.Get(), L#x)
 
 namespace DisplayMetrics
 {
@@ -104,7 +126,7 @@ void DX::DeviceResources::CreateDeviceResources()
 	}
 #endif
 
-	DX::ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(&m_dxgiFactory)));
+	ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(&m_dxgiFactory)));
 
 	ComPtr<IDXGIAdapter1> adapter;
 	GetHardwareAdapter(&adapter);
@@ -124,20 +146,20 @@ void DX::DeviceResources::CreateDeviceResources()
 		// https://go.microsoft.com/fwlink/?LinkId=286690
 
 		ComPtr<IDXGIAdapter> warpAdapter;
-		DX::ThrowIfFailed(m_dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter)));
+		ThrowIfFailed(m_dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter)));
 
 		hr = D3D12CreateDevice(warpAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_d3dDevice));
 	}
 #endif
 
-	DX::ThrowIfFailed(hr);
+	ThrowIfFailed(hr);
 
 	// Create the command queue.
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 
-	DX::ThrowIfFailed(m_d3dDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_commandQueue)));
+	ThrowIfFailed(m_d3dDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_commandQueue)));
 	NAME_D3D12_OBJECT(m_commandQueue);
 
 	// Create descriptor heaps for render target views and depth stencil views.
@@ -145,7 +167,7 @@ void DX::DeviceResources::CreateDeviceResources()
 	rtvHeapDesc.NumDescriptors = c_frameCount;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	DX::ThrowIfFailed(m_d3dDevice->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_rtvHeap)));
+	ThrowIfFailed(m_d3dDevice->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_rtvHeap)));
 	NAME_D3D12_OBJECT(m_rtvHeap);
 
 	m_rtvDescriptorSize = m_d3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
@@ -159,19 +181,19 @@ void DX::DeviceResources::CreateDeviceResources()
 
 	for (UINT n = 0; n < c_frameCount; n++)
 	{
-		DX::ThrowIfFailed(
+		ThrowIfFailed(
 			m_d3dDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_commandAllocators[n]))
 			);
 	}
 
 	// Create synchronization objects.
-	DX::ThrowIfFailed(m_d3dDevice->CreateFence(m_fenceValues[m_currentFrame], D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
+	ThrowIfFailed(m_d3dDevice->CreateFence(m_fenceValues[m_currentFrame], D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
 	m_fenceValues[m_currentFrame]++;
 
 	m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 	if (m_fenceEvent == nullptr)
 	{
-		DX::ThrowIfFailed(HRESULT_FROM_WIN32(GetLastError()));
+		ThrowIfFailed(HRESULT_FROM_WIN32(GetLastError()));
 	}
 }
 
@@ -217,7 +239,7 @@ void DX::DeviceResources::CreateWindowSizeDependentResources()
 		}
 		else
 		{
-			DX::ThrowIfFailed(hr);
+			ThrowIfFailed(hr);
 		}
 	}
 	else
@@ -240,7 +262,7 @@ void DX::DeviceResources::CreateWindowSizeDependentResources()
 		swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
 
 		ComPtr<IDXGISwapChain1> swapChain;
-		DX::ThrowIfFailed(
+		ThrowIfFailed(
 			m_dxgiFactory->CreateSwapChainForCoreWindow(
 				m_commandQueue.Get(),								// Swap chains need a reference to the command queue in DirectX 12.
 				m_wnd,//reinterpret_cast<IUnknown*>(m_window.Get()),
@@ -250,7 +272,7 @@ void DX::DeviceResources::CreateWindowSizeDependentResources()
 				)
 			);
 
-		DX::ThrowIfFailed(swapChain.As(&m_swapChain));
+		ThrowIfFailed(swapChain.As(&m_swapChain));
 	}
 
 	// Set the proper orientation for the swap chain, and generate
@@ -279,7 +301,7 @@ void DX::DeviceResources::CreateWindowSizeDependentResources()
 		throw std::exception();
 	}
 
-	DX::ThrowIfFailed(
+	ThrowIfFailed(
 		m_swapChain->SetRotation(displayRotation)
 		);
 
@@ -289,14 +311,14 @@ void DX::DeviceResources::CreateWindowSizeDependentResources()
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor(m_rtvHeap->GetCPUDescriptorHandleForHeapStart());
 		for (UINT n = 0; n < c_frameCount; n++)
 		{
-			DX::ThrowIfFailed(m_swapChain->GetBuffer(n, IID_PPV_ARGS(&m_renderTargets[n])));
+			ThrowIfFailed(m_swapChain->GetBuffer(n, IID_PPV_ARGS(&m_renderTargets[n])));
 			m_d3dDevice->CreateRenderTargetView(m_renderTargets[n].Get(), nullptr, rtvDescriptor);
 			rtvDescriptor.Offset(m_rtvDescriptorSize);
 
 			WCHAR name[25];
 			if (swprintf_s(name, L"m_renderTargets[%u]", n) > 0)
 			{
-				DX::SetName(m_renderTargets[n].Get(), name);
+				SetName(m_renderTargets[n].Get(), name);
 			}
 		}
 	}
@@ -342,8 +364,8 @@ void DX::DeviceResources::UpdateRenderTargetSize()
 	// and allow the GPU to scale the output when it is presented.
 	if (!DisplayMetrics::SupportHighResolutions && m_dpi > DisplayMetrics::DpiThreshold)
 	{
-		float width = DX::ConvertDipsToPixels(m_LgcWidth, m_dpi);
-		float height = DX::ConvertDipsToPixels(m_LgcHeight, m_dpi);
+		float width = ConvertDipsToPixels(m_LgcWidth, m_dpi);
+		float height = ConvertDipsToPixels(m_LgcHeight, m_dpi);
 
 		// When the device is in portrait orientation, height > width. Compare the
 		// larger dimension against the width threshold and the smaller dimension
@@ -356,8 +378,8 @@ void DX::DeviceResources::UpdateRenderTargetSize()
 	}
 
 	// Calculate the necessary render target size in pixels.
-	m_OutWidth = DX::ConvertDipsToPixels(m_LgcWidth, m_effectiveDpi);
-	m_OutHeight = DX::ConvertDipsToPixels(m_LgcHeight, m_effectiveDpi);
+	m_OutWidth = ConvertDipsToPixels(m_LgcWidth, m_effectiveDpi);
+	m_OutHeight = ConvertDipsToPixels(m_LgcHeight, m_effectiveDpi);
 
 	// Prevent zero size DirectX content from being created.
 	m_OutWidth = max(m_OutWidth, 1);
@@ -421,9 +443,9 @@ void DX::DeviceResources::ValidateDevice()
 	DXGI_ADAPTER_DESC previousDesc;
 	{
 		ComPtr<IDXGIAdapter1> previousDefaultAdapter;
-		DX::ThrowIfFailed(m_dxgiFactory->EnumAdapters1(0, &previousDefaultAdapter));
+		ThrowIfFailed(m_dxgiFactory->EnumAdapters1(0, &previousDefaultAdapter));
 
-		DX::ThrowIfFailed(previousDefaultAdapter->GetDesc(&previousDesc));
+		ThrowIfFailed(previousDefaultAdapter->GetDesc(&previousDesc));
 	}
 
 	// Next, get the information for the current default adapter.
@@ -431,12 +453,12 @@ void DX::DeviceResources::ValidateDevice()
 	DXGI_ADAPTER_DESC currentDesc;
 	{
 		ComPtr<IDXGIFactory4> currentDxgiFactory;
-		DX::ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(&currentDxgiFactory)));
+		ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(&currentDxgiFactory)));
 
 		ComPtr<IDXGIAdapter1> currentDefaultAdapter;
-		DX::ThrowIfFailed(currentDxgiFactory->EnumAdapters1(0, &currentDefaultAdapter));
+		ThrowIfFailed(currentDxgiFactory->EnumAdapters1(0, &currentDefaultAdapter));
 
-		DX::ThrowIfFailed(currentDefaultAdapter->GetDesc(&currentDesc));
+		ThrowIfFailed(currentDefaultAdapter->GetDesc(&currentDesc));
 	}
 
 	// If the adapter LUIDs don't match, or if the device reports that it has been removed,
@@ -466,7 +488,7 @@ void DX::DeviceResources::Present()
 	}
 	else
 	{
-		DX::ThrowIfFailed(hr);
+		ThrowIfFailed(hr);
 
 		MoveToNextFrame();
 	}
@@ -476,10 +498,10 @@ void DX::DeviceResources::Present()
 void DX::DeviceResources::WaitForGpu()
 {
 	// Schedule a Signal command in the queue.
-	DX::ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), m_fenceValues[m_currentFrame]));
+	ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), m_fenceValues[m_currentFrame]));
 
 	// Wait until the fence has been crossed.
-	DX::ThrowIfFailed(m_fence->SetEventOnCompletion(m_fenceValues[m_currentFrame], m_fenceEvent));
+	ThrowIfFailed(m_fence->SetEventOnCompletion(m_fenceValues[m_currentFrame], m_fenceEvent));
 	WaitForSingleObjectEx(m_fenceEvent, INFINITE, FALSE);
 
 	// Increment the fence value for the current frame.
@@ -491,7 +513,7 @@ void DX::DeviceResources::MoveToNextFrame()
 {
 	// Schedule a Signal command in the queue.
 	const UINT64 currentFenceValue = m_fenceValues[m_currentFrame];
-	DX::ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), currentFenceValue));
+	ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), currentFenceValue));
 
 	// Advance the frame index.
 	m_currentFrame = m_swapChain->GetCurrentBackBufferIndex();
@@ -499,7 +521,7 @@ void DX::DeviceResources::MoveToNextFrame()
 	// Check to see if the next frame is ready to start.
 	if (m_fence->GetCompletedValue() < m_fenceValues[m_currentFrame])
 	{
-		DX::ThrowIfFailed(m_fence->SetEventOnCompletion(m_fenceValues[m_currentFrame], m_fenceEvent));
+		ThrowIfFailed(m_fence->SetEventOnCompletion(m_fenceValues[m_currentFrame], m_fenceEvent));
 		WaitForSingleObjectEx(m_fenceEvent, INFINITE, FALSE);
 	}
 

@@ -20,6 +20,8 @@ namespace FispApp
 		void OnResuming();
 		void OnDeviceRemoved();
 
+		std::shared_ptr<DX::DeviceResources> GetDeviceResources();
+
 	protected:
 		void SaveState();
 		void LoadState();
@@ -27,7 +29,7 @@ namespace FispApp
 	private:
 		// TODO: Replace with your own content renderers.
 		std::unique_ptr<Sample3DSceneRenderer> m_sceneRenderer;
-
+		std::shared_ptr<DX::DeviceResources> m_deviceResources;
 		// Rendering loop timer.
 		ITimer*		mpTimer;
 

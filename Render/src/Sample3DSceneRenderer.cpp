@@ -1,6 +1,5 @@
 ﻿//#include "pch.h"
 #include "../include/Sample3DSceneRenderer.h"
-#include "../include/DirectXHelper.h"
 #include "../../Utility/include/useUtility.h"
 //#include <ppltasks.h>
 //#include <synchapi.h>
@@ -16,6 +15,20 @@ using namespace Microsoft::WRL;
 // Indices into the application state map.
 //Platform::String^ AngleKey = "Angle";
 //Platform::String^ TrackingKey = "Tracking";
+
+// Assign a name to the object to aid with debugging.
+#if defined(_DEBUG)
+inline void SetName(ID3D12Object* pObject, LPCWSTR name)
+{
+	pObject->SetName(name);
+}
+#else
+inline void SetName(ID3D12Object*, LPCWSTR)
+{
+}
+#endif
+// Assigns the name of the variable as the name of the object.
+#define NAME_D3D12_OBJECT(x) SetName(x.Get(), L#x)
 
 // Loads vertex and pixel shaders from files and instantiates the cube geometry.
 Sample3DSceneRenderer::Sample3DSceneRenderer(const std::shared_ptr<DX::DeviceResources>& deviceResources) :
@@ -63,8 +76,8 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 
 		ComPtr<ID3DBlob> pSignature;
 		ComPtr<ID3DBlob> pError;
-		DX::ThrowIfFailed(D3D12SerializeRootSignature(&descRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, pSignature.GetAddressOf(), pError.GetAddressOf()));
-		DX::ThrowIfFailed(d3dDevice->CreateRootSignature(0, pSignature->GetBufferPointer(), pSignature->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature)));
+		ThrowIfFailed(D3D12SerializeRootSignature(&descRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, pSignature.GetAddressOf(), pError.GetAddressOf()));
+		ThrowIfFailed(d3dDevice->CreateRootSignature(0, pSignature->GetBufferPointer(), pSignature->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature)));
         NAME_D3D12_OBJECT(m_rootSignature);
 	}
 
@@ -94,7 +107,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 		state.DSVFormat = m_deviceResources->GetDepthBufferFormat();
 		state.SampleDesc.Count = 1;
 
-		DX::ThrowIfFailed(m_deviceResources->GetD3DDevice()->CreateGraphicsPipelineState(&state, IID_PPV_ARGS(&m_pipelineState)));
+		ThrowIfFailed(m_deviceResources->GetD3DDevice()->CreateGraphicsPipelineState(&state, IID_PPV_ARGS(&m_pipelineState)));
 
 		// Shader data can be deleted once the pipeline state is created.
 		vsBlob.destroy();
@@ -104,7 +117,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 		d3dDevice = m_deviceResources->GetD3DDevice();
 
 		// Create a command list.
-		DX::ThrowIfFailed(d3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_deviceResources->GetCommandAllocator(), m_pipelineState.Get(), IID_PPV_ARGS(&m_commandList)));
+		ThrowIfFailed(d3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_deviceResources->GetCommandAllocator(), m_pipelineState.Get(), IID_PPV_ARGS(&m_commandList)));
         NAME_D3D12_OBJECT(m_commandList);
 
 		// Cube vertices. Each vertex has a position and a color.
@@ -128,7 +141,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 
 		CD3DX12_HEAP_PROPERTIES defaultHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
 		CD3DX12_RESOURCE_DESC vertexBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize);
-		DX::ThrowIfFailed(d3dDevice->CreateCommittedResource(
+		ThrowIfFailed(d3dDevice->CreateCommittedResource(
 			&defaultHeapProperties,
 			D3D12_HEAP_FLAG_NONE,
 			&vertexBufferDesc,
@@ -137,7 +150,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 			IID_PPV_ARGS(&m_vertexBuffer)));
 
 		CD3DX12_HEAP_PROPERTIES uploadHeapProperties(D3D12_HEAP_TYPE_UPLOAD);
-		DX::ThrowIfFailed(d3dDevice->CreateCommittedResource(
+		ThrowIfFailed(d3dDevice->CreateCommittedResource(
 			&uploadHeapProperties,
 			D3D12_HEAP_FLAG_NONE,
 			&vertexBufferDesc,
@@ -192,7 +205,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 		Microsoft::WRL::ComPtr<ID3D12Resource> indexBufferUpload;
 
 		CD3DX12_RESOURCE_DESC indexBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(indexBufferSize);
-		DX::ThrowIfFailed(d3dDevice->CreateCommittedResource(
+		ThrowIfFailed(d3dDevice->CreateCommittedResource(
 			&defaultHeapProperties,
 			D3D12_HEAP_FLAG_NONE,
 			&indexBufferDesc,
@@ -200,7 +213,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 			nullptr,
 			IID_PPV_ARGS(&m_indexBuffer)));
 
-		DX::ThrowIfFailed(d3dDevice->CreateCommittedResource(
+		ThrowIfFailed(d3dDevice->CreateCommittedResource(
 			&uploadHeapProperties,
 			D3D12_HEAP_FLAG_NONE,
 			&indexBufferDesc,
@@ -231,13 +244,13 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 			heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 			// This flag indicates that this descriptor heap can be bound to the pipeline and that descriptors contained in it can be referenced by a root table.
 			heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-			DX::ThrowIfFailed(d3dDevice->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&m_cbvHeap)));
+			ThrowIfFailed(d3dDevice->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&m_cbvHeap)));
 
             NAME_D3D12_OBJECT(m_cbvHeap);
 		}
 
 		CD3DX12_RESOURCE_DESC constantBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(DX::c_frameCount * c_alignedConstantBufferSize);
-		DX::ThrowIfFailed(d3dDevice->CreateCommittedResource(
+		ThrowIfFailed(d3dDevice->CreateCommittedResource(
 			&uploadHeapProperties,
 			D3D12_HEAP_FLAG_NONE,
 			&constantBufferDesc,
@@ -265,12 +278,12 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 
 		// Map the constant buffers.
 		CD3DX12_RANGE readRange(0, 0);		// We do not intend to read from this resource on the CPU.
-		DX::ThrowIfFailed(m_constantBuffer->Map(0, &readRange, reinterpret_cast<void**>(&m_mappedConstantBuffer)));
+		ThrowIfFailed(m_constantBuffer->Map(0, &readRange, reinterpret_cast<void**>(&m_mappedConstantBuffer)));
 		ZeroMemory(m_mappedConstantBuffer, DX::c_frameCount * c_alignedConstantBufferSize);
 		// We don't unmap this until the app closes. Keeping things mapped for the lifetime of the resource is okay.
 
 		// Close the command list and execute it to begin the vertex/index buffer copy into the GPU's default heap.
-		DX::ThrowIfFailed(m_commandList->Close());
+		ThrowIfFailed(m_commandList->Close());
 		ID3D12CommandList* ppCommandLists[] = { m_commandList.Get() };
 		m_deviceResources->GetCommandQueue()->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
@@ -428,10 +441,10 @@ bool Sample3DSceneRenderer::Render()
 		return false;
 	}
 
-	DX::ThrowIfFailed(m_deviceResources->GetCommandAllocator()->Reset());
+	ThrowIfFailed(m_deviceResources->GetCommandAllocator()->Reset());
 
 	// The command list can be reset anytime after ExecuteCommandList() is called.
-	DX::ThrowIfFailed(m_commandList->Reset(m_deviceResources->GetCommandAllocator(), m_pipelineState.Get()));
+	ThrowIfFailed(m_commandList->Reset(m_deviceResources->GetCommandAllocator(), m_pipelineState.Get()));
 
 	PIXBeginEvent(m_commandList.Get(), 0, L"Draw the cube");
 	{
@@ -476,7 +489,7 @@ bool Sample3DSceneRenderer::Render()
 	}
 	PIXEndEvent(m_commandList.Get());
 
-	DX::ThrowIfFailed(m_commandList->Close());
+	ThrowIfFailed(m_commandList->Close());
 
 	// Execute the command list.
 	ID3D12CommandList* ppCommandLists[] = { m_commandList.Get() };

@@ -65,6 +65,15 @@ namespace fisp
 
 	namespace utility
 	{
+		inline void ThrowIfFailed(HRESULT hr)
+		{
+			if (hr < 0)
+			{
+				//throw Platform::Exception::CreateException(hr);
+				assert(0);
+				//assert(__FILE__ ## __LINE__);
+			}
+		}
 		/*-----------------------------------------------------------
 		class IBase
 		------------------------------------------------------------*/
@@ -78,5 +87,6 @@ namespace fisp
 //#define freecom(ptr)	if(ptr){(ptr)->Release(); (ptr)=0;}
 //#define freearray(ptr)	if(ptr){delete[] (ptr); (ptr) = 0;}
 
+#define ThrowIfFailed(hr) if((hr)<0){assert(0);}
 
 }

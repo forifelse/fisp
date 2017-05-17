@@ -20,12 +20,6 @@
     <ClInclude Include="include\d3dx12.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\DirectXHelper.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ShaderStructures.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\pch.h">
       <Filter>include</Filter>
     </ClInclude>
