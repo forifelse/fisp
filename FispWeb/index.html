@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Fisp APP</title>
+    <link href="css/app.css" rel="stylesheet" />
+    <script src="src/utility.js"></script>
+    <script src="src/uilib.js"></script>
+    <script src="src/uisty.js"></script>
+    <script src="src/share.js"></script>
+    <script src="src/enginecore.js"></script>
+    <script src="src/hand.js"></script>
+    <script src="src/cannon.js"></script>
+    <script src="src/rdrlib.js"></script>
+    <script src="src/netsocket.js"></script>
+    <script src="src/shader.js"></script>
+    <script src="src/entity.js"></script>
+    <script src="src/scene.js"></script>
+    <script src="src/render.js"></script>
+    <script src="src/engine.js"></script>
+    <script src="src/input.js"></script>
+    <script src="src/frame.js"></script>
+    <script src="src/fisp.js"></script>
+    <script src="src/user.js"></script>
+    <script src="app/main.js"></script>
+    <style>
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="cvsid" style="width:100%;height:100%;touch-action:none">
+        Your browser does not support the HTML5 canvas element.
+    </canvas>
+    <script>
+        var lgc = new Fisp.AppLgc();
+        Fisp.gRoot = new Fisp.FispRoot(lgc.optCallback);
+    </script>
+</body>
+</html>
