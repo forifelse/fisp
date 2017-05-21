@@ -52,7 +52,8 @@
     export class RdrImp extends IEngine {
         mCore: EngineCore.Engine;
         mScene: EngineCore.Scene;
-        mCamera: EngineCore.FreeCamera;
+        //mCamera: EngineCore.FreeCamera;
+        mCamera: EngineCore.ArcRotateCamera;
         mSkyLight: any;
         mDireLight: any;
         mPointLight: any;
@@ -68,9 +69,12 @@
             this.mCore = new EngineCore.Engine(cvs, true);
             this.mScene = new EngineCore.Scene(this.mCore);
             this.mScene.clearColor = new EngineCore.Color3(0, 0, 0);
-            this.mCamera = new EngineCore.FreeCamera("camera1", new EngineCore.Vector3(0, 40, -100), this.mScene);
-            this.mCamera.rotation = new EngineCore.Vector3(-70, 0, 0);
-            this.mCamera.setTarget(EngineCore.Vector3.Zero());
+            //this.mCamera = new EngineCore.FreeCamera("camera1", new EngineCore.Vector3(0, 30, -25), this.mScene);
+            //this.mCamera.rotation = new EngineCore.Vector3(0, 0, 0);
+            ////this.mCamera.setTarget(EngineCore.Vector3.Zero());
+            //this.mCamera.attachControl(cvs, false);
+
+            this.mCamera = new EngineCore.ArcRotateCamera("ArcRotateCamera", 1, 0.8, 10, new EngineCore.Vector3(0, 0, 0), this.mScene);
             this.mCamera.attachControl(cvs, false);
         }
 
@@ -284,30 +288,26 @@
             bSimplify = bSimplify || false;
             var that = this;
             EngineCore.SceneLoader.ImportMesh(objName, "data/source/", fileName, this.mScene,
-            //EngineCore.SceneLoader.ImportMesh(objName, "", fileName, this.mScene,
                 function (newMeshes, particleSystems, skeletons) {
                     // add new meshs
                     if (newMeshes && newMeshes.length > 0) {
                         for (var i = 0; i < newMeshes.length; i++) {
-                            if (null != bCastShadow && bCastShadow) {
-                                that.mDireLight.castShadow(newMeshes[i]);
-                            }
-                            //var bReSha = (null != bReceiveShadow && bReceiveShadow);
-                            newMeshes[i].receiveShadows = bReceiveShadow;//bReSha;
+                            newMeshes[i].position.x = pos.x;
+                            newMeshes[i].position.y = pos.y;
+                            newMeshes[i].position.z = pos.z;
+                            newMeshes[i].scaling = scale;
                             if (animate) {
                                 //Fisp.mcAnimate.rotate(newMeshes[i]);
                                 if (i == 1) {
                                     animate.rotate(newMeshes[i]);
                                 }
                             }
-                            if (pos != null) {
-                                newMeshes[i].position.x = pos.x;
-                                newMeshes[i].position.y = pos.y;
-                                newMeshes[i].position.z = pos.z;
+                            if (bCastShadow && that.mDireLight.castShadow) {
+                                //that.mDireLight.castShadow(newMeshes[i]);
                             }
-                            newMeshes[i].scaling = scale;
-                            newMeshes[i].layerMask = 1;
+                            newMeshes[i].receiveShadows = bReceiveShadow;
                             newMeshes[i].name = name + ((i != 0) ? i : "");
+                            //newMeshes[i].layerMask = 1;
                             //newMeshes[i].userData = new Object();
                             //
                             //if (bSimplify) {
