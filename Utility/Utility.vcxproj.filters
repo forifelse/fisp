@@ -44,6 +44,27 @@
     <ClInclude Include="include\timer.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\dlist.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dbio.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\filefmt.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\maths.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\maths2d.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\object.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\thread.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\fileio.cpp">
@@ -53,6 +74,24 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\timer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dbio.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\filefmt.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\maths.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\maths2d.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\object.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\thread.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

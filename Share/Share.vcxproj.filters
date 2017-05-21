@@ -9,6 +9,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="scenedata">
+      <UniqueIdentifier>{33eff016-2a70-463b-91ca-e07ab465b411}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -17,8 +20,19 @@
     <ClInclude Include="include\useShare.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\scenedata.h">
+    <ClInclude Include="include\netdbif.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\inShare.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scenedata.h">
+      <Filter>scenedata</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\netdb.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

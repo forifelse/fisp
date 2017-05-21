@@ -1,6 +1,6 @@
 #pragma once
 
-//#include "../Share/include/fileio.h"
+#include "../Share/include/netdbif.h"
 
-//using namespace fisp;
-//using namespace fisp::share;
+using namespace fisp;
+using namespace fisp::share;

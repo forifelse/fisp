@@ -149,17 +149,30 @@
     <ClInclude Include="include\array.h" />
     <ClInclude Include="include\base.h" />
     <ClInclude Include="include\buffer.h" />
+    <ClInclude Include="include\dbio.h" />
     <ClInclude Include="include\define.h" />
+    <ClInclude Include="include\dlist.h" />
+    <ClInclude Include="include\filefmt.h" />
     <ClInclude Include="include\fileio.h" />
     <ClInclude Include="include\inUtility.h" />
     <ClInclude Include="include\macro.h" />
     <ClInclude Include="include\map.h" />
+    <ClInclude Include="include\maths.h" />
+    <ClInclude Include="include\maths2d.h" />
+    <ClInclude Include="include\object.h" />
+    <ClInclude Include="include\thread.h" />
     <ClInclude Include="include\timer.h" />
     <ClInclude Include="include\useUtility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\base.cpp" />
+    <ClCompile Include="src\dbio.cpp" />
+    <ClCompile Include="src\filefmt.cpp" />
     <ClCompile Include="src\fileio.cpp" />
+    <ClCompile Include="src\maths.cpp" />
+    <ClCompile Include="src\maths2d.cpp" />
+    <ClCompile Include="src\object.cpp" />
+    <ClCompile Include="src\thread.cpp" />
     <ClCompile Include="src\timer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
