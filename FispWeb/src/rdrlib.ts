@@ -1,4 +1,5 @@
-﻿namespace Fisp {
+﻿/// <reference path="enginecore.d.ts" />
+namespace Fisp {
     export class CustomMesh {
         mMesh: EngineCore.Mesh;
         mData: EngineCore.VertexData;

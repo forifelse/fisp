@@ -66,20 +66,21 @@
         }
 
     }
-    export var gRoot: FispRoot = null;
+    //export var gRoot: FispRoot = null;
+    export var gRoot: Fisp.FispRoot = new Fisp.FispRoot();
 
     window.onload = () => {
-        gRoot.mCvs = <HTMLCanvasElement>document.getElementById('cvsid');
-        gRoot.loadCfg();
-        gRoot.create();
+        Fisp.gRoot.mCvs = <HTMLCanvasElement>document.getElementById('cvsid');
+        Fisp.gRoot.loadCfg();
+        Fisp.gRoot.create();
         (function renderLoop() {
             requestAnimationFrame(renderLoop);
-            gRoot.renderLoop();
+            Fisp.gRoot.renderLoop();
         })();
     };
 
     window.close = () => {
-        gRoot.stop();
+        Fisp.gRoot.stop();
     }
     
 }
