@@ -425,42 +425,50 @@ public:
 		pScene->pBlob->pMesh = nullptr;
 		if (pScene->uNumMesh > 0)
 		{
-			pScene->pBlob->pMesh = new SDMesh;
+			pScene->pBlob->pMesh = new SDMesh[pScene->uNumMesh];
 			ifs.read((char*)pScene->pBlob->pMesh, sizeof(SDMesh) * pScene->uNumMesh);
+			pScene->pBlob->pMesh->pSubOther = nullptr;
+			pScene->pBlob->pMesh->pChildren = nullptr;
 		}
 
 		pScene->pBlob->pGeom = nullptr;
 		if (pScene->uNumGeom > 0)
 		{
-			pScene->pBlob->pGeom = new SDGeometry;
+			pScene->pBlob->pGeom = new SDGeometry[pScene->uNumGeom];
 			ifs.read((char*)pScene->pBlob->pGeom, sizeof(SDGeometry) * pScene->uNumGeom);
+			pScene->pBlob->pGeom->pVertices = nullptr;
+			pScene->pBlob->pGeom->pIndex = nullptr;
+			pScene->pBlob->pGeom->pUV = nullptr;
+			pScene->pBlob->pGeom->pNormal = nullptr;
+			pScene->pBlob->pGeom->pTangent = nullptr;
+			pScene->pBlob->pGeom->pVerClr = nullptr;
 		}
 
 		pScene->pBlob->pMate = nullptr;
 		if (pScene->uNumMate > 0)
 		{
-			pScene->pBlob->pMate = new SDMaterial;
+			pScene->pBlob->pMate = new SDMaterial[pScene->uNumMate];
 			ifs.read((char*)pScene->pBlob->pMate, sizeof(SDMaterial) * pScene->uNumMate);
 		}
 
 		pScene->pBlob->pLitPoint = nullptr;
 		if (pScene->uNumLitPoint > 0)
 		{
-			pScene->pBlob->pLitPoint = new SDLitPoint;
+			pScene->pBlob->pLitPoint = new SDLitPoint[pScene->uNumLitPoint];
 			ifs.read((char*)pScene->pBlob->pLitPoint, sizeof(SDLitPoint) * pScene->uNumLitPoint);
 		}
 
 		pScene->pBlob->pLitSpot = nullptr;
 		if (pScene->uNumLitSpot > 0)
 		{
-			pScene->pBlob->pLitSpot = new SDLitSpot;
+			pScene->pBlob->pLitSpot = new SDLitSpot[pScene->uNumLitSpot];
 			ifs.read((char*)pScene->pBlob->pLitSpot, sizeof(SDLitSpot) * pScene->uNumLitSpot);
 		}
 
 		pScene->pBlob->pLitDire = nullptr;
 		if (pScene->uNumLitDire > 0)
 		{
-			pScene->pBlob->pLitDire = new SDLitDire;
+			pScene->pBlob->pLitDire = new SDLitDire[pScene->uNumLitDire];
 			ifs.read((char*)pScene->pBlob->pLitDire, sizeof(SDLitDire) * pScene->uNumLitDire);
 		}
 		//
