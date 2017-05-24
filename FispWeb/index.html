@@ -19,10 +19,10 @@
     <script src="src/render.js"></script>
     <script src="src/engine.js"></script>
     <script src="src/input.js"></script>
+    <script src="src/user.js"></script>
     <script src="src/frame.js"></script>
     <script src="src/fisp.js"></script>
-    <script src="src/user.js"></script>
-    <script src="app/main.js"></script>
+    <script src="app/ScanApp/scanApp.js"></script>
     <style>
         html, body {
             overflow: hidden;
@@ -38,7 +38,7 @@
         Your browser does not support the HTML5 canvas element.
     </canvas>
     <script>
-        var lgc = new Fisp.AppLgc();
+        var lgc = new Fisp.ScanApp();
         Fisp.gRoot.setCallback(lgc.optCallback);
     </script>
 </body>
