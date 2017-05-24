@@ -247,7 +247,7 @@ struct SDMesh
 	float			mass;
 	bool			bDamage;
 	//
-	unsigned int	uParent;	// 0xffff or -1 means parent is null
+	unsigned int	uParent;	// 0xffffffff or -1 means parent is null
 	unsigned int	uNumChild;
 	unsigned int*	pChildren;
 	// instance ?
@@ -333,6 +333,7 @@ struct SDScene
 	SDRoot*			pRoot;
 
 	SDScene() { memset(this, 0, sizeof(SDScene)); }
+	//virtual ~SDScene() { if (pBlob)delete pBlob, pBlob = 0; if (pRoot)delete pRoot, pRoot = 0; }
 	SDScene(const SDScene& o)
 	{
 		memcpy(this, &o, sizeof(SDScene));
@@ -376,13 +377,102 @@ private:
 	}
 
 public:
-	static void sceneWrite(const SDScene* pScene, const std::string& strFile)
+	static bool writeScene(const SDScene* pScene, const std::string& strFile)
 	{
-		write<SDScene>(pScene, strFile);
+		if (nullptr == pScene || nullptr == pScene->pRoot)
+			return false;
+		//write<SDScene>(pScene, strFile);
+		std::ofstream ofs(strFile, std::ios::binary);
+		if (!ofs.is_open())
+			return false;
+		ofs.seekp(0);
+		ofs.write((char*)pScene, sizeof(SDScene));
+		if(pScene->uNumMesh  > 0)
+			ofs.write((char*)pScene->pBlob->pMesh, sizeof(SDMesh) * pScene->uNumMesh);
+		if (pScene->uNumGeom  > 0)
+			ofs.write((char*)pScene->pBlob->pGeom, sizeof(SDGeometry) * pScene->uNumGeom);
+		if (pScene->uNumMate  > 0)
+			ofs.write((char*)pScene->pBlob->pMate, sizeof(SDMaterial) * pScene->uNumMate);
+		if (pScene->uNumLitPoint  > 0)
+			ofs.write((char*)pScene->pBlob->pLitPoint, sizeof(SDLitPoint) * pScene->uNumLitPoint);
+		if (pScene->uNumLitSpot  > 0)
+			ofs.write((char*)pScene->pBlob->pLitSpot, sizeof(SDLitSpot) * pScene->uNumLitSpot);
+		if (pScene->uNumLitDire  > 0)
+			ofs.write((char*)pScene->pBlob->pLitDire, sizeof(SDLitDire) * pScene->uNumLitDire);
+		//
+		ofs.write((char*)pScene->pRoot, sizeof(SDRoot));
+		if (pScene->pRoot->uNumChild  > 0)
+			ofs.write((char*)pScene->pRoot->pChildren, sizeof(unsigned int) * pScene->pRoot->uNumChild);
+		//
+		ofs.close();
+		return true;
 	}
 
-	static void sceneRead(SDScene& scene, const std::string& strFile)
+	static bool readScene(SDScene* pScene, const std::string& strFile)
 	{
-		read<SDScene>(scene, strFile);
+		if (nullptr == pScene)
+			return false;
+		//read<SDScene>(scene, strFile);
+		std::ifstream ifs(strFile, std::ios::binary);
+		if (!ifs.is_open())
+			return false;
+		memset(pScene, 0, sizeof(SDScene));
+		ifs.seekg(0);
+		ifs.read((char*)pScene, sizeof(SDScene));
+		pScene->pBlob = new SDBlob;
+		pScene->pRoot = new SDRoot;
+
+		pScene->pBlob->pMesh = nullptr;
+		if (pScene->uNumMesh > 0)
+		{
+			pScene->pBlob->pMesh = new SDMesh;
+			ifs.read((char*)pScene->pBlob->pMesh, sizeof(SDMesh) * pScene->uNumMesh);
+		}
+
+		pScene->pBlob->pGeom = nullptr;
+		if (pScene->uNumGeom > 0)
+		{
+			pScene->pBlob->pGeom = new SDGeometry;
+			ifs.read((char*)pScene->pBlob->pGeom, sizeof(SDGeometry) * pScene->uNumGeom);
+		}
+
+		pScene->pBlob->pMate = nullptr;
+		if (pScene->uNumMate > 0)
+		{
+			pScene->pBlob->pMate = new SDMaterial;
+			ifs.read((char*)pScene->pBlob->pMate, sizeof(SDMaterial) * pScene->uNumMate);
+		}
+
+		pScene->pBlob->pLitPoint = nullptr;
+		if (pScene->uNumLitPoint > 0)
+		{
+			pScene->pBlob->pLitPoint = new SDLitPoint;
+			ifs.read((char*)pScene->pBlob->pLitPoint, sizeof(SDLitPoint) * pScene->uNumLitPoint);
+		}
+
+		pScene->pBlob->pLitSpot = nullptr;
+		if (pScene->uNumLitSpot > 0)
+		{
+			pScene->pBlob->pLitSpot = new SDLitSpot;
+			ifs.read((char*)pScene->pBlob->pLitSpot, sizeof(SDLitSpot) * pScene->uNumLitSpot);
+		}
+
+		pScene->pBlob->pLitDire = nullptr;
+		if (pScene->uNumLitDire > 0)
+		{
+			pScene->pBlob->pLitDire = new SDLitDire;
+			ifs.read((char*)pScene->pBlob->pLitDire, sizeof(SDLitDire) * pScene->uNumLitDire);
+		}
+		//
+		ifs.read((char*)pScene->pRoot, sizeof(SDRoot));
+		pScene->pRoot->pChildren = nullptr;
+		if (pScene->pRoot->uNumChild > 0)
+		{
+			pScene->pRoot->pChildren = new unsigned int[pScene->pRoot->uNumChild];
+			ifs.read((char*)pScene->pRoot->pChildren, sizeof(unsigned int) * pScene->pRoot->uNumChild);
+		}
+		//
+		ifs.close();
+		return true;
 	}
 };

@@ -1,6 +1,6 @@
 #include "imexport.h"
 #include <fstream>
-#include "scenedata.h"
+#include "../../../../share/include/scenedata.h"
 
 bool ImExport::load(const std::string& strInFile, const std::string& strFormat, const std::string& strContent, const std::string& strOutFile)
 {
@@ -20,17 +20,17 @@ bool ImExport::load(const std::string& strInFile, const std::string& strFormat, 
 		aiProcess_OptimizeMeshes;
 	//flags |= aiProcess_GenNormals;
 	//flags |= aiProcess_CalcTangentSpace;
-	const aiScene* pInScene = importer.ReadFile(strInFile, flags);
-											  
-	if (!pInScene)
+	const aiScene* pInScene = importer.ReadFile(strInFile, flags);			  
+	if (nullptr == pInScene)
 	{
 		return false;
 	}
 	SDScene outScene;
 	getScene(&outScene, pInScene);
-	SceneRW::sceneWrite(&outScene, "outSceneFile.dat");
-	//write(strOutFile, pInScene);
-	//read("out");
+	SceneRW::writeScene(&outScene, strOutFile);
+	// test
+	SDScene inScene;
+	SceneRW::readScene(&inScene, strOutFile);
 	return true;
 }
 
@@ -42,6 +42,7 @@ bool ImExport::getScene(void* pOutScene, const aiScene* pInScene)
 	if (pInScene->mNumMeshes <= 0 || nullptr == pInScene->mMeshes)
 		return false;
 	pScene->pBlob = new SDBlob;
+	pScene->pRoot = new SDRoot;
 	//
 	pScene->uNumGeom = pInScene->mNumMeshes;
 	pScene->pBlob->pGeom = new SDGeometry[pScene->uNumGeom];

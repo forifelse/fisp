@@ -118,9 +118,12 @@ int main (int argc, char* argv[])
 	//param[2] = (argc > 2) ? argv[2] : "-b";
 	//param[3] = (argc > 3) ? argv[3] : "scene";
 	//param[4] = (argc > 4) ? argv[4] : param[1] + "_out";
+	printf("Loading ...\n");
 	ImExport imex;
 	//imex.load(param[1], param[2], param[3], param[4]);
-	imex.load("test.fbx", "-b", "scene", "out");
+	bool bOk = imex.load("test.fbx", "-b", "scene", "out.dat");
+	std::string strMsg = bOk ? "Loaded successfully!\n\n" : "Failed to load!\n\n";
+	printf(strMsg.c_str());
 	//
 	system("pause");
 	return 0;
