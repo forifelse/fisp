@@ -1,4 +1,4 @@
-﻿/// <reference path="uilib.ts" />
+﻿/// <reference path="scene.ts" />
 namespace Fisp {
     export class Engine{// extends IEngine {
         mTimer: number = null;
