@@ -162,6 +162,25 @@ bool ImExport::getMaterial(void* pDest, const aiMaterial* pSrc)
 	return true;
 }
 
+bool ImExport::getRoot(void* pDest, const aiScene* pInScene)
+{
+	const aiNode* pRoot = pInScene->mRootNode;
+	if (!(nullptr != pDest && nullptr != pRoot && nullptr == pRoot->mParent))
+		return false;
+	SDRoot* dest = (SDRoot*)pDest;
+	dest->pNodes = nullptr;
+	dest->uNumNode = pRoot->mNumMeshes;
+	if (dest->uNumNode > 0)
+	{
+		dest->pNodes = new unsigned int[dest->uNumNode];
+		for (unsigned int i = 0; i < dest->uNumNode; i++)
+		{
+			dest->pNodes[i] = pRoot->mMeshes[i];
+		}
+	}
+	return true;
+}
+
 void ImExport::write(const std::string& strFile, const aiScene* pScene)
 {
 	std::ofstream ofs(strFile, std::ios::binary);

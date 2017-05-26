@@ -18,6 +18,7 @@ private:
 	bool getGeom(void* pDest, const aiMesh* pSrc);
 	bool getMaterial(void* pDest, const aiMaterial* pSrc);
 	bool getMesh(void* pDest, const aiMesh* pSrc);
+	bool getRoot(void* pDest, const aiScene* pInScene);
 
 private:
 	//aiScene*	mpScene;

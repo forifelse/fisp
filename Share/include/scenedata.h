@@ -234,23 +234,23 @@ struct SDSubMesh
 struct SDMesh
 {
 	std::string		strName;
-	bool			bVisible;
 	SDSubMesh		subFirst;
 	unsigned int	uNumSubOther;
 	SDSubMesh*		pSubOther;
-	//
-	float			trans[16];
-	//float			tx, ty, tz, rx, ry, rz, sx, sy, sz;
-	bool			bCastShadow;
-	bool			bReceiveShadow;
-	bool			bSimulate;
-	float			mass;
-	bool			bDamage;
-	//
-	unsigned int	uParent;	// 0xffffffff or -1 means parent is null
-	unsigned int	uNumChild;
-	unsigned int*	pChildren;
-	// instance ?
+	//bool			bVisible;
+	////
+	//float			trans[16];
+	////float			tx, ty, tz, rx, ry, rz, sx, sy, sz;
+	//bool			bCastShadow;
+	//bool			bReceiveShadow;
+	//bool			bSimulate;
+	//float			mass;
+	//bool			bDamage;
+	////
+	//unsigned int	uParent;	// 0xffffffff or -1 means parent is null
+	//unsigned int	uNumChild;
+	//unsigned int*	pChildren;
+	//// instance ?
 
 	SDMesh() { memset(this, 0, sizeof(SDMesh)); }
 	SDMesh(const SDMesh& o)
@@ -268,21 +268,56 @@ struct SDMesh
 	}
 };
 
-struct SDRoot
+struct SDNode
 {
+	std::string		strName;
+	bool			bVisible;
+	SDMesh			mesh;
+	//
+	float			trans[16];
+	//float			tx, ty, tz, rx, ry, rz, sx, sy, sz;
+	bool			bCastShadow;
+	bool			bReceiveShadow;
+	bool			bSimulate;
+	float			mass;
+	bool			bDamage;
+	//
+	unsigned int	uParent;	// 0xffffffff or -1 means parent is null
 	unsigned int	uNumChild;
 	unsigned int*	pChildren;
+	// instance ?
+
+	SDNode() { memset(this, 0, sizeof(SDNode)); }
+	SDNode(const SDNode& o)
+	{
+		memcpy(this, &o, sizeof(SDNode));
+	}
+	SDNode& operator=(const SDNode& o)
+	{
+		memcpy(this, &o, sizeof(SDNode));
+		return *this;
+	}
+	bool operator<(const SDNode& o)
+	{
+		return true;
+	}
+};
+
+struct SDRoot
+{
+	unsigned int	uNumNode;
+	unsigned int*	pNodes;
 
 	SDRoot() { memset(this, 0, sizeof(SDRoot)); }
 	SDRoot(const SDRoot& o)
 	{
-		uNumChild = o.uNumChild;
-		pChildren = o.pChildren;
+		uNumNode = o.uNumNode;
+		pNodes = o.pNodes;
 	}
 	SDRoot& operator=(const SDRoot& o)
 	{
-		uNumChild = o.uNumChild;
-		pChildren = o.pChildren;
+		uNumNode = o.uNumNode;
+		pNodes = o.pNodes;
 		return *this;
 	}
 	bool operator<(const SDRoot& o)
@@ -294,6 +329,7 @@ struct SDRoot
 struct SDBlob
 {
 	// Blob data
+	SDNode*			pNode;
 	SDMesh*			pMesh;
 	SDGeometry*		pGeom;
 	SDMaterial*		pMate;
@@ -321,6 +357,7 @@ struct SDScene
 {
 	// Blob data
 	SDBlob*			pBlob;
+	unsigned int	uNumNode;
 	unsigned int	uNumMesh;
 	unsigned int	uNumGeom;
 	unsigned int	uNumMate;
@@ -401,8 +438,8 @@ public:
 			ofs.write((char*)pScene->pBlob->pLitDire, sizeof(SDLitDire) * pScene->uNumLitDire);
 		//
 		ofs.write((char*)pScene->pRoot, sizeof(SDRoot));
-		if (pScene->pRoot->uNumChild  > 0)
-			ofs.write((char*)pScene->pRoot->pChildren, sizeof(unsigned int) * pScene->pRoot->uNumChild);
+		if (pScene->pRoot->uNumNode  > 0)
+			ofs.write((char*)pScene->pRoot->pNodes, sizeof(unsigned int) * pScene->pRoot->uNumNode);
 		//
 		ofs.close();
 		return true;
@@ -427,8 +464,8 @@ public:
 		{
 			pScene->pBlob->pMesh = new SDMesh[pScene->uNumMesh];
 			ifs.read((char*)pScene->pBlob->pMesh, sizeof(SDMesh) * pScene->uNumMesh);
-			pScene->pBlob->pMesh->pSubOther = nullptr;
-			pScene->pBlob->pMesh->pChildren = nullptr;
+			for(unsigned int i=0; i<pScene->uNumMesh; i++)
+				pScene->pBlob->pMesh[i].pSubOther = nullptr;
 		}
 
 		pScene->pBlob->pGeom = nullptr;
@@ -436,12 +473,15 @@ public:
 		{
 			pScene->pBlob->pGeom = new SDGeometry[pScene->uNumGeom];
 			ifs.read((char*)pScene->pBlob->pGeom, sizeof(SDGeometry) * pScene->uNumGeom);
-			pScene->pBlob->pGeom->pVertices = nullptr;
-			pScene->pBlob->pGeom->pIndex = nullptr;
-			pScene->pBlob->pGeom->pUV = nullptr;
-			pScene->pBlob->pGeom->pNormal = nullptr;
-			pScene->pBlob->pGeom->pTangent = nullptr;
-			pScene->pBlob->pGeom->pVerClr = nullptr;
+			for (unsigned int i = 0; i < pScene->uNumGeom; i++)
+			{
+				pScene->pBlob->pGeom[i].pVertices = nullptr;
+				pScene->pBlob->pGeom[i].pIndex = nullptr;
+				pScene->pBlob->pGeom[i].pUV = nullptr;
+				pScene->pBlob->pGeom[i].pNormal = nullptr;
+				pScene->pBlob->pGeom[i].pTangent = nullptr;
+				pScene->pBlob->pGeom[i].pVerClr = nullptr;
+			}
 		}
 
 		pScene->pBlob->pMate = nullptr;
@@ -473,11 +513,11 @@ public:
 		}
 		//
 		ifs.read((char*)pScene->pRoot, sizeof(SDRoot));
-		pScene->pRoot->pChildren = nullptr;
-		if (pScene->pRoot->uNumChild > 0)
+		pScene->pRoot->pNodes = nullptr;
+		if (pScene->pRoot->uNumNode > 0)
 		{
-			pScene->pRoot->pChildren = new unsigned int[pScene->pRoot->uNumChild];
-			ifs.read((char*)pScene->pRoot->pChildren, sizeof(unsigned int) * pScene->pRoot->uNumChild);
+			pScene->pRoot->pNodes = new unsigned int[pScene->pRoot->uNumNode];
+			ifs.read((char*)pScene->pRoot->pNodes, sizeof(unsigned int) * pScene->pRoot->uNumNode);
 		}
 		//
 		ifs.close();
