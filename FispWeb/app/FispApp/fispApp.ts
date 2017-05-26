@@ -1,11 +1,11 @@
 ﻿namespace Fisp {
-    export class AppLgc {
+    export class FispApp {
         optCallback: any;
-        //mDlgTop: Fisp.DlgTop;
-        //mDlgMain: Fisp.DlgMain;
-        //mDlgEditScene: Fisp.DlgEditScene;
-        //mDlgEntityProp: Fisp.DlgEntityProperty;
-        //mDlgChat: Fisp.DlgChat;
+        mDlgTop: Fisp.DlgTop;
+        mDlgMain: Fisp.DlgMain;
+        mDlgEditScene: Fisp.DlgEditScene;
+        mDlgEntityProp: Fisp.DlgEntityProperty;
+        mDlgChat: Fisp.DlgChat;
 
         constructor() {
             this.optCallback = new Object();
@@ -17,11 +17,11 @@
             this.optCallback.onPicked = this.onPicked;
             this.optCallback.onResize = this.onResize;
             //
-            //this.mDlgTop = null;
-            //this.mDlgMain = null;
-            //this.mDlgEditScene = null;
-            //this.mDlgEntityProp = null;
-            //this.mDlgChat = null;
+            this.mDlgTop = null;
+            this.mDlgMain = null;
+            this.mDlgEditScene = null;
+            this.mDlgEntityProp = null;
+            this.mDlgChat = null;
         }
 
         onSetup() {
@@ -33,31 +33,29 @@
         }
 
         onBuildScene() {
-            //gRoot.mEngineImp.createSkyBox('skybox_objname', "skybox");
-            //gRoot.mEngineImp.createTerrain('grass_objname', 'grass.jpg', 32, 32, true, false);
+            gRoot.mEngineImp.createSkyBox('skybox_objname', "skybox");
+            gRoot.mEngineImp.createTerrain('grass_objname', 'grass.jpg', 32, 32, true, false);
             //
             var bSimplify = false;
             var pos = new EngineCore.Vector3(0, 0, 0);
             var scale = new EngineCore.Vector3(1.0,1.0,1.0);//(0.05, 0.05, 0.05);
-            //gRoot.mEngineImp.addSkeleton('character_objname', "dude.3d", null, true, null, pos, scale, true, bSimplify);
-            gRoot.mEngineImp.addSkeleton('character_objname', "test.3d", null, true, null, pos, scale, true, bSimplify);
-
+            gRoot.mEngineImp.addSkeleton('character_objname', "dude.3d", null, true, null, pos, scale, true, bSimplify);
         }
 
         onBuildUi(uiMgr) {
             var that = this;
-            //this.mDlgTop = new Fisp.DlgTop(uiMgr);
-            //this.mDlgMain = new Fisp.DlgMain(uiMgr);
-            //this.mDlgTop.mdlgMain = this.mDlgMain;
-            //this.mDlgEditScene = new Fisp.DlgEditScene(uiMgr);
-            //this.mDlgEntityProp = new Fisp.DlgEntityProperty();
-            //this.mDlgChat = new Fisp.DlgChat(uiMgr);
+            this.mDlgTop = new Fisp.DlgTop(uiMgr);
+            this.mDlgMain = new Fisp.DlgMain(uiMgr);
+            this.mDlgTop.mdlgMain = this.mDlgMain;
+            this.mDlgEditScene = new Fisp.DlgEditScene(uiMgr);
+            this.mDlgEntityProp = new Fisp.DlgEntityProperty();
+            this.mDlgChat = new Fisp.DlgChat(uiMgr);
 
-            //uiMgr.regUserDlg(this.mDlgTop);
-            //uiMgr.regUserDlg(this.mDlgMain);
-            //uiMgr.regUserDlg(this.mDlgEditScene);
-            //uiMgr.regUserDlg(this.mDlgEntityProp);
-            //uiMgr.regUserDlg(this.mDlgChat);
+            uiMgr.regUserDlg(this.mDlgTop);
+            uiMgr.regUserDlg(this.mDlgMain);
+            uiMgr.regUserDlg(this.mDlgEditScene);
+            uiMgr.regUserDlg(this.mDlgEntityProp);
+            uiMgr.regUserDlg(this.mDlgChat);
         }
 
         onUpdate(delta: number) {
@@ -75,7 +73,7 @@
     }
 
     //
-    export class LgcEvent {
+    export class FispAppEvent {
 
         constructor() {
         }
@@ -244,5 +242,5 @@
         }
 
     }
-    export var gLgcEvent: LgcEvent = new LgcEvent();
+    export var gFispAppEvent: FispAppEvent = new FispAppEvent();
 }

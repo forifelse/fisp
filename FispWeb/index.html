@@ -22,7 +22,8 @@
     <script src="src/user.js"></script>
     <script src="src/frame.js"></script>
     <script src="src/fisp.js"></script>
-    <script src="app/ScanApp/scanApp.js"></script>
+    <script src="app/fispApp/fispAppUI.js"></script>
+    <script src="app/fispApp/fispApp.js"></script>
     <style>
         html, body {
             overflow: hidden;
@@ -38,7 +39,7 @@
         Your browser does not support the HTML5 canvas element.
     </canvas>
     <script>
-        var lgc = new Fisp.ScanApp();
+        var lgc = new Fisp.FispApp();
         Fisp.gRoot.setCallback(lgc.optCallback);
     </script>
 </body>
