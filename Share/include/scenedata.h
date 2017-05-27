@@ -24,6 +24,11 @@ struct SDCamera
 	}
 };
 
+struct SDLitDire
+{
+	SDLitDire() { memset(this, 0, sizeof(SDLitDire)); }
+};
+
 struct SDLitPoint
 {
 	std::string	strName;
@@ -81,11 +86,6 @@ struct SDLitSpot : public SDLitPoint
 	{
 		return true;
 	}
-};
-
-struct SDLitDire
-{
-	SDLitDire() { memset(this, 0, sizeof(SDLitDire)); }
 };
 
 struct SDMaterial
@@ -237,20 +237,6 @@ struct SDMesh
 	SDSubMesh		subFirst;
 	unsigned int	uNumSubOther;
 	SDSubMesh*		pSubOther;
-	//bool			bVisible;
-	////
-	//float			trans[16];
-	////float			tx, ty, tz, rx, ry, rz, sx, sy, sz;
-	//bool			bCastShadow;
-	//bool			bReceiveShadow;
-	//bool			bSimulate;
-	//float			mass;
-	//bool			bDamage;
-	////
-	//unsigned int	uParent;	// 0xffffffff or -1 means parent is null
-	//unsigned int	uNumChild;
-	//unsigned int*	pChildren;
-	//// instance ?
 
 	SDMesh() { memset(this, 0, sizeof(SDMesh)); }
 	SDMesh(const SDMesh& o)
@@ -333,9 +319,9 @@ struct SDBlob
 	SDMesh*			pMesh;
 	SDGeometry*		pGeom;
 	SDMaterial*		pMate;
+	SDLitDire*		pLitDire;
 	SDLitPoint*		pLitPoint;
 	SDLitSpot*		pLitSpot;
-	SDLitDire*		pLitDire;
 
 	SDBlob() { memset(this, 0, sizeof(SDBlob)); }
 	SDBlob(const SDBlob& o)
@@ -361,9 +347,9 @@ struct SDScene
 	unsigned int	uNumMesh;
 	unsigned int	uNumGeom;
 	unsigned int	uNumMate;
+	unsigned int	uNumLitDire;
 	unsigned int	uNumLitPoint;
 	unsigned int	uNumLitSpot;
-	unsigned int	uNumLitDire;
 	// scene data
 	std::string		strName;
 	SDCamera		camera;
@@ -424,18 +410,22 @@ public:
 			return false;
 		ofs.seekp(0);
 		ofs.write((char*)pScene, sizeof(SDScene));
-		if(pScene->uNumMesh  > 0)
-			ofs.write((char*)pScene->pBlob->pMesh, sizeof(SDMesh) * pScene->uNumMesh);
+		if (pScene->uNumNode > 0)
+		{
+			ofs.write((char*)pScene->pBlob->pNode, sizeof(SDNode) * pScene->uNumNode);
+		}
+		//if(pScene->uNumMesh  > 0)
+		//	ofs.write((char*)pScene->pBlob->pMesh, sizeof(SDMesh) * pScene->uNumMesh);
 		if (pScene->uNumGeom  > 0)
 			ofs.write((char*)pScene->pBlob->pGeom, sizeof(SDGeometry) * pScene->uNumGeom);
 		if (pScene->uNumMate  > 0)
 			ofs.write((char*)pScene->pBlob->pMate, sizeof(SDMaterial) * pScene->uNumMate);
+		if (pScene->uNumLitDire  > 0)
+			ofs.write((char*)pScene->pBlob->pLitDire, sizeof(SDLitDire) * pScene->uNumLitDire);
 		if (pScene->uNumLitPoint  > 0)
 			ofs.write((char*)pScene->pBlob->pLitPoint, sizeof(SDLitPoint) * pScene->uNumLitPoint);
 		if (pScene->uNumLitSpot  > 0)
 			ofs.write((char*)pScene->pBlob->pLitSpot, sizeof(SDLitSpot) * pScene->uNumLitSpot);
-		if (pScene->uNumLitDire  > 0)
-			ofs.write((char*)pScene->pBlob->pLitDire, sizeof(SDLitDire) * pScene->uNumLitDire);
 		//
 		ofs.write((char*)pScene->pRoot, sizeof(SDRoot));
 		if (pScene->pRoot->uNumNode  > 0)
@@ -459,14 +449,26 @@ public:
 		pScene->pBlob = new SDBlob;
 		pScene->pRoot = new SDRoot;
 
-		pScene->pBlob->pMesh = nullptr;
-		if (pScene->uNumMesh > 0)
+		pScene->pBlob->pNode = nullptr;
+		if (pScene->uNumNode > 0)
 		{
-			pScene->pBlob->pMesh = new SDMesh[pScene->uNumMesh];
-			ifs.read((char*)pScene->pBlob->pMesh, sizeof(SDMesh) * pScene->uNumMesh);
-			for(unsigned int i=0; i<pScene->uNumMesh; i++)
-				pScene->pBlob->pMesh[i].pSubOther = nullptr;
+			pScene->pBlob->pNode = new SDNode[pScene->uNumNode];
+			ifs.read((char*)pScene->pBlob->pNode, sizeof(SDNode) * pScene->uNumNode);
+			for (unsigned int i = 0; i < pScene->uNumNode; i++)
+			{
+				pScene->pBlob->pNode[i].pChildren = nullptr;
+				pScene->pBlob->pNode[i].mesh.pSubOther = nullptr;
+			}
 		}
+
+		//pScene->pBlob->pMesh = nullptr;
+		//if (pScene->uNumMesh > 0)
+		//{
+		//	pScene->pBlob->pMesh = new SDMesh[pScene->uNumMesh];
+		//	ifs.read((char*)pScene->pBlob->pMesh, sizeof(SDMesh) * pScene->uNumMesh);
+		//	for(unsigned int i=0; i<pScene->uNumMesh; i++)
+		//		pScene->pBlob->pMesh[i].pSubOther = nullptr;
+		//}
 
 		pScene->pBlob->pGeom = nullptr;
 		if (pScene->uNumGeom > 0)
@@ -491,6 +493,13 @@ public:
 			ifs.read((char*)pScene->pBlob->pMate, sizeof(SDMaterial) * pScene->uNumMate);
 		}
 
+		pScene->pBlob->pLitDire = nullptr;
+		if (pScene->uNumLitDire > 0)
+		{
+			pScene->pBlob->pLitDire = new SDLitDire[pScene->uNumLitDire];
+			ifs.read((char*)pScene->pBlob->pLitDire, sizeof(SDLitDire) * pScene->uNumLitDire);
+		}
+
 		pScene->pBlob->pLitPoint = nullptr;
 		if (pScene->uNumLitPoint > 0)
 		{
@@ -503,13 +512,6 @@ public:
 		{
 			pScene->pBlob->pLitSpot = new SDLitSpot[pScene->uNumLitSpot];
 			ifs.read((char*)pScene->pBlob->pLitSpot, sizeof(SDLitSpot) * pScene->uNumLitSpot);
-		}
-
-		pScene->pBlob->pLitDire = nullptr;
-		if (pScene->uNumLitDire > 0)
-		{
-			pScene->pBlob->pLitDire = new SDLitDire[pScene->uNumLitDire];
-			ifs.read((char*)pScene->pBlob->pLitDire, sizeof(SDLitDire) * pScene->uNumLitDire);
 		}
 		//
 		ifs.read((char*)pScene->pRoot, sizeof(SDRoot));
