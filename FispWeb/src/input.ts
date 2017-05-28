@@ -21,34 +21,41 @@
         }
 
         static explorer() {
+            var flag = 0;//0 == ie, 1 == chrome, 2 == firefox, 3 == opera, 4 == saf
             var name = "";
             var explorer = window.navigator.userAgent;
+            gMsgbox.showMsg(explorer);
             //ie 
-            if (explorer.indexOf("MSIE") >= 0) {
-                name = "ie";
-                alert("ie");
-            }
-            //firefox 
-            else if (explorer.indexOf("Firefox") >= 0) {
-                name = "fox";
-                alert("fox");
+            if (explorer.indexOf("Edge") >= 0 || explorer.indexOf("MSIE") >= 0) {
+                flag = 0;
+                name = "Edge";
+                alert("Edge");
             }
             //Chrome
             else if (explorer.indexOf("Chrome") >= 0) {
-                name = "cro";
-                alert("cro");
+                flag = 1;
+                name = "Chrome";
+                alert("Chrome");
+            }
+            //firefox 
+            else if (explorer.indexOf("Firefox") >= 0) {
+                flag = 2;
+                name = "Firefox";
+                alert("Firefox");
             }
             //Opera
             else if (explorer.indexOf("Opera") >= 0) {
-                name = "ope";
-                alert("ope");
+                flag = 3;
+                name = "Opera";
+                alert("Opera");
             }
             //Safari
             else if (explorer.indexOf("Safari") >= 0) {
-                name = "saf";
-                alert("saf");
+                flag = 4;
+                name = "Safari";
+                alert("Safari");
             }
-            return name;
+            return [flag, name];
         }
 
         static isPC(): boolean {

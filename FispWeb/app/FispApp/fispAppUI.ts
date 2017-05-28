@@ -461,11 +461,20 @@
             var user = gUser.mbSignin ? gUser.mstrName : "Vistor";
             var ypos = 35;
             {
-                var opt = UIStyle.editArea(1, ypos, 5, 40, "", 16, true);
+                var expl = Input.explorer();
+                var row = 6; var col = 44;
+                if (0 == expl[0]) { row = 6; col = 44; }//edge
+                else if (1 == expl[0]) { row = 5; col = 53; }//chrome
+                else if (2 == expl[0]) { row = 5; col = 40; }//firefox
+                var opt = UIStyle.editArea(1, ypos, row, col, "", 16, true);
                 var fun = function (e) { };
                 this.mChat = new UITextArea("edtChat", opt, this.mUiMgr, fun, false);
                 this.mdlg.add(this.mChat);
-                var opt = UIStyle.editArea(1, ypos + 136, 2, 32, "", 16);
+                var row = 6; var col = 36;
+                if (0 == expl[0]) { row = 3; col = 36; }//edge
+                else if (1 == expl[0]) { row = 2; col = 43; }//chrome
+                else if (2 == expl[0]) { row = 2; col = 32;}//firefox
+                var opt = UIStyle.editArea(1, ypos + 136, row, col, "", 16);
                 var edtSend = new UITextArea("edtSend", opt, this.mUiMgr, null, false);
                 this.mdlg.add(edtSend);
                 var opt = UIStyle.button(cx - 65, ypos + 160, 60, 30, gLang.mString.dlgChat.send[lang]);
