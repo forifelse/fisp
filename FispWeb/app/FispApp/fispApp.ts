@@ -37,10 +37,10 @@
             gRoot.mEngineImp.createSkyBox('skybox_objname', "skybox");
             gRoot.mEngineImp.createTerrain('grass_objname', 'grass.jpg', 32, 32, true, false);
             //
-            var bSimplify = false;
-            var pos = new EngineCore.Vector3(0, 0, 0);
-            var scale = new EngineCore.Vector3(0.5, 0.5, 0.5);//(1.0,1.0,1.0);
-            gRoot.mEngineImp.addSkeleton('character_objname', "dude.3d", null, true, null, pos, scale, true, bSimplify);
+            //var bSimplify = false;
+            //var pos = new EngineCore.Vector3(0, 0, 0);
+            //var scale = new EngineCore.Vector3(0.5, 0.5, 0.5);//(1.0,1.0,1.0);
+            //gRoot.mEngineImp.addSkeleton('character_objname', "dude.3d", null, true, null, pos, scale, true, bSimplify);
             //
             //var bSimplify = false;
             //var pos = new EngineCore.Vector3(100, 10, 0);

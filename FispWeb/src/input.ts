@@ -21,9 +21,9 @@
         }
 
         static explorer() {
-            var flag = 0;//0 == ie, 1 == chrome, 2 == firefox, 3 == opera, 4 == saf
-            var name = "";
             var explorer = window.navigator.userAgent;
+            var flag = -1;//0 == ie, 1 == chrome, 2 == firefox, 3 == opera, 4 == saf
+            var name = explorer;
             //ie 
             if (explorer.indexOf("Edge") >= 0 || explorer.indexOf("MSIE") >= 0) {
                 flag = 0;

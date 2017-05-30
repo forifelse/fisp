@@ -292,7 +292,7 @@
         build() {
             var lang = gLang.muLang;
             var cvsSize = this.mUiMgr.getCanvasSize();
-            var cx = 400;
+            var cx = 300;
             var cy = 300;
             var opt = UIStyle.window(this.mX, this.mY, cx, cy, gLang.mMsgWnd[lang], null, "rgba(40, 40, 40, 0.9)", null, 10);
             this.mdlg = new UIWindow(this.mstrWndName, opt, this.mUiMgr);
@@ -300,7 +300,7 @@
             var txt = new UIText("msg", opt, this.mUiMgr, false);
             this.mdlg.add(txt);
             this.mdlg.userData.mtxtMsg = txt;
-            var opt = UIStyle.button(370, 0, 30, 30, "X", null, "white", "rgba(200,4,4,1.0)");
+            var opt = UIStyle.button(cx-30, 0, 30, 30, "X", null, "white", "rgba(200,4,4,1.0)");
             var that = this;
             var fun = function (e) { that.mdlg.setVisible(false, false); that.mdlg.userData.mtxtMsg.updateText(" "); if (that.mdlg.userData.mdlgReturn) { (<UIWindow>that.mdlg.userData.mdlgReturn).setVisible(true); } };
             var btn = new UIButton("dlginfoclose", opt, this.mUiMgr, fun, false);

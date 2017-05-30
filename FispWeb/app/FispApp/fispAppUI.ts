@@ -97,7 +97,14 @@
                 this.mdlg.add(btn);
                 btn.setVisible(false, false);
                 var opt = UIStyle.button(125, ypos + 55, 100, 30, gLang.mUserinfo[lang]);
-                var fun = function (e) { gMsgbox.showMsg(gUser.mstrName + " Scene " + scecnt + ", Published: " + pubed, that.mdlg); this.mDlg.setVisible(false); };
+                var fun = function (e) {
+                    var msg = gUser.mstrName + " Scene " + scecnt + ", Published: " + pubed + '. ';
+                    msg += Input.explorer()[1] + '. ';
+                    var wh = gRoot.mFrame.mUiMgr.getCanvasSize();
+                    msg += 'width: ' + wh.width + ' height: ' + wh.height;
+                    gMsgbox.showMsg(msg, that.mdlg);
+                    this.mDlg.setVisible(false);
+                };
                 var btn = new UIButton("btnUserinfo", opt, this.mUiMgr, fun, false);
                 this.mdlg.add(btn);
                 btn.setVisible(false, false);
@@ -450,10 +457,8 @@
             var lang = gLang.muLang;
             var barSize = 64;
             var cvsSize = this.mUiMgr.getCanvasSize();
-            var cx = 400;
+            var cx = 300;
             var cy = (cvsSize.height < this.mUiMgr.heightThreshold()) ? 200 : 240;//Math.min(500, cvsSize.height - 2 * barSize);
-            //var x = 2;
-            //var y = 2;//cvsSize.height - cy - 2;
             var textTitle = gLang.mString.dlgChat.title[lang];
             var opt = UIStyle.window(this.mX, this.mY, cx, cy, textTitle);
             this.mdlg = new UIWindow(this.mstrWndName, opt, this.mUiMgr);
@@ -464,18 +469,18 @@
             var ypos = 35;
             {
                 var expl = Input.explorer();
-                var row = 6; var col = 44;
-                if (0 == expl[0]) { row = 6; col = 44; }//edge
-                else if (1 == expl[0]) { row = 6; col = 53; }//chrome
-                else if (2 == expl[0]) { row = 5; col = 40; }//firefox
+                var row = 6; var col = 32;
+                if (0 == expl[0]) { row = 6; col = 32; }//edge
+                else if (1 == expl[0]) { row = 6; col = 39; }//chrome
+                else if (2 == expl[0]) { row = 5; col = 28; }//firefox
                 var opt = UIStyle.editArea(1, ypos, row, col, "", 16, true);
                 var fun = function (e) { };
                 this.mChat = new UITextArea("edtChat", opt, this.mUiMgr, fun, false);
                 this.mdlg.add(this.mChat);
-                var row = 6; var col = 36;
-                if (0 == expl[0]) { row = 3; col = 36; }//edge
-                else if (1 == expl[0]) { row = 3; col = 43; }//chrome
-                else if (2 == expl[0]) { row = 2; col = 32;}//firefox
+                var row = 6; var col = 25;
+                if (0 == expl[0]) { row = 3; col = 25; }//edge
+                else if (1 == expl[0]) { row = 3; col = 29; }//chrome
+                else if (2 == expl[0]) { row = 2; col = 21;}//firefox
                 var opt = UIStyle.editArea(1, ypos + 136, row, col, "", 16);
                 var edtSend = new UITextArea("edtSend", opt, this.mUiMgr, null, false);
                 this.mdlg.add(edtSend);
