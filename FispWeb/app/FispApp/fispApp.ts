@@ -16,6 +16,7 @@
             this.optCallback.onUpdate = this.onUpdate;
             this.optCallback.onPicked = this.onPicked;
             this.optCallback.onResize = this.onResize;
+            this.optCallback.onReceMsg = this.onReceMsg;
             //
             this.mDlgTop = null;
             this.mDlgMain = null;
@@ -38,18 +39,24 @@
             //
             var bSimplify = false;
             var pos = new EngineCore.Vector3(0, 0, 0);
-            var scale = new EngineCore.Vector3(1.0,1.0,1.0);//(0.05, 0.05, 0.05);
+            var scale = new EngineCore.Vector3(0.5, 0.5, 0.5);//(1.0,1.0,1.0);
             gRoot.mEngineImp.addSkeleton('character_objname', "dude.3d", null, true, null, pos, scale, true, bSimplify);
+            //
+            //var bSimplify = false;
+            //var pos = new EngineCore.Vector3(100, 10, 0);
+            //var scale = new EngineCore.Vector3(1.0, 1.0, 1.0);
+            //gRoot.mEngineImp.addSkeleton('test_objname', "test.3d", null, true, null, pos, scale, true, bSimplify);
         }
 
         onBuildUi(uiMgr) {
             var that = this;
-            this.mDlgTop = new Fisp.DlgTop(uiMgr);
-            this.mDlgMain = new Fisp.DlgMain(uiMgr);
+            var cvsSize = uiMgr.getCanvasSize();
+            this.mDlgTop = new Fisp.DlgTop(uiMgr, 2, 44);
+            this.mDlgMain = new Fisp.DlgMain(uiMgr, true, 68, 2);
             this.mDlgTop.mdlgMain = this.mDlgMain;
-            this.mDlgEditScene = new Fisp.DlgEditScene(uiMgr);
-            this.mDlgEntityProp = new Fisp.DlgEntityProperty();
-            this.mDlgChat = new Fisp.DlgChat(uiMgr);
+            this.mDlgEditScene = new Fisp.DlgEditScene(uiMgr, false, 68, 2);
+            this.mDlgEntityProp = new Fisp.DlgEntityProperty(uiMgr, false, 68, 2);
+            this.mDlgChat = new Fisp.DlgChat(uiMgr, false, 68, 2);
 
             uiMgr.regUserDlg(this.mDlgTop);
             uiMgr.regUserDlg(this.mDlgMain);
@@ -68,6 +75,47 @@
             //if (null != this.mDlgTop) {
             //    this.mDlgTop.resize(evt);
             //}
+        }
+
+        onReceMsg(arg1, arg2, uiMgr: UIMgr) {
+            var flag = arg2.indexOf(":");
+            var sub1, sub2;
+            if (flag != -1) {
+                sub1 = arg2.substr(0, flag);
+                sub2 = arg2.substr(flag + 1);
+            }
+            if (arg1 == "signup") {
+                var dlg = uiMgr.findUserDlg("dlgsignup");
+                if (dlg) {
+                    (<DlgSignup>dlg).mdlg.setVisible(false);
+                }
+                var dlg = uiMgr.findUserDlg("dlgmain");
+                gMsgbox.showMsg(gLang.mString.msg.signupok[gLang.muLang], (<DlgMain>dlg).mdlg);
+            }
+            else if (arg1 == "signin") {
+                gUser.mstrName = arg2;
+                gUser.mbSignin = true;
+                var dlg = uiMgr.findUserDlg("dlgmain");
+                if (dlg) {
+                    (<DlgMain>dlg).signState(true);
+                }
+            }
+            else if (arg1 == "chat") {
+                var dlg = uiMgr.findUserDlg('dlgchat');
+                if (dlg) {
+                    (<DlgChat>dlg).mChat.addLine(sub2 + ': ' + sub1);
+                }
+            }
+            else if (arg1 == "onopen") {
+            }
+            else if (arg1 == "onclose") {
+            }
+            else if (arg1 == "error") {
+                gMsgbox.showMsg('ERROR: ' + arg2);
+            }
+            else {
+                //gMsgbox.showMsg(arg1 + ": " + arg2);
+            }
         }
 
     }

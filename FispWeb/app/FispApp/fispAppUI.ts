@@ -8,8 +8,8 @@
         mTextWSS: UIText;
         mdlgMain: DlgMain;
 
-        constructor(uiMgr) {
-            super('dlgtop');
+        constructor(uiMgr,x=0,y=0) {
+            super('dlgtop', x, y);
             this.mUiMgr = uiMgr;
             this.build(true);
         }
@@ -31,7 +31,8 @@
                 that.mdlgMain.show(bShow);
             };
             var cvsSize = this.mUiMgr.getCanvasSize();
-            var opt = UIStyle.button((cvsSize.width / 2 - 32), (cvsSize.height - 64), 64, 64, "", gRoot.mCfg.mstrDataPath + "source/logo.png", "white", "black", "0px");
+            //var opt = UIStyle.button((cvsSize.width / 2 - 32), (cvsSize.height - 64), 64, 64, "", gRoot.mCfg.mstrDataPath + "source/logo.png", "white", "black", "0px");
+            var opt = UIStyle.button(this.mX, this.mY, 64, 64, "", gRoot.mCfg.mstrDataPath + "source/logo.png", "white", "black", "0px");
             this.mmainBtn = new UIButton("mainmenu", opt, this.mUiMgr, clickLogo, true);
         }
 
@@ -56,8 +57,8 @@
         mLgc: FispApp;
         mbFullsceen: boolean;
 
-        constructor(uiMgr, bShow = true) {
-            super('dlgmain');
+        constructor(uiMgr, bShow = true, x = 0, y = 0) {
+            super('dlgmain', x, y);
             this.mUiMgr = uiMgr;
             this.mbFullsceen = false;
             this.build(bShow);
@@ -68,11 +69,11 @@
             var barSize = 64;
             var cvsSize = this.mUiMgr.getCanvasSize();
             var cx = 300;
-            var cy = Math.min(500, cvsSize.height - 2 * barSize);
-            var x = 0.5 * (cvsSize.width - cx);
-            var y = 0.5 * (cvsSize.height - barSize - cy);
+            var cy = Math.min(300, cvsSize.height - 2 * barSize);
+            //var x = 68;//0.5 * (cvsSize.width - cx);
+            //var y = 2;//0.5 * (cvsSize.height - barSize - cy);
             var textTitle = gLang.mmainMenu[lang];
-            var opt = UIStyle.window(x, y, cx, cy, textTitle);
+            var opt = UIStyle.window(this.mX, this.mY, cx, cy, textTitle);
             this.mdlg = new UIWindow(this.mstrWndName, opt, this.mUiMgr);
             this.mdlg.setVisible(bShow, true);
             //
@@ -129,7 +130,7 @@
                     edtid.setValue(''); edtpw.setValue(''); that.mdlg.setVisible(false);
                     var dlg = that.mUiMgr.findUserDlg('dlgsignup');
                     if (!dlg) {
-                        dlg = new Fisp.DlgSignup(that.mUiMgr, true);
+                        dlg = new Fisp.DlgSignup(that.mUiMgr, true, 68, 2);
                         that.mUiMgr.regUserDlg(dlg);
                     }
                     (<DlgSignup>dlg).mdlg.setVisible(true);
@@ -145,15 +146,15 @@
             var btn = new UIButton("btnhelp", opt, this.mUiMgr, fun, false);
             this.mdlg.add(btn);
             var opt = UIStyle.button(240, ypos + 54, 60, 20, gLang.mString.dlgMain.chat[lang]);
-            var fun = function (e) { var dlg: DlgChat = that.mUiMgr.findUserDlg('dlgchat'); dlg.mdlg.setVisible(!dlg.isVisible()); }
+            var fun = function (e) { var dlg: DlgChat = that.mUiMgr.findUserDlg('dlgchat'); dlg.mdlg.setVisible(!dlg.isVisible()); that.show(false); }
             var btn = new UIButton("btnChat", opt, this.mUiMgr, fun, false);
             this.mdlg.add(btn);
             //
-            var opt = UIStyle.button(30, ypos + 100, 240, 50, gLang.mFullscreen[lang]);
+            var opt = UIStyle.button(30, ypos + 90, 240, 35, gLang.mFullscreen[lang]);
             var btn = new UIButton("btnFullscreen", opt, this.mUiMgr, function (e) { that.fullscreen(e); that.show(false); }, false);
             this.mdlg.add(btn);
 
-            var opt = UIStyle.button(30, ypos + 160, 240, 50, gLang.mHideEditor[lang]);
+            var opt = UIStyle.button(30, ypos + 130, 240, 35, gLang.mShowEditor[lang]);
             var fun = function (e) {
                 var dlg: DlgEditScene = that.mUiMgr.findUserDlg('dlgeditscene');
                 if (gUser.mbEdit) {
@@ -170,11 +171,12 @@
                     //if (b) { gRoot.mFrame.mLgc.editMode(true); }
                 }
                 gUser.mbEdit = !gUser.mbEdit;
+                that.show(false); 
             };
             var btn = new UIButton("btnPlay", opt, this.mUiMgr, fun, false);
             this.mdlg.add(btn);
             //
-            var opt = UIStyle.button(30, ypos + 220, 240, 50, gLang.mRunVR[lang]);
+            var opt = UIStyle.button(30, ypos + 170, 240, 35, gLang.mRunVR[lang]);
             var funRun = function (e) {
                 that.show(false);
                 Utility.downloadFile("VR-exe.rar");
@@ -182,7 +184,7 @@
             }
             var btn = new UIButton("btnRunVR", opt, this.mUiMgr, funRun, false);
             this.mdlg.add(btn);
-            var opt = UIStyle.button(30, ypos + 280, 240, 50, gLang.mRunMR[lang]);
+            var opt = UIStyle.button(30, ypos + 210, 240, 35, gLang.mRunMR[lang]);
             var fun = function (e) { that.mdlg.setVisible(false, false); Utility.downloadFile("MR-exe.rar"); };
             var btn = new UIButton("btnRunMR", opt, this.mUiMgr, fun, false);
             this.mdlg.add(btn);
@@ -317,8 +319,8 @@
         mUiMgr: UIMgr;
         mdlg: UIWindow;
 
-        constructor(uiMgr, bShow = true) {
-            super('dlgsignup');
+        constructor(uiMgr, bShow = true, x = 0, y = 0) {
+            super('dlgsignup', x, y);
             this.mUiMgr = uiMgr;
             this.build(bShow);
         }
@@ -328,11 +330,11 @@
             var barSize = 64;
             var cvsSize = this.mUiMgr.getCanvasSize();
             var cx = 240;
-            var cy = 200;//Math.min(500, cvsSize.height - 2 * barSize);
-            var x = 0.5 * (cvsSize.width - cx);
-            var y = 0.5 * (cvsSize.height - barSize - cy);
+            var cy = 200;
+            //var x = 4;//0.5 * (cvsSize.width - cx);
+            //var y = 4;//0.5 * (cvsSize.height - barSize - cy);
             var textTitle = gLang.mString.dlgSignup.title[lang];
-            var opt = UIStyle.window(x, y, cx, cy, textTitle);
+            var opt = UIStyle.window(this.mX, this.mY, cx, cy, textTitle);
             this.mdlg = new UIWindow(this.mstrWndName, opt, this.mUiMgr);
             this.mdlg.setVisible(bShow, true);
             //
@@ -438,8 +440,8 @@
         mdlg: UIWindow;
         mChat: UITextArea;
 
-        constructor(uiMgr, bShow = true) {
-            super('dlgchat');
+        constructor(uiMgr, bShow = true, x = 0, y = 0) {
+            super('dlgchat', x, y);
             this.mUiMgr = uiMgr;
             this.build(bShow);
         }
@@ -450,12 +452,12 @@
             var cvsSize = this.mUiMgr.getCanvasSize();
             var cx = 400;
             var cy = (cvsSize.height < this.mUiMgr.heightThreshold()) ? 200 : 240;//Math.min(500, cvsSize.height - 2 * barSize);
-            var x = 2;
-            var y = cvsSize.height - cy - 2;
+            //var x = 2;
+            //var y = 2;//cvsSize.height - cy - 2;
             var textTitle = gLang.mString.dlgChat.title[lang];
-            var opt = UIStyle.window(x, y, cx, cy, textTitle);
+            var opt = UIStyle.window(this.mX, this.mY, cx, cy, textTitle);
             this.mdlg = new UIWindow(this.mstrWndName, opt, this.mUiMgr);
-            this.mdlg.setVisible(bShow, true);
+            this.mdlg.setVisible(bShow);
             //
             var that = this;
             var user = gUser.mbSignin ? gUser.mstrName : "Vistor";
@@ -464,7 +466,7 @@
                 var expl = Input.explorer();
                 var row = 6; var col = 44;
                 if (0 == expl[0]) { row = 6; col = 44; }//edge
-                else if (1 == expl[0]) { row = 5; col = 53; }//chrome
+                else if (1 == expl[0]) { row = 6; col = 53; }//chrome
                 else if (2 == expl[0]) { row = 5; col = 40; }//firefox
                 var opt = UIStyle.editArea(1, ypos, row, col, "", 16, true);
                 var fun = function (e) { };
@@ -472,7 +474,7 @@
                 this.mdlg.add(this.mChat);
                 var row = 6; var col = 36;
                 if (0 == expl[0]) { row = 3; col = 36; }//edge
-                else if (1 == expl[0]) { row = 2; col = 43; }//chrome
+                else if (1 == expl[0]) { row = 3; col = 43; }//chrome
                 else if (2 == expl[0]) { row = 2; col = 32;}//firefox
                 var opt = UIStyle.editArea(1, ypos + 136, row, col, "", 16);
                 var edtSend = new UITextArea("edtSend", opt, this.mUiMgr, null, false);
@@ -485,7 +487,7 @@
                         edtSend.setValue('');
                     }
                     else
-                        gMsgbox.showMsg(gLang.mString.msg.chatEmpty[gLang.muLang], null);
+                        gMsgbox.showMsg(gLang.mString.msg.chatEmpty[gLang.muLang], that.mdlg);
                 };
                 var btn = new UIButton("btnChatSend", opt, this.mUiMgr, fun, false);
                 this.mdlg.add(btn);
@@ -536,10 +538,10 @@
         mvPnl: Array<UIPanel>;
         miSel: number;
 
-        constructor(uiMgr, bShow: boolean = true, idxOpt: number = 0) {
-            super('dlgeditscene');
+        constructor(uiMgr, bShow: boolean = true, x = 0, y = 0) {
+            super('dlgeditscene', x, y);
             this.mUiMgr = uiMgr;
-            this.build(true);
+            this.build(bShow);
         }
 
         build(bShow: boolean = true, idxOpt: number = 0) {
@@ -547,8 +549,8 @@
             var cx = 300;
             var cvsSize = this.mUiMgr.getCanvasSize();
             var cy = 340;//(cvsSize.height < this.mUiMgr.heightThreshold()) ? 240 : 340;//cvsSize.height - 200;
-            var x = 2; var y = 0;
-            var opt = UIStyle.window(x, y, cx, cy, gLang.mSceneOp[lang]);
+            //var x = 2; var y = 2;
+            var opt = UIStyle.window(this.mX, this.mY, cx, cy, gLang.mSceneOp[lang]);
             this.mdlg = new UIWindow(this.mstrWndName, opt, this.mUiMgr);
             this.mdlg.setVisible(bShow);
             //
@@ -1203,8 +1205,8 @@
     export class DlgEntityProperty extends IWnd {
         mUiMgr: UIMgr;
 
-        constructor() {
-            super('dlgentityproperty');
+        constructor(uiMgr, bShow = true, x = 0, y = 0) {
+            super('dlgentityproperty', x, y);
         }
 
         addEntity(strName) {

@@ -39,31 +39,32 @@
             //var vdDir = this.getRootPath();
             //that.mstrDataPath = this.getRootPath2();
 
-            var procData = function (data: string) {
-                that.mcfgPath = JSON.parse(data);
-            }
+            //var procData = function (data: string) {
+            //    that.mcfgPath = JSON.parse(data);
+            //}
             //NetData.getData('fispweb.json', procData);
+
             //var procData = function (data: string) {
             //    that.mcfgEdit = JSON.parse(data);
             //}
             //NetData.getData(that.mstrDataPath + 'web/config/cfg.json', procData);
 
-            //var procData = function (data: string) {
-            //    that.mObjGlobal = JSON.parse(data);
-            //}
-            //NetData.getData(that.mstrDataPath + 'web/config/objglobal.json', procData);
-            //var procData = function (data: string) {
-            //    that.mObjBasic = JSON.parse(data);
-            //}
-            //NetData.getData(that.mstrDataPath + 'web/config/objbasic.json', procData);
-            //var procData = function (data: string) {
-            //    that.mObjBuild = JSON.parse(data);
-            //}
-            //NetData.getData(that.mstrDataPath + 'web/config/objbuilding.json', procData);
-            //var procData = function (data: string) {
-            //    that.mObjMachine = JSON.parse(data);
-            //}
-            //NetData.getData(that.mstrDataPath + 'web/config/objmachine.json', procData);
+            var procData = function (data: string) {
+                that.mObjGlobal = JSON.parse(data);
+            }
+            NetData.getData(that.mstrDataPath + 'web/config/objglobal.json', procData);
+            var procData = function (data: string) {
+                that.mObjBasic = JSON.parse(data);
+            }
+            NetData.getData(that.mstrDataPath + 'web/config/objbasic.json', procData);
+            var procData = function (data: string) {
+                that.mObjBuild = JSON.parse(data);
+            }
+            NetData.getData(that.mstrDataPath + 'web/config/objbuilding.json', procData);
+            var procData = function (data: string) {
+                that.mObjMachine = JSON.parse(data);
+            }
+            NetData.getData(that.mstrDataPath + 'web/config/objmachine.json', procData);
         }
     }
 

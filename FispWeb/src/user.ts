@@ -13,7 +13,7 @@
         mstrSocketID: string;
 
         constructor() {
-            this.mbEdit = true;
+            this.mbEdit = false;
             this.mbSignin = false;
             this.mstrName = "";
             this.mvSceneName = [];

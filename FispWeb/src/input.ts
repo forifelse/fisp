@@ -24,36 +24,30 @@
             var flag = 0;//0 == ie, 1 == chrome, 2 == firefox, 3 == opera, 4 == saf
             var name = "";
             var explorer = window.navigator.userAgent;
-            gMsgbox.showMsg(explorer);
             //ie 
             if (explorer.indexOf("Edge") >= 0 || explorer.indexOf("MSIE") >= 0) {
                 flag = 0;
                 name = "Edge";
-                alert("Edge");
             }
             //Chrome
             else if (explorer.indexOf("Chrome") >= 0) {
                 flag = 1;
                 name = "Chrome";
-                alert("Chrome");
             }
             //firefox 
             else if (explorer.indexOf("Firefox") >= 0) {
                 flag = 2;
                 name = "Firefox";
-                alert("Firefox");
             }
             //Opera
             else if (explorer.indexOf("Opera") >= 0) {
                 flag = 3;
                 name = "Opera";
-                alert("Opera");
             }
             //Safari
             else if (explorer.indexOf("Safari") >= 0) {
                 flag = 4;
                 name = "Safari";
-                alert("Safari");
             }
             return [flag, name];
         }

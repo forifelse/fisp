@@ -146,9 +146,12 @@
     //
     export class IWnd {
         mstrWndName: string;
+        mX: number;
+        mY: number;
 
-        constructor(name: string) {
+        constructor(name: string, x: number = 0, y: number = 0) {
             this.mstrWndName = name || '';
+            this.mX = x; this.mY = y;
         }
 
         name() {
@@ -168,6 +171,7 @@
         mCScon = ["Connected", "已连接"];
         mCScloi = ["Closing ...", "正在关闭"];
         mCSclo = ["Closed", "已关闭"];
+        mCSErr = ["Connecting, try again please!","正在连接，请再试一次！"];
         //
         mMsgTitle = ['', ''];//["DIYW3D can edit and publish 3D scene online", "DIYW3D可在线编辑、发布三维场景"];
         //mMsgHelp = ["Welcome to DIYW3D.<br>" + this.mMsgTitle[0] + ".<br>Have any question, please feel free contact us:<br>diyw3d@gmail.com .<br>Thank you!", "欢迎光临 DIYW3D。<br>" + this.mMsgTitle[1] + "。<br>有任何问题请垂询:<br>diyw3d@gmail.com 。<br>谢谢!"];
@@ -279,8 +283,8 @@
         mUiMgr: UIMgr;
         mdlg: UIWindow;
 
-        constructor(uiMgr: UIMgr) {
-            super('dlginfo');
+        constructor(uiMgr: UIMgr, x = 0, y = 0) {
+            super('dlginfo', x, y);
             this.mUiMgr = uiMgr;
             this.build();
         }
@@ -290,8 +294,7 @@
             var cvsSize = this.mUiMgr.getCanvasSize();
             var cx = 400;
             var cy = 300;
-            var x = (0.5 * (cvsSize.width - cx)); var y = (0.5 * (cvsSize.height - cy));
-            var opt = UIStyle.window(x, y, cx, cy, gLang.mMsgWnd[lang], null, "rgba(40, 40, 40, 0.9)", null, 10);
+            var opt = UIStyle.window(this.mX, this.mY, cx, cy, gLang.mMsgWnd[lang], null, "rgba(40, 40, 40, 0.9)", null, 10);
             this.mdlg = new UIWindow(this.mstrWndName, opt, this.mUiMgr);
             var opt = UIStyle.text(0, 34, "", 24, "rgba(240,240,14,1.0)");
             var txt = new UIText("msg", opt, this.mUiMgr, false);
@@ -330,8 +333,8 @@
         mTextWSS: UIText;
         //mdlgMain: DlgMain;
 
-        constructor(uiMgr) {
-            super('dlgsys');
+        constructor(uiMgr,x=0,y=0) {
+            super('dlgsys', x, y);
             this.mUiMgr = uiMgr;
             this.build(true);
         }
@@ -357,9 +360,9 @@
             //var opt = UIStyle.button((cvsSize.width / 2 - 32), (cvsSize.height - 64), 64, 64, "", "data/source/logo.png", "white", "black", "0px");
             //this.mmainBtn = new UIButton("mainmenu", opt, this.mUiMgr, clickLogo, true);
 
-            var opt = UIStyle.text(2, 0, '', 20);
+            var opt = UIStyle.text(this.mX, this.mY, '', 20);
             this.mTextFPS = new UIText('fps', opt, this.mUiMgr, true);
-            var opt = UIStyle.text(2, 20, '', 20);
+            var opt = UIStyle.text(this.mX, 20, '', 20);
             this.mTextWSS = new UIText('wss', opt, this.mUiMgr, true);
         }
 

@@ -69,7 +69,7 @@ namespace Fisp {
             }
             this.mCore = new EngineCore.Engine(cvs, true);
             this.mScene = new EngineCore.Scene(this.mCore);
-            this.mScene.clearColor = new EngineCore.Color3(0, 0, 0);
+            this.mScene.clearColor = new EngineCore.Color4(0, 0, 0, 0);
             //this.mCamera = new EngineCore.FreeCamera("camera1", new EngineCore.Vector3(0, 30, -25), this.mScene);
             //this.mCamera.rotation = new EngineCore.Vector3(0, 0, 0);
             ////this.mCamera.setTarget(EngineCore.Vector3.Zero());

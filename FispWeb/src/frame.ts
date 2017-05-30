@@ -112,8 +112,8 @@
             var css = "button {cursor:pointer;}";
             var options = { themeRoot: "./css/", themeGUI: "default" };
             this.mUiMgr = new Fisp.UIMgr(cvs, css, options);
-            gMsgbox = new Msgbox(this.mUiMgr);
-            gDlgSys = new DlgSys(this.mUiMgr);
+            gMsgbox = new Msgbox(this.mUiMgr, 68, 2);
+            gDlgSys = new DlgSys(this.mUiMgr, 2, 0);
             this.mUiMgr.regUserDlg(gMsgbox);
             this.mUiMgr.regUserDlg(gDlgSys);
             if (null != this.doBuildUi)
@@ -138,44 +138,21 @@
         }
 
         onReceMsg(arg1, arg2) {
-            var flag = arg2.indexOf(":");
-            var sub1, sub2;
-            if (flag != -1) {
-                sub1 = arg2.substr(0, flag);
-                sub2 = arg2.substr(flag + 1);
-            }
-            if (arg1 == "signup") {
-                //var dlg = this.mUiMgr.findUserDlg("dlgsignup");
-                //if (dlg) {
-                //    (<DlgSignup>dlg).mdlg.setVisible(false);
-                //}
-                //var dlg = this.mUiMgr.findUserDlg("dlgmain");
-                //gMsgbox.showMsg(gLang.mString.msg.signupok[gLang.muLang], (<DlgMain>dlg).mdlg);
-            }
-            else if (arg1 == "signin") {
-                //gUser.mstrName = arg2;
-                //gUser.mbSignin = true;
-                //var dlg = this.mUiMgr.findUserDlg("dlgmain");
-                //if (dlg) {
-                //    (<DlgMain>dlg).signState(true);
-                //}
-            }
-            else if (arg1 == "chat") {
-                //var dlg = this.mUiMgr.findUserDlg('dlgchat');
-                //if (dlg) {
-                //   (<DlgChat>dlg).mChat.addLine(sub2 + ': ' + sub1);
-                //}
-            }
-            else if (arg1 == "onopen") {
+            //var flag = arg2.indexOf(":");
+            //var sub1, sub2;
+            //if (flag != -1) {
+            //    sub1 = arg2.substr(0, flag);
+            //    sub2 = arg2.substr(flag + 1);
+            //}
+            if (arg1 == "onopen") {
                 this.mNet.mstrID = arg2;
                 gUser.mstrSocketID = arg2;
             }
             else if (arg1 == "onclose") {
-                //alert("onclose" + this.mNet.mstrID);
             }
-            else {
-                //gMsgbox.showMsg(arg1 + ": " + arg2);
+            else if (arg1 == "onerror") {
             }
+            this.doReceMsg(arg1, arg2, this.mUiMgr);
         }
 
         onKeyDown() {
@@ -224,7 +201,7 @@
                 var wss = (this.mNet) ? this.mNet.state() : -1;
                 switch (wss) {
                     case 0: str = gLang.mCSconi[idx]; break;
-                    case 1: str = gLang.mCScon[idx]; break;
+                    case 1: str = gUser.mbSignin ? gUser.mstrName : gLang.mCScon[idx]; break;
                     case 2: str = gLang.mCScloi[idx]; break;
                     case 3: str = gLang.mCSclo[idx]; break;
                     default: str = gLang.mCSclo[idx];

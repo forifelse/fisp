@@ -38,21 +38,6 @@
             }
 
             this.msocket.onmessage = function (msg) {
-                //var str = "";
-                //str = msg.data;
-                //var id = str.substr(0, 1);
-                //var separator = str.indexOf("|");
-                //var arg1 = "";
-                //var arg2 = "";
-                //if (separator != -1) {
-                //    arg1 = str.substr(1, separator - 1);
-                //    arg2 = str.substr(separator + 1);
-                //}
-                //else {
-                //    arg1 = str.substr(1);
-                //}
-                //Fisp.gRoot.mFrame.onReceMsg(id, arg1, arg2);
-
                 var arg1 = "";
                 var arg2 = "";
                 var str = msg.data;
@@ -83,6 +68,8 @@
             }
             if (!this.msocket || this.msocket.readyState != 1) {
                 this.connect(this.mwsSvr);
+                gMsgbox.showMsg(gLang.mCSErr[gLang.muLang]);
+                return;
             }
             //
             eType = eType || "1";
@@ -171,7 +158,8 @@
         }
 
         errlog = function (e) {
-            gMsgbox.showMsg("num: " + e.number + "\n" + "name: " + e.name + "\n" + "des: " + e.description + "\n" + "msg: " + e.message + "\n");
+            gMsgbox.showMsg("ERROR: " + e.name + "\n");
+            //gMsgbox.showMsg("num: " + e.number + "\n" + "name: " + e.name + "\n" + "des: " + e.description + "\n" + "msg: " + e.message + "\n");
         }
 
         proceMsg = function (type, msg) {

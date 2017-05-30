@@ -103,7 +103,6 @@
   <ItemGroup>
     <TypeScriptCompile Include="app\FispApp\fispApp.ts" />
     <TypeScriptCompile Include="app\FispApp\fispAppUI.ts" />
-    <TypeScriptCompile Include="app\ScanApp\scanApp.ts" />
     <TypeScriptCompile Include="src\engine.ts" />
     <TypeScriptCompile Include="src\enginecore.d.ts" />
     <TypeScriptCompile Include="src\entity.ts" />
