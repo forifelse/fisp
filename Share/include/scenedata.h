@@ -155,45 +155,51 @@ struct SDTexture
 
 };
 
-struct SDGeometry
+struct SDGeomBlob
 {
-	unsigned int	uNumVertex;
 	float*			pVertices;
-	//unsigned int	uNumFace;
-	unsigned int	uNumIndex;
 	unsigned int*	pIndex;
 	float*			pUV;
 	float*			pNormal;
 	float*			pTangent;
 	float*			pVerClr;
 
+	SDGeomBlob() { memset(this, 0, sizeof(SDGeomBlob)); }
+	SDGeomBlob(const SDGeomBlob& o)
+	{
+		memcpy(this, &o, sizeof(SDGeomBlob));
+	}
+	SDGeomBlob& operator=(const SDGeomBlob& o)
+	{
+		memcpy(this, &o, sizeof(SDGeomBlob));
+		return *this;
+	}
+	bool operator<(const SDGeomBlob& o)
+	{
+		return true;
+	}
+};
+
+struct SDGeometry
+{
+	unsigned int	uNumVertex;
+	unsigned int	uNumIndex;
+	SDGeomBlob*		pGemoBlob;
+
 	SDGeometry() { memset(this, 0, sizeof(SDGeometry)); }
 	SDGeometry(const SDGeometry& o)
 	{
 		uNumVertex = o.uNumVertex;
-		//uNumFace = o.uNumFace;
 		uNumIndex = o.uNumIndex;
-		// ?
-		pVertices = o.pVertices;
-		pIndex = o.pIndex;
-		pUV = o.pUV;
-		pNormal = o.pNormal;
-		pTangent = o.pTangent;
-		pVerClr = o.pVerClr;
-
+		//uNumFace = o.uNumFace;
+		pGemoBlob = o.pGemoBlob;
 	}
 	SDGeometry& operator=(const SDGeometry& o)
 	{
 		uNumVertex = o.uNumVertex;
-		//uNumFace = o.uNumFace;
 		uNumIndex = o.uNumIndex;
-		// ?
-		pVertices = o.pVertices;
-		pIndex = o.pIndex;
-		pUV = o.pUV;
-		pNormal = o.pNormal;
-		pTangent = o.pTangent;
-		pVerClr = o.pVerClr;
+		//uNumFace = o.uNumFace;
+		pGemoBlob = o.pGemoBlob;
 		return *this;
 	}
 	bool operator<(const SDGeometry& o)
@@ -356,14 +362,41 @@ struct SDScene
 	SDRoot*			pRoot;
 
 	SDScene() { memset(this, 0, sizeof(SDScene)); }
-	//virtual ~SDScene() { if (pBlob)delete pBlob, pBlob = 0; if (pRoot)delete pRoot, pRoot = 0; }
+	virtual ~SDScene()
+	{
+		if (pBlob)delete pBlob, pBlob = 0; if (pRoot)delete pRoot, pRoot = 0;
+	}
 	SDScene(const SDScene& o)
 	{
-		memcpy(this, &o, sizeof(SDScene));
+		//memcpy(this, &o, sizeof(SDScene));
+		pBlob = o.pBlob;
+		uNumNode = o.uNumNode;
+		uNumMesh = o.uNumMesh;
+		uNumGeom = o.uNumGeom;
+		uNumMate = o.uNumMate;
+		uNumLitDire = o.uNumLitDire;
+		uNumLitPoint = o.uNumLitPoint;
+		uNumLitSpot = o.uNumLitSpot;
+
+		strName = o.strName;
+		camera = o.camera;
+		pRoot = o.pRoot;
 	}
 	SDScene& operator=(const SDScene& o)
 	{
-		memcpy(this, &o, sizeof(SDScene));
+		//memcpy(this, &o, sizeof(SDScene));
+		pBlob = o.pBlob;
+		uNumNode = o.uNumNode;
+		uNumMesh = o.uNumMesh;
+		uNumGeom = o.uNumGeom;
+		uNumMate = o.uNumMate;
+		uNumLitDire = o.uNumLitDire;
+		uNumLitPoint = o.uNumLitPoint;
+		uNumLitSpot = o.uNumLitSpot;
+
+		strName = o.strName;
+		camera = o.camera;
+		pRoot = o.pRoot;
 		return *this;
 	}
 	bool operator<(const SDScene& o)
@@ -477,12 +510,13 @@ public:
 			ifs.read((char*)pScene->pBlob->pGeom, sizeof(SDGeometry) * pScene->uNumGeom);
 			for (unsigned int i = 0; i < pScene->uNumGeom; i++)
 			{
-				pScene->pBlob->pGeom[i].pVertices = nullptr;
-				pScene->pBlob->pGeom[i].pIndex = nullptr;
-				pScene->pBlob->pGeom[i].pUV = nullptr;
-				pScene->pBlob->pGeom[i].pNormal = nullptr;
-				pScene->pBlob->pGeom[i].pTangent = nullptr;
-				pScene->pBlob->pGeom[i].pVerClr = nullptr;
+				pScene->pBlob->pGeom[i].pGemoBlob = nullptr;
+				//pScene->pBlob->pGeom[i].pVertices = nullptr;
+				//pScene->pBlob->pGeom[i].pIndex = nullptr;
+				//pScene->pBlob->pGeom[i].pUV = nullptr;
+				//pScene->pBlob->pGeom[i].pNormal = nullptr;
+				//pScene->pBlob->pGeom[i].pTangent = nullptr;
+				//pScene->pBlob->pGeom[i].pVerClr = nullptr;
 			}
 		}
 

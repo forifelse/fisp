@@ -524,7 +524,7 @@ namespace fisp
 			for (ulong i = 0; i<uSize; i++)
 			{
 				char ch = getAt(i);
-				ch ^= 0xaf;
+				ch ^= 0xfa;
 				if (0 == ch)
 					continue;
 				setAt(i, ch);
@@ -543,7 +543,7 @@ namespace fisp
 			for (ulong i = 0; i<uSize; i++)
 			{
 				char ch = getAt(i);
-				ch ^= 0xaf;
+				ch ^= 0xfa;
 				if (0 == ch)
 					continue;
 				setAt(i, ch);

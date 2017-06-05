@@ -1,6 +1,7 @@
 #include "imexport.h"
 #include <fstream>
 #include "../../../../share/include/scenedata.h"
+#include "../../../../utility/include/useutility.h"
 
 bool ImExport::load(const std::string& strInFile, const std::string& strFormat, const std::string& strContent, const std::string& strOutFile)
 {
@@ -25,12 +26,27 @@ bool ImExport::load(const std::string& strInFile, const std::string& strFormat, 
 	{
 		return false;
 	}
-	SDScene outScene;
-	getScene(&outScene, pInScene);
-	SceneRW::writeScene(&outScene, strOutFile);
+	//SDScene outScene;
+	//getScene(&outScene, pInScene);
+	////for (unsigned int i = 0; i < 100; i++)
+	////{
+	////	char sz[16];
+	////	sprintf(sz, "%d", 2*i);
+	////	outScene.strTest+=std::string(sz);
+	////}
+	////outScene.strName = "aaaaaAAAA中文";
+	//String str = "aaaaaAAAA中文";
+	//str.encryption();
+	//outScene.strName = str.getString();
+	//SceneRW::writeScene(&outScene, strOutFile);
 	// test
 	SDScene inScene;
 	SceneRW::readScene(&inScene, strOutFile);
+	String str(inScene.strName);
+	str.decryption();
+	inScene.strName = str.getString();
+	if (inScene.strName == "aaaaaAAAA中文")
+		inScene.strName = "test ok";
 	return true;
 }
 
@@ -48,6 +64,7 @@ bool ImExport::getScene(void* pOutScene, const aiScene* pInScene)
 	pScene->pBlob->pGeom = new SDGeometry[pScene->uNumGeom];
 	for (unsigned int i = 0; i < pScene->uNumGeom; i++)
 	{
+		pScene->pBlob->pGeom[i].pGemoBlob = new SDGeomBlob;
 		getGeom(&pScene->pBlob->pGeom[i], pInScene->mMeshes[i]);
 	}
 	if (pInScene->mNumMaterials > 0)
@@ -68,45 +85,45 @@ bool ImExport::getGeom(void* pDest, const aiMesh* pSrc)
 		return false;
 	SDGeometry* dest = (SDGeometry*)pDest;
 	dest->uNumVertex = pSrc->mNumVertices;
-	dest->pVertices = new float[3 * dest->uNumVertex];
+	dest->pGemoBlob->pVertices = new float[3 * dest->uNumVertex];
 	if (pSrc->mNormals)
 	{
-		dest->pNormal = new float[3 * dest->uNumVertex];
+		dest->pGemoBlob->pNormal = new float[3 * dest->uNumVertex];
 	}
 	if (pSrc->mTangents)
 	{
-		dest->pTangent = new float[3 * dest->uNumVertex];
+		dest->pGemoBlob->pTangent = new float[3 * dest->uNumVertex];
 	}
 	if (pSrc->mTextureCoords)
 	{
-		dest->pUV = new float[2 * dest->uNumVertex];
+		dest->pGemoBlob->pUV = new float[2 * dest->uNumVertex];
 	}
 	for (unsigned int i = 0; i < pSrc->mNumVertices; i++)
 	{
-		dest->pVertices[3 * i] = pSrc->mVertices[i].x;
-		dest->pVertices[3 * i + 1] = pSrc->mVertices[i].y;
-		dest->pVertices[3 * i + 2] = pSrc->mVertices[i].z;
+		dest->pGemoBlob->pVertices[3 * i] = pSrc->mVertices[i].x;
+		dest->pGemoBlob->pVertices[3 * i + 1] = pSrc->mVertices[i].y;
+		dest->pGemoBlob->pVertices[3 * i + 2] = pSrc->mVertices[i].z;
 		if (pSrc->mNormals)
 		{
-			dest->pNormal[3 * i] = pSrc->mNormals[i].x;
-			dest->pNormal[3 * i + 1] = pSrc->mNormals[i].y;
-			dest->pNormal[3 * i + 2] = pSrc->mNormals[i].z;
+			dest->pGemoBlob->pNormal[3 * i] = pSrc->mNormals[i].x;
+			dest->pGemoBlob->pNormal[3 * i + 1] = pSrc->mNormals[i].y;
+			dest->pGemoBlob->pNormal[3 * i + 2] = pSrc->mNormals[i].z;
 		}
 		if (pSrc->mTangents)
 		{
-			dest->pTangent[3 * i] = pSrc->mTangents[i].x;
-			dest->pTangent[3 * i + 1] = pSrc->mTangents[i].y;
-			dest->pTangent[3 * i + 2] = pSrc->mTangents[i].z;
+			dest->pGemoBlob->pTangent[3 * i] = pSrc->mTangents[i].x;
+			dest->pGemoBlob->pTangent[3 * i + 1] = pSrc->mTangents[i].y;
+			dest->pGemoBlob->pTangent[3 * i + 2] = pSrc->mTangents[i].z;
 		}
 		if (pSrc->mTextureCoords)
 		{
-			dest->pUV[2 * i] = pSrc->mTextureCoords[0][i].x;
-			dest->pUV[2 * i + 1] = pSrc->mTextureCoords[0][i].y;
+			dest->pGemoBlob->pUV[2 * i] = pSrc->mTextureCoords[0][i].x;
+			dest->pGemoBlob->pUV[2 * i + 1] = pSrc->mTextureCoords[0][i].y;
 		}
 	}
 	dest->uNumIndex = pSrc->mFaces->mNumIndices;
-	dest->pIndex = new unsigned int[dest->uNumIndex];
-	memcpy(dest->pIndex, pSrc->mFaces->mIndices, dest->uNumIndex * sizeof(unsigned int));
+	dest->pGemoBlob->pIndex = new unsigned int[dest->uNumIndex];
+	memcpy(dest->pGemoBlob->pIndex, pSrc->mFaces->mIndices, dest->uNumIndex * sizeof(unsigned int));
 	
 	return true;
 }
