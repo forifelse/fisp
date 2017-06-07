@@ -1,6 +1,7 @@
 #include "imexport.h"
 #include <fstream>
 #include "../../../../share/include/scenedata.h"
+#include "../../../../utility/include/useutility.h"
 
 bool ImExport::load(const std::string& strInFile, const std::string& strFormat, const std::string& strContent, const std::string& strOutFile)
 {
@@ -187,7 +188,7 @@ bool ImExport::getRoot(void* pDest, const aiScene* pInScene)
 		return false;
 	SDRoot* dest = (SDRoot*)pDest;
 	if(nullptr != pRoot->mMeshes && pRoot->mNumMeshes > 0)
-		dest->strNodes = String::fromNumArray<uint>(pRoot->mMeshes, pRoot->mNumMeshes);
+		dest->strNodes = String::fromNumArray<uint>(pRoot->mMeshes, pRoot->mNumMeshes).getString();
 	//dest->pNodes = nullptr;
 	//dest->uNumNode = pRoot->mNumMeshes;
 	//if (dest->uNumNode > 0)

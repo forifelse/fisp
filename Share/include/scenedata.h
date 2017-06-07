@@ -1,6 +1,5 @@
 #pragma once
 #include <fstream>
-#include "../../../../utility/include/useutility.h"
 
 struct SDCamera
 {
@@ -242,9 +241,9 @@ struct SDEntity
 {
 	std::string		strName;
 	SDSubMesh		subFirst;
-	String			strSubGeom; // Geometry
-	String			strSubMate; // Material
-	String			strSubColl; // Collision
+	std::string		strSubGeom; // Geometry
+	std::string		strSubMate; // Material
+	std::string		strSubColl; // Collision
 
 	//unsigned int	uNumSubOther;
 	//SDSubMesh*		pSubOther;
@@ -282,7 +281,7 @@ struct SDNode
 	unsigned int	uParent;	// 0xffffffff or -1 means parent is null
 	//unsigned int	uNumChild;
 	//unsigned int*	pChildren;
-	String			strChildren;
+	std::string		strChildren;
 	// instance ?
 
 	SDNode() { memset(this, 0, sizeof(SDNode)); }
@@ -305,7 +304,7 @@ struct SDRoot
 {
 	//unsigned int	uNumNode;
 	//unsigned int*	pNodes;
-	String	strNodes;
+	std::string	strNodes;
 
 	SDRoot() { memset(this, 0, sizeof(SDRoot)); }
 	SDRoot(const SDRoot& o)
