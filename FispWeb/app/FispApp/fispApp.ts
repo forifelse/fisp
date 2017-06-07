@@ -216,9 +216,10 @@
                     //Fisp.mcMesh.water(name);
                     break;
                 case "character":
+                case "dude":
                     var bSimplify = false;
                     var pos = new EngineCore.Vector3(0, 0, 0);
-                    var scale = new EngineCore.Vector3(0.05, 0.05, 0.05);
+                    var scale = new EngineCore.Vector3(0.5, 0.5, 0.5);
                     gRoot.mEngineImp.addSkeleton(name, "dude.3d", null, true, null, pos, scale, true, bSimplify);
                     break;
                 case "litSky":
