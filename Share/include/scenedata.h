@@ -241,9 +241,7 @@ struct SDEntity
 {
 	std::string		strName;
 	SDSubMesh		subFirst;
-	std::string		strSubGeom; // Geometry
-	std::string		strSubMate; // Material
-	std::string		strSubColl; // Collision
+	std::string		strSubs; // Geometry index,Material index,Collision flag;Geometry index,Material index,Collision flag ...
 
 	//unsigned int	uNumSubOther;
 	//SDSubMesh*		pSubOther;
@@ -302,9 +300,9 @@ struct SDNode
 
 struct SDRoot
 {
+	std::string	strNodes;
 	//unsigned int	uNumNode;
 	//unsigned int*	pNodes;
-	std::string	strNodes;
 
 	SDRoot() { memset(this, 0, sizeof(SDRoot)); }
 	SDRoot(const SDRoot& o)
