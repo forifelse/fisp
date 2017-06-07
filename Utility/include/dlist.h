@@ -199,7 +199,7 @@ namespace fisp
 		class TTree
 		------------------------------------------------------------*/
 		template <class T, int D = 2>
-		TTree<T, D>::TTree<T, D>()
+		TTree<T, D>::TTree()
 			: mpNode(nullptr)
 			, mpParent(nullptr)
 		{
@@ -208,7 +208,7 @@ namespace fisp
 		}
 
 		template <class T, int D = 2>
-		TTree<T, D>::~TTree<T, D>()
+		TTree<T, D>::~TTree()
 		{
 			T::destroyMem<T>(mpNode);
 			mpParent = nullptr;
@@ -220,7 +220,7 @@ namespace fisp
 		}
 
 		template <class T, int D = 2>
-		TTree<T, D>::TTree<T, D>(T* pNode)
+		TTree<T, D>::TTree(T* pNode)
 			: mpNode(pNode)
 			, mpParent(nullptr)
 		{
@@ -229,7 +229,7 @@ namespace fisp
 		}
 
 		template <class T, int D = 2>
-		TTree<T, D>::TTree<T, D>(const TTree<T, D>& other)
+		TTree<T, D>::TTree(const TTree<T, D>& other)
 			: mpNode(nullptr)
 			, mpParent(nullptr)
 		{

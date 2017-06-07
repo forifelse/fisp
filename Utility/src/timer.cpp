@@ -155,9 +155,9 @@ namespace fisp
 			Timer* pTimer = globalTimer();
 			char time[32] = { 0 };
 			if(bHourMod24)
-				sprintf(time, "%02d:%02d:%02d %03d ", pTimer->elapsedHour() % 24, pTimer->elapsedMinute() % 60, pTimer->elapsedSecond() % 60, pTimer->elapsedMilli() % 1000);
+				sprintf(time, "%02llu:%02llu:%02llu %03llu ", pTimer->elapsedHour() % 24, pTimer->elapsedMinute() % 60, pTimer->elapsedSecond() % 60, pTimer->elapsedMilli() % 1000);
 			else
-				sprintf(time, "%d days %02d:%02d:%02d %03d ", pTimer->elapsedHour() / 24, pTimer->elapsedHour() % 24, pTimer->elapsedMinute() % 60, pTimer->elapsedSecond() % 60, pTimer->elapsedMilli() % 1000);
+				sprintf(time, "%llu days %02llu:%02llu:%02llu %03llu ", pTimer->elapsedHour() / 24, pTimer->elapsedHour() % 24, pTimer->elapsedMinute() % 60, pTimer->elapsedSecond() % 60, pTimer->elapsedMilli() % 1000);
 			String strTime(time);
 
 			return strTime;
@@ -170,7 +170,7 @@ namespace fisp
 			struct tm *tv = localtime(&t);
 			char day[16] = { 0 }, time[16] = { 0 };
 			sprintf(day, "%04d%02d%02d", tv->tm_year + 1900, tv->tm_mon + 1, tv->tm_mday);
-			sprintf(time, "%02d%02d%02d%03d ", tv->tm_hour, tv->tm_min, tv->tm_sec, pTimer->elapsedMilli() % 1000);
+			sprintf(time, "%02d%02d%02d%03llu ", tv->tm_hour, tv->tm_min, tv->tm_sec, pTimer->elapsedMilli() % 1000);
 			String strTime(day);
 			strTime += String(time);
 			return strTime;

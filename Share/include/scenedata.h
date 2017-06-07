@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include "../../../../utility/include/useutility.h"
 
 struct SDCamera
 {
@@ -237,24 +238,28 @@ struct SDSubMesh
 	}
 };
 
-struct SDMesh
+struct SDEntity
 {
 	std::string		strName;
 	SDSubMesh		subFirst;
-	unsigned int	uNumSubOther;
-	SDSubMesh*		pSubOther;
+	String			strSubGeom; // Geometry
+	String			strSubMate; // Material
+	String			strSubColl; // Collision
 
-	SDMesh() { memset(this, 0, sizeof(SDMesh)); }
-	SDMesh(const SDMesh& o)
+	//unsigned int	uNumSubOther;
+	//SDSubMesh*		pSubOther;
+
+	SDEntity() { memset(this, 0, sizeof(SDEntity)); }
+	SDEntity(const SDEntity& o)
 	{
-		memcpy(this, &o, sizeof(SDMesh));
+		memcpy(this, &o, sizeof(SDEntity));
 	}
-	SDMesh& operator=(const SDMesh& o)
+	SDEntity& operator=(const SDEntity& o)
 	{
-		memcpy(this, &o, sizeof(SDMesh));
+		memcpy(this, &o, sizeof(SDEntity));
 		return *this;
 	}
-	bool operator<(const SDMesh& o)
+	bool operator<(const SDEntity& o)
 	{
 		return true;
 	}
@@ -264,7 +269,7 @@ struct SDNode
 {
 	std::string		strName;
 	bool			bVisible;
-	SDMesh			mesh;
+	SDEntity		entity;
 	//
 	float			trans[16];
 	//float			tx, ty, tz, rx, ry, rz, sx, sy, sz;
@@ -275,8 +280,9 @@ struct SDNode
 	bool			bDamage;
 	//
 	unsigned int	uParent;	// 0xffffffff or -1 means parent is null
-	unsigned int	uNumChild;
-	unsigned int*	pChildren;
+	//unsigned int	uNumChild;
+	//unsigned int*	pChildren;
+	String			strChildren;
 	// instance ?
 
 	SDNode() { memset(this, 0, sizeof(SDNode)); }
@@ -297,19 +303,22 @@ struct SDNode
 
 struct SDRoot
 {
-	unsigned int	uNumNode;
-	unsigned int*	pNodes;
+	//unsigned int	uNumNode;
+	//unsigned int*	pNodes;
+	String	strNodes;
 
 	SDRoot() { memset(this, 0, sizeof(SDRoot)); }
 	SDRoot(const SDRoot& o)
 	{
-		uNumNode = o.uNumNode;
-		pNodes = o.pNodes;
+		//uNumNode = o.uNumNode;
+		//pNodes = o.pNodes;
+		strNodes = o.strNodes;
 	}
 	SDRoot& operator=(const SDRoot& o)
 	{
-		uNumNode = o.uNumNode;
-		pNodes = o.pNodes;
+		//uNumNode = o.uNumNode;
+		//pNodes = o.pNodes;
+		strNodes = o.strNodes;
 		return *this;
 	}
 	bool operator<(const SDRoot& o)
@@ -322,7 +331,6 @@ struct SDBlob
 {
 	// Blob data
 	SDNode*			pNode;
-	SDMesh*			pMesh;
 	SDGeometry*		pGeom;
 	SDMaterial*		pMate;
 	SDLitDire*		pLitDire;
@@ -461,8 +469,8 @@ public:
 			ofs.write((char*)pScene->pBlob->pLitSpot, sizeof(SDLitSpot) * pScene->uNumLitSpot);
 		//
 		ofs.write((char*)pScene->pRoot, sizeof(SDRoot));
-		if (pScene->pRoot->uNumNode  > 0)
-			ofs.write((char*)pScene->pRoot->pNodes, sizeof(unsigned int) * pScene->pRoot->uNumNode);
+		//if (pScene->pRoot->uNumNode  > 0)
+		//	ofs.write((char*)pScene->pRoot->pNodes, sizeof(unsigned int) * pScene->pRoot->uNumNode);
 		//
 		ofs.close();
 		return true;
@@ -487,11 +495,11 @@ public:
 		{
 			pScene->pBlob->pNode = new SDNode[pScene->uNumNode];
 			ifs.read((char*)pScene->pBlob->pNode, sizeof(SDNode) * pScene->uNumNode);
-			for (unsigned int i = 0; i < pScene->uNumNode; i++)
-			{
-				pScene->pBlob->pNode[i].pChildren = nullptr;
-				pScene->pBlob->pNode[i].mesh.pSubOther = nullptr;
-			}
+			//for (unsigned int i = 0; i < pScene->uNumNode; i++)
+			//{
+			//	pScene->pBlob->pNode[i].pChildren = nullptr;
+			//	pScene->pBlob->pNode[i].mesh.pSubOther = nullptr;
+			//}
 		}
 
 		//pScene->pBlob->pMesh = nullptr;
@@ -549,12 +557,12 @@ public:
 		}
 		//
 		ifs.read((char*)pScene->pRoot, sizeof(SDRoot));
-		pScene->pRoot->pNodes = nullptr;
-		if (pScene->pRoot->uNumNode > 0)
-		{
-			pScene->pRoot->pNodes = new unsigned int[pScene->pRoot->uNumNode];
-			ifs.read((char*)pScene->pRoot->pNodes, sizeof(unsigned int) * pScene->pRoot->uNumNode);
-		}
+		//pScene->pRoot->pNodes = nullptr;
+		//if (pScene->pRoot->uNumNode > 0)
+		//{
+		//	pScene->pRoot->pNodes = new unsigned int[pScene->pRoot->uNumNode];
+		//	ifs.read((char*)pScene->pRoot->pNodes, sizeof(unsigned int) * pScene->pRoot->uNumNode);
+		//}
 		//
 		ifs.close();
 		return true;

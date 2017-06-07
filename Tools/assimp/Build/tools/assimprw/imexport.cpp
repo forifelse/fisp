@@ -1,7 +1,6 @@
 #include "imexport.h"
 #include <fstream>
 #include "../../../../share/include/scenedata.h"
-#include "../../../../utility/include/useutility.h"
 
 bool ImExport::load(const std::string& strInFile, const std::string& strFormat, const std::string& strContent, const std::string& strOutFile)
 {
@@ -26,23 +25,23 @@ bool ImExport::load(const std::string& strInFile, const std::string& strFormat, 
 	{
 		return false;
 	}
-	//SDScene outScene;
-	//getScene(&outScene, pInScene);
-	////for (unsigned int i = 0; i < 100; i++)
-	////{
-	////	char sz[16];
-	////	sprintf(sz, "%d", 2*i);
-	////	outScene.strTest+=std::string(sz);
-	////}
-	////outScene.strName = "aaaaaAAAA中文";
-	//String str = "aaaaaAAAA中文";
-	//str.encryption();
-	//outScene.strName = str.getString();
-	//SceneRW::writeScene(&outScene, strOutFile);
+	SDScene outScene;
+	getScene(&outScene, pInScene);
+	//for (unsigned int i = 0; i < 100; i++)
+	//{
+	//	char sz[16];
+	//	sprintf(sz, "%d", 2*i);
+	//	outScene.strTest+=std::string(sz);
+	//}
+	//outScene.strName = "aaaaaAAAA中文";
+	String str = "aaaaaAAAA中文";
+	str.encryption();
+	outScene.strName = str.getString();
+	SceneRW::writeScene(&outScene, strOutFile);
 	// test
 	SDScene inScene;
 	SceneRW::readScene(&inScene, strOutFile);
-	String str(inScene.strName);
+	 str=String(inScene.strName);
 	str.decryption();
 	inScene.strName = str.getString();
 	if (inScene.strName == "aaaaaAAAA中文")
@@ -76,6 +75,8 @@ bool ImExport::getScene(void* pOutScene, const aiScene* pInScene)
 			getMaterial(&pScene->pBlob->pMate[i], pInScene->mMaterials[i]);
 		}
 	}
+	//
+	getRoot(pScene->pRoot, pInScene);
 	return true;
 }
 
@@ -185,16 +186,18 @@ bool ImExport::getRoot(void* pDest, const aiScene* pInScene)
 	if (!(nullptr != pDest && nullptr != pRoot && nullptr == pRoot->mParent))
 		return false;
 	SDRoot* dest = (SDRoot*)pDest;
-	dest->pNodes = nullptr;
-	dest->uNumNode = pRoot->mNumMeshes;
-	if (dest->uNumNode > 0)
-	{
-		dest->pNodes = new unsigned int[dest->uNumNode];
-		for (unsigned int i = 0; i < dest->uNumNode; i++)
-		{
-			dest->pNodes[i] = pRoot->mMeshes[i];
-		}
-	}
+	if(nullptr != pRoot->mMeshes && pRoot->mNumMeshes > 0)
+		dest->strNodes = String::fromNumArray<uint>(pRoot->mMeshes, pRoot->mNumMeshes);
+	//dest->pNodes = nullptr;
+	//dest->uNumNode = pRoot->mNumMeshes;
+	//if (dest->uNumNode > 0)
+	//{
+	//	dest->pNodes = new unsigned int[dest->uNumNode];
+	//	for (unsigned int i = 0; i < dest->uNumNode; i++)
+	//	{
+	//		dest->pNodes[i] = pRoot->mMeshes[i];
+	//	}
+	//}
 	return true;
 }
 

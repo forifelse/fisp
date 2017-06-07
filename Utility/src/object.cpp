@@ -80,10 +80,10 @@ namespace fisp
 
 		void Guid::sDestroy()
 		{
-			if (gpMapGuid != NULL)
+			if (gpMapGuid != nullptr)
 			{
 				//gpMapGuid->clear();
-				delete[] gpMapGuid;
+				//delete[] gpMapGuid;
 				//gpMapGuid = NULL;
 			}
 		}

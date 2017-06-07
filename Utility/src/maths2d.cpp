@@ -699,7 +699,7 @@ namespace fisp
 		{
 			TArray<String> strArray;
 			strArray = strRect.split(",");
-			FASSERT(strArray.size() >= 4);
+			FASSERT(strArray.size() >= 4U);
 			Rect rc(strArray[0].toInt(), strArray[1].toInt(), strArray[2].toInt(), strArray[3].toInt());
 			return rc;
 		}

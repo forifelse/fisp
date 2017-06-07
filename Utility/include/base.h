@@ -334,6 +334,12 @@ namespace fisp
 			//static LPCTSTR sWCharToCChar(LPCWSTR wStr, int size, EnumCodePage CodePage = CodePage_ACP);
 			static std::wstring toWString(const std::string& s);
 			static std::string toString(const std::wstring& ws);
+
+			template<class T>
+			static String fromNumArray(const T* pData, uint uSize, uint uPrecision = 0);
+			template<class T>
+			static void toNumArray(T*& pData, uint &uSize, const String& strNum);
+
 			static String sGetExePath();
 			static String sGetCurrentPath();
 			static String sGetSystemTempPath();
@@ -377,6 +383,53 @@ namespace fisp
 			std::wstring	m_WString;
 			bool			mbEncryption;
 		};
+
+		/*-----------------------------------------------------------
+		class String
+		------------------------------------------------------------*/
+		template<class T>
+		String String::fromNumArray(const T* pData, uint uSize, uint uPrecision /* = 0 */)
+		{
+			String strRe = "";
+			if (nullptr == pData || uSize <= 0)
+				return strRe;
+			char sz[16];
+			char prec[8] = "%d";
+			switch (uPrecision)
+			{
+			case 0: strcpy(prec, "%d"); break;
+			case 1: strcpy(prec, "%.1f"); break;
+			case 2: strcpy(prec, "%.2f"); break;
+			case 3: strcpy(prec, "%.3f"); break;
+			//case 4: strcpy(prec, "%.4f"); break;
+			default:
+				strcpy(prec, "%.4f"); break;
+			}
+			for (uint i = 0; i < uSize; i++)
+			{
+				sprintf(sz, prec, pData[i]);
+				strRe += sz;
+			}
+			strRe.trimRight(",");
+			return strRe;
+		}
+
+		template<class T>
+		void String::toNumArray(T*& pData, uint &uSize, const String& strNum)
+		{
+			pData = nullptr;
+			uSize = 0;
+			TArray<String> vStr = strNum.split(",");
+			const uint uCnt = vStr.size();
+			if (strNum.isEmpty() || uCnt <= 0)
+				return;
+			uSize = uCnt;
+			pData = new T[uSize];
+			for (uint i = 0; i < uCnt; i++)
+			{
+				pData[i] = (T)atoll(vStr[i].getChar());
+			}
+		}
 
 		/*-----------------------------------------------------------
 		class Tag

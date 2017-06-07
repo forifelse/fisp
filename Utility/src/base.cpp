@@ -280,7 +280,7 @@ namespace fisp
 			:mbEncryption(false)
 		{
 			char szStr[256];
-			sprintf(szStr, "%l", uStr);
+			sprintf(szStr, "%lu", uStr);
 			m_String = szStr;
 		}
 
@@ -1814,12 +1814,12 @@ namespace fisp
 
 		float Maths::minSizeFloat()
 		{
-			return -1.7976931348623158e+38;//2.2250738585072014e-308;//DBL_MIN
+			return -1.7976931348623158e+38f;//2.2250738585072014e-308;//DBL_MIN
 		}
 
 		float Maths::maxSizeFloat()
 		{
-			return 1.7976931348623158e+38;//1.7976931348623158e+308;//DBL_MAX
+			return 1.7976931348623158e+38f;//1.7976931348623158e+308;//DBL_MAX
 		}
 
 		float Maths::PI()
