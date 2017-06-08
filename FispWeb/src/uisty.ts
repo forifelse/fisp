@@ -218,7 +218,7 @@
         moptScene = ["Scene", "场景"];
         moptPlace = ["Place", "放置"];
         moptTerrain = ["Terrain", "地形"];
-        moptFoliage = ["Foliage", "植被"];
+        moptFoliage = ["World", "世界"];//["Foliage", "植被"];
         mNewScene = ["New Scene", "新建场景"];
         mMultiuser = ["Teamwork", "多人协作"];
         mPublishScene = ["Public", "公开"];
