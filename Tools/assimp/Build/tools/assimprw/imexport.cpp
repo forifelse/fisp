@@ -28,37 +28,24 @@ bool ImExport::load(const std::string& strInFile, const std::string& strFormat, 
 	}
 	SDScene outScene;
 	getScene(&outScene, pInScene);
-	//for (unsigned int i = 0; i < 100; i++)
-	//{
-	//	char sz[16];
-	//	sprintf(sz, "%d", 2*i);
-	//	outScene.strTest+=std::string(sz);
-	//}
-	//outScene.strName = "aaaaaAAAA中文";
-	String str = "aaaaaAAAA中文";
-	str.encryption();
-	outScene.strName = str.getString();
+	String::encryption(outScene.strName);
 	SceneRW::writeScene(&outScene, strOutFile);
 	// test
-	SDScene inScene;
-	SceneRW::readScene(&inScene, strOutFile);
-	 str=String(inScene.strName);
-	str.decryption();
-	inScene.strName = str.getString();
-	if (inScene.strName == "aaaaaAAAA中文")
-		inScene.strName = "test ok";
+	//SDScene inScene;
+	//SceneRW::readScene(&inScene, strOutFile);
+	//String::decryption(inScene.strName);
 	return true;
 }
 
 bool ImExport::getScene(void* pOutScene, const aiScene* pInScene)
 {
-	if (nullptr == pOutScene || nullptr == pInScene)
+	if (nullptr == pOutScene || nullptr == pInScene || pInScene->mNumMeshes <= 0 || nullptr == pInScene->mMeshes)
 		return false;
 	SDScene* pScene = (SDScene*)pOutScene;
-	if (pInScene->mNumMeshes <= 0 || nullptr == pInScene->mMeshes)
-		return false;
 	pScene->pBlob = new SDBlob;
 	pScene->pRoot = new SDRoot;
+	// nodes
+	pScene->uNumNode = 0;
 	//
 	pScene->uNumGeom = pInScene->mNumMeshes;
 	pScene->pBlob->pGeom = new SDGeometry[pScene->uNumGeom];
@@ -78,6 +65,7 @@ bool ImExport::getScene(void* pOutScene, const aiScene* pInScene)
 	}
 	//
 	getRoot(pScene->pRoot, pInScene);
+	pScene->strName = pScene->pRoot->strName;
 	return true;
 }
 
@@ -187,18 +175,17 @@ bool ImExport::getRoot(void* pDest, const aiScene* pInScene)
 	if (!(nullptr != pDest && nullptr != pRoot && nullptr == pRoot->mParent))
 		return false;
 	SDRoot* dest = (SDRoot*)pDest;
+	dest->strName = pInScene->mRootNode->mName.C_Str();
 	if(nullptr != pRoot->mMeshes && pRoot->mNumMeshes > 0)
 		dest->strNodes = String::fromNumArray<uint>(pRoot->mMeshes, pRoot->mNumMeshes).getString();
-	//dest->pNodes = nullptr;
-	//dest->uNumNode = pRoot->mNumMeshes;
-	//if (dest->uNumNode > 0)
-	//{
-	//	dest->pNodes = new unsigned int[dest->uNumNode];
-	//	for (unsigned int i = 0; i < dest->uNumNode; i++)
-	//	{
-	//		dest->pNodes[i] = pRoot->mMeshes[i];
-	//	}
-	//}
+	if (nullptr != pRoot->mChildren && pRoot->mNumChildren > 0)
+	{
+		for (unsigned int i = 0; i < pRoot->mNumChildren; i++)
+		{
+			//pRoot->mChildren[i]->
+			//dest->strChildren = String::fromNumArray<uint>(pRoot->mChildren, pRoot->mNumChildren).getString();
+		}
+	}
 	return true;
 }
 

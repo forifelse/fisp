@@ -334,6 +334,8 @@ namespace fisp
 			//static LPCTSTR sWCharToCChar(LPCWSTR wStr, int size, EnumCodePage CodePage = CodePage_ACP);
 			static std::wstring toWString(const std::string& s);
 			static std::string toString(const std::wstring& ws);
+			static void encryption(std::string& s);
+			static void decryption(std::string& s);
 
 			template<class T>
 			static String fromNumArray(const T* pData, uint uSize, uint uPrecision = 0);

@@ -300,7 +300,9 @@ struct SDNode
 
 struct SDRoot
 {
+	std::string	strName;
 	std::string	strNodes;
+	std::string strChildren;
 	//unsigned int	uNumNode;
 	//unsigned int*	pNodes;
 
@@ -309,13 +311,17 @@ struct SDRoot
 	{
 		//uNumNode = o.uNumNode;
 		//pNodes = o.pNodes;
+		strName = o.strName;
 		strNodes = o.strNodes;
+		strChildren = o.strChildren;
 	}
 	SDRoot& operator=(const SDRoot& o)
 	{
 		//uNumNode = o.uNumNode;
 		//pNodes = o.pNodes;
+		strName = o.strName;
 		strNodes = o.strNodes;
+		strChildren = o.strChildren;
 		return *this;
 	}
 	bool operator<(const SDRoot& o)

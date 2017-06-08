@@ -1160,6 +1160,20 @@ namespace fisp
 			return result;
 		}
 
+		void String::encryption(std::string& s)
+		{
+			String str(s);
+			str.encryption();
+			s = str.getString();
+		}
+
+		void String::decryption(std::string& s)
+		{
+			String str(s);
+			str.decryption();
+			s = str.getString();
+		}
+
 		String String::sGetExePath()
 		{
 			return String();
