@@ -42,10 +42,14 @@ bool ImExport::getScene(void* pOutScene, const aiScene* pInScene)
 	if (nullptr == pOutScene || nullptr == pInScene || pInScene->mNumMeshes <= 0 || nullptr == pInScene->mMeshes)
 		return false;
 	SDScene* pScene = (SDScene*)pOutScene;
+	pScene->uNumNode = nodeNum(pInScene->mRootNode);
+	if (pScene->uNumNode <= 0)
+		return false;
 	pScene->pBlob = new SDBlob;
 	pScene->pRoot = new SDRoot;
 	// nodes
-	pScene->uNumNode = 0;
+	pScene->pBlob->pNode = new SDNode[pScene->uNumNode];
+	traveNodes(pScene->pBlob->pNode, 0, -1, pInScene->mRootNode);
 	//
 	pScene->uNumGeom = pInScene->mNumMeshes;
 	pScene->pBlob->pGeom = new SDGeometry[pScene->uNumGeom];
@@ -187,6 +191,44 @@ bool ImExport::getRoot(void* pDest, const aiScene* pInScene)
 		}
 	}
 	return true;
+}
+
+unsigned int ImExport::nodeNum(const aiNode* pRoot)
+{
+	if (nullptr == pRoot)
+		return 0;
+	unsigned int cnt = 1;
+	for (unsigned int i = 0; i < pRoot->mNumChildren; i++)
+	{
+		cnt += nodeNum(pRoot->mChildren[i]);
+	}
+	return cnt;
+}
+
+void ImExport::traveNodes(void* pDest, unsigned int uIdx, unsigned int uParent, const aiNode* pInNode)
+{
+	if (nullptr == pDest || nullptr == pInNode)
+		return;
+	SDNode* pRoot = (SDNode*)pDest;
+	SDNode* pNode = pRoot + uIdx;
+	pNode->strName = pInNode->mName.C_Str();
+	pNode->uParent = uParent;
+	//memcpy(pNode->trans, pInNode->mTransformation);
+	//pNode->entity.subFirst.uGeomIdx = pInNode->
+	pNode->strChildren = "";
+	if (pInNode->mNumChildren <= 0)
+		return;
+	char sz[16];
+	unsigned int uSub = uIdx + 1;
+	for (unsigned int i = 0; i < pInNode->mNumChildren; i++)
+	{
+		uSub += i;
+		if (i > 0)
+			pNode->strChildren += ",";
+		sprintf(sz, "%d", uSub);
+		pNode->strChildren += sz;
+		traveNodes(pDest, uSub, uIdx, pInNode->mChildren[i]);
+	}
 }
 
 void ImExport::write(const std::string& strFile, const aiScene* pScene)

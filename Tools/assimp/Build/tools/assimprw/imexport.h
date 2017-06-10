@@ -19,6 +19,8 @@ private:
 	bool getMaterial(void* pDest, const aiMaterial* pSrc);
 	bool getMesh(void* pDest, const aiMesh* pSrc);
 	bool getRoot(void* pDest, const aiScene* pInScene);
+	unsigned int nodeNum(const aiNode* pRoot);
+	void traveNodes(void* pDest, unsigned int uIdx, unsigned int uParent, const aiNode* pInNode);
 
 private:
 	//aiScene*	mpScene;

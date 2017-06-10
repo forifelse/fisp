@@ -208,10 +208,15 @@ struct SDGeometry
 	}
 };
 
+struct SDAnimate
+{
+};
+
 struct SDSubMesh
 {
 	unsigned int	uGeomIdx;
 	unsigned int	uMateIdx;
+	unsigned int	uAnimate;
 	unsigned int	uSubIdx;
 	bool			bCollision;
 
@@ -220,6 +225,7 @@ struct SDSubMesh
 	{
 		uGeomIdx = o.uGeomIdx;
 		uMateIdx = o.uMateIdx;
+		uAnimate = o.uAnimate;
 		uSubIdx = o.uSubIdx;
 		bCollision = o.bCollision;
 	}
@@ -227,6 +233,7 @@ struct SDSubMesh
 	{
 		uGeomIdx = o.uGeomIdx;
 		uMateIdx = o.uMateIdx;
+		uAnimate = o.uAnimate;
 		uSubIdx = o.uSubIdx;
 		bCollision = o.bCollision;
 		return *this;
@@ -242,9 +249,6 @@ struct SDEntity
 	std::string		strName;
 	SDSubMesh		subFirst;
 	std::string		strSubs; // Geometry index,Material index,Collision flag;Geometry index,Material index,Collision flag ...
-
-	//unsigned int	uNumSubOther;
-	//SDSubMesh*		pSubOther;
 
 	SDEntity() { memset(this, 0, sizeof(SDEntity)); }
 	SDEntity(const SDEntity& o)
@@ -265,20 +269,17 @@ struct SDEntity
 struct SDNode
 {
 	std::string		strName;
-	bool			bVisible;
 	SDEntity		entity;
 	//
-	float			trans[16];
-	//float			tx, ty, tz, rx, ry, rz, sx, sy, sz;
+	float			trans[16];//float	tx, ty, tz, rx, ry, rz, sx, sy, sz;
+	bool			bVisible;
 	bool			bCastShadow;
 	bool			bReceiveShadow;
 	bool			bSimulate;
-	float			mass;
 	bool			bDamage;
+	float			mass;
 	//
 	unsigned int	uParent;	// 0xffffffff or -1 means parent is null
-	//unsigned int	uNumChild;
-	//unsigned int*	pChildren;
 	std::string		strChildren;
 	// instance ?
 
@@ -303,22 +304,16 @@ struct SDRoot
 	std::string	strName;
 	std::string	strNodes;
 	std::string strChildren;
-	//unsigned int	uNumNode;
-	//unsigned int*	pNodes;
 
 	SDRoot() { memset(this, 0, sizeof(SDRoot)); }
 	SDRoot(const SDRoot& o)
 	{
-		//uNumNode = o.uNumNode;
-		//pNodes = o.pNodes;
 		strName = o.strName;
 		strNodes = o.strNodes;
 		strChildren = o.strChildren;
 	}
 	SDRoot& operator=(const SDRoot& o)
 	{
-		//uNumNode = o.uNumNode;
-		//pNodes = o.pNodes;
 		strName = o.strName;
 		strNodes = o.strNodes;
 		strChildren = o.strChildren;
@@ -336,6 +331,7 @@ struct SDBlob
 	SDNode*			pNode;
 	SDGeometry*		pGeom;
 	SDMaterial*		pMate;
+	SDAnimate*		pAnim;
 	SDLitDire*		pLitDire;
 	SDLitPoint*		pLitPoint;
 	SDLitSpot*		pLitSpot;
