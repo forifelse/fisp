@@ -49,7 +49,7 @@ bool ImExport::getScene(void* pOutScene, const aiScene* pInScene)
 	pScene->pRoot = new SDRoot;
 	// nodes
 	pScene->pBlob->pNode = new SDNode[pScene->uNumNode];
-	traveNodes(pScene->pBlob->pNode, 0, -1, pInScene->mRootNode);
+	traveNodes(pScene->pBlob->pNode, 0, -1, pInScene->mRootNode, pInScene);
 	//
 	pScene->uNumGeom = pInScene->mNumMeshes;
 	pScene->pBlob->pGeom = new SDGeometry[pScene->uNumGeom];
@@ -205,16 +205,71 @@ unsigned int ImExport::nodeNum(const aiNode* pRoot)
 	return cnt;
 }
 
-void ImExport::traveNodes(void* pDest, unsigned int uIdx, unsigned int uParent, const aiNode* pInNode)
+void ImExport::traveNodes(void* pDest, unsigned int uIdx, unsigned int uParent, const aiNode* pInNode, const aiScene* pInScene)
 {
-	if (nullptr == pDest || nullptr == pInNode)
+	if (nullptr == pDest || nullptr == pInNode || nullptr == pInScene)
 		return;
 	SDNode* pRoot = (SDNode*)pDest;
 	SDNode* pNode = pRoot + uIdx;
 	pNode->strName = pInNode->mName.C_Str();
+	// entity
+	aiMesh* pMesh = nullptr;
+	if (pInNode->mNumMeshes > 0)
+	{
+		pMesh = pInScene->mMeshes[pInNode->mMeshes[0]];
+		pNode->entity.subFirst.uGeomIdx = pInNode->mMeshes[0];
+		pNode->entity.subFirst.uMateIdx = pMesh->mMaterialIndex;
+		pNode->entity.subFirst.uAnimate = -1;
+		pNode->entity.subFirst.uSubIdx = 0;
+		pNode->entity.subFirst.bCollision = true;
+	}
+	pNode->entity.strSubs = "";
+	if (pInNode->mNumMeshes > 1)
+	{
+		char sz[16];
+		for (unsigned int i = 1; i < pInNode->mNumMeshes; i++)
+		{
+			pMesh = pInScene->mMeshes[pInNode->mMeshes[i]];
+			// Gemo
+			sprintf(sz, "%d,", pInNode->mMeshes[0]);
+			pNode->entity.strSubs += sz;
+			// Mate
+			sprintf(sz, "%d,", pMesh->mMaterialIndex);
+			pNode->entity.strSubs += sz;
+			// Anim
+			sprintf(sz, "%d,", -1);
+			pNode->entity.strSubs += sz;
+			// Coll
+			sprintf(sz, "%d", 1);
+			pNode->entity.strSubs += sz;
+		}
+	}
+	// trans
+	pNode->trans[0] = pInNode->mTransformation.a1;
+	pNode->trans[1] = pInNode->mTransformation.a2;
+	pNode->trans[2] = pInNode->mTransformation.a3;
+	pNode->trans[3] = pInNode->mTransformation.a4;
+	pNode->trans[4] = pInNode->mTransformation.b1;
+	pNode->trans[5] = pInNode->mTransformation.b2;
+	pNode->trans[6] = pInNode->mTransformation.b3;
+	pNode->trans[7] = pInNode->mTransformation.b4;
+	pNode->trans[8] = pInNode->mTransformation.c1;
+	pNode->trans[9] = pInNode->mTransformation.c2;
+	pNode->trans[10] = pInNode->mTransformation.c3;
+	pNode->trans[11] = pInNode->mTransformation.c4;
+	pNode->trans[12] = pInNode->mTransformation.d1;
+	pNode->trans[13] = pInNode->mTransformation.d2;
+	pNode->trans[14] = pInNode->mTransformation.d3;
+	pNode->trans[15] = pInNode->mTransformation.d4;
+	//
+	pNode->bVisible = true;
+	pNode->bCastShadow = true;
+	pNode->bReceiveShadow = true;
+	pNode->bSimulate = false;
+	pNode->bDamage = false;
+	pNode->mass = 0.f;
+	//
 	pNode->uParent = uParent;
-	//memcpy(pNode->trans, pInNode->mTransformation);
-	//pNode->entity.subFirst.uGeomIdx = pInNode->
 	pNode->strChildren = "";
 	if (pInNode->mNumChildren <= 0)
 		return;
@@ -227,7 +282,7 @@ void ImExport::traveNodes(void* pDest, unsigned int uIdx, unsigned int uParent, 
 			pNode->strChildren += ",";
 		sprintf(sz, "%d", uSub);
 		pNode->strChildren += sz;
-		traveNodes(pDest, uSub, uIdx, pInNode->mChildren[i]);
+		traveNodes(pDest, uSub, uIdx, pInNode->mChildren[i], pInScene);
 	}
 }
 

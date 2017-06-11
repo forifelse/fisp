@@ -20,7 +20,7 @@ private:
 	bool getMesh(void* pDest, const aiMesh* pSrc);
 	bool getRoot(void* pDest, const aiScene* pInScene);
 	unsigned int nodeNum(const aiNode* pRoot);
-	void traveNodes(void* pDest, unsigned int uIdx, unsigned int uParent, const aiNode* pInNode);
+	void traveNodes(void* pDest, unsigned int uIdx, unsigned int uParent, const aiNode* pInNode, const aiScene* pInScene);
 
 private:
 	//aiScene*	mpScene;
