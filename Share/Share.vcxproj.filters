@@ -29,9 +29,15 @@
     <ClInclude Include="include\scenedata.h">
       <Filter>scenedata</Filter>
     </ClInclude>
+    <ClInclude Include="include\scene.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\netdb.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

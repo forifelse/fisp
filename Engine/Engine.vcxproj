@@ -157,6 +157,13 @@
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\useEngine.h" />
+    <ClInclude Include="include\world.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\world.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

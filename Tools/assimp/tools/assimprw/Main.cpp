@@ -98,30 +98,30 @@ const char* MSG_HELP =
 // Application entry point
 int main (int argc, char* argv[])
 {
-	//if (argc <= 1)
-	//{
-	//	printf("assimp: No command specified. Use \'assimp ?\' for a detailed command list\n\n");
-	//	printf("%s", MSG_HELP);
-	//	system("pause");
-	//	return 0;
-	//}
-	//if (!strcmp(argv[1], "?") || !strcmp(argv[1], "help") || !strcmp(argv[1], "-help") || !strcmp(argv[1], "-h"))
-	//{
-	//	printf("%s", MSG_HELP);
-	//	system("pause");
-	//	return 0;
-	//}
-	////
-	//std::string param[5] = {};
-	//param[0] = argv[0];
-	//param[1] = argv[1];
-	//param[2] = (argc > 2) ? argv[2] : "-b";
-	//param[3] = (argc > 3) ? argv[3] : "scene";
-	//param[4] = (argc > 4) ? argv[4] : param[1] + "_out";
+	if (argc <= 1)
+	{
+		printf("No command specified. Use \'?\' for a detailed command list\n\n");
+		printf("%s", MSG_HELP);
+		printf("\nBy default, will load scene.fbx\n\n");
+		system("pause");
+		//return 0;
+	}
+	else if (!strcmp(argv[1], "?") || !strcmp(argv[1], "help") || !strcmp(argv[1], "-help") || !strcmp(argv[1], "-h"))
+	{
+		printf("%s", MSG_HELP);
+		system("pause");
+		return 0;
+	}
+	//
+	std::string param[5] = {};
+	param[0] = argv[0];
+	param[1] = (argc > 1) ? argv[1] : "scene.fbx";
+	param[2] = (argc > 2) ? argv[2] : "-b";
+	param[3] = (argc > 3) ? argv[3] : "scene";
+	param[4] = (argc > 4) ? argv[4] : param[1] + "_out";
 	printf("Loading ...\n");
 	ImExport imex;
-	//imex.load(param[1], param[2], param[3], param[4]);
-	bool bOk = imex.load("test.fbx", "-b", "scene", "out.dat");
+	bool bOk = imex.load(param[1], param[2], param[3], param[4]);
 	std::string strMsg = bOk ? "Loaded successfully!\n\n" : "Failed to load!\n\n";
 	printf(strMsg.c_str());
 	//

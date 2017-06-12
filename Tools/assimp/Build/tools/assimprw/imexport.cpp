@@ -1,6 +1,7 @@
 #include "imexport.h"
 #include <fstream>
-#include "../../../../share/include/scenedata.h"
+//#include "../../../../share/include/scenedata.h"
+#include "../../../../share/include/useshare.h"
 #include "../../../../utility/include/useutility.h"
 
 bool ImExport::load(const std::string& strInFile, const std::string& strFormat, const std::string& strContent, const std::string& strOutFile)
