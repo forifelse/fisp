@@ -277,12 +277,12 @@ void ImExport::traveNodes(void* pDest, unsigned int uIdx, unsigned int uParent, 
 	unsigned int uSub = uIdx + 1;
 	for (unsigned int i = 0; i < pInNode->mNumChildren; i++)
 	{
-		uSub += i;
 		if (i > 0)
 			pNode->strChildren += ",";
 		sprintf(sz, "%d", uSub);
 		pNode->strChildren += sz;
 		traveNodes(pDest, uSub, uIdx, pInNode->mChildren[i], pInScene);
+		uSub ++;
 	}
 }
 
