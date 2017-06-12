@@ -184,22 +184,35 @@ struct SDGeometry
 {
 	unsigned int	uNumVertex;
 	unsigned int	uNumIndex;
-	SDGeomBlob*		pGemoBlob;
+	bool			bNormal;
+	bool			bTangent;
+	bool			bUV;
+	bool			bVerClr;
+	//unsigned int	primType;
+	SDGeomBlob*		pGeomBlob;
 
 	SDGeometry() { memset(this, 0, sizeof(SDGeometry)); }
 	SDGeometry(const SDGeometry& o)
 	{
 		uNumVertex = o.uNumVertex;
 		uNumIndex = o.uNumIndex;
-		//uNumFace = o.uNumFace;
-		pGemoBlob = o.pGemoBlob;
+		bNormal = o.bNormal;
+		bTangent = o.bTangent;
+		bUV = o.bUV;
+		bVerClr = o.bVerClr;
+		//primType = o.primType;
+		pGeomBlob = o.pGeomBlob;
 	}
 	SDGeometry& operator=(const SDGeometry& o)
 	{
 		uNumVertex = o.uNumVertex;
 		uNumIndex = o.uNumIndex;
-		//uNumFace = o.uNumFace;
-		pGemoBlob = o.pGemoBlob;
+		bNormal = o.bNormal;
+		bTangent = o.bTangent;
+		bUV = o.bUV;
+		bVerClr = o.bVerClr;
+		//primType = o.primType;
+		pGeomBlob = o.pGeomBlob;
 		return *this;
 	}
 	bool operator<(const SDGeometry& o)
@@ -360,6 +373,7 @@ struct SDScene
 	unsigned int	uNumMesh;
 	unsigned int	uNumGeom;
 	unsigned int	uNumMate;
+	unsigned int	uNumAnim;
 	unsigned int	uNumLitDire;
 	unsigned int	uNumLitPoint;
 	unsigned int	uNumLitSpot;
@@ -381,6 +395,7 @@ struct SDScene
 		uNumMesh = o.uNumMesh;
 		uNumGeom = o.uNumGeom;
 		uNumMate = o.uNumMate;
+		uNumAnim = o.uNumAnim;
 		uNumLitDire = o.uNumLitDire;
 		uNumLitPoint = o.uNumLitPoint;
 		uNumLitSpot = o.uNumLitSpot;
@@ -397,6 +412,7 @@ struct SDScene
 		uNumMesh = o.uNumMesh;
 		uNumGeom = o.uNumGeom;
 		uNumMate = o.uNumMate;
+		uNumAnim = o.uNumAnim;
 		uNumLitDire = o.uNumLitDire;
 		uNumLitPoint = o.uNumLitPoint;
 		uNumLitSpot = o.uNumLitSpot;
@@ -456,10 +472,30 @@ public:
 		}
 		//if(pScene->uNumMesh  > 0)
 		//	ofs.write((char*)pScene->pBlob->pMesh, sizeof(SDMesh) * pScene->uNumMesh);
-		if (pScene->uNumGeom  > 0)
+		if (pScene->uNumGeom > 0)
+		{
 			ofs.write((char*)pScene->pBlob->pGeom, sizeof(SDGeometry) * pScene->uNumGeom);
+			SDGeometry* pGeom = nullptr;
+			for (unsigned int i = 0; i < pScene->uNumGeom; i++)
+			{
+				pGeom = &pScene->pBlob->pGeom[i];
+				ofs.write((char*)pGeom->pGeomBlob->pVertices, sizeof(float) * pGeom->uNumVertex * 3);
+				if(pGeom->bNormal)
+					ofs.write((char*)pGeom->pGeomBlob->pNormal, sizeof(float) * pGeom->uNumVertex * 3);
+				if (pGeom->bTangent)
+					ofs.write((char*)pGeom->pGeomBlob->pTangent, sizeof(float) * pGeom->uNumVertex * 3);
+				if (pGeom->bUV)
+					ofs.write((char*)pGeom->pGeomBlob->pUV, sizeof(float) * pGeom->uNumVertex * 2);
+				if (pGeom->bVerClr)
+					ofs.write((char*)pGeom->pGeomBlob->pVerClr, sizeof(float) * pGeom->uNumVertex * 3);
+				if (nullptr != pGeom->pGeomBlob->pIndex && pGeom->uNumIndex > 0)
+					ofs.write((char*)pGeom->pGeomBlob->pIndex, sizeof(unsigned int) * pGeom->uNumIndex);
+			}
+		}
 		if (pScene->uNumMate  > 0)
 			ofs.write((char*)pScene->pBlob->pMate, sizeof(SDMaterial) * pScene->uNumMate);
+		if (pScene->uNumAnim  > 0)
+			ofs.write((char*)pScene->pBlob->pAnim, sizeof(SDAnimate) * pScene->uNumAnim);
 		if (pScene->uNumLitDire  > 0)
 			ofs.write((char*)pScene->pBlob->pLitDire, sizeof(SDLitDire) * pScene->uNumLitDire);
 		if (pScene->uNumLitPoint  > 0)
@@ -468,8 +504,6 @@ public:
 			ofs.write((char*)pScene->pBlob->pLitSpot, sizeof(SDLitSpot) * pScene->uNumLitSpot);
 		//
 		ofs.write((char*)pScene->pRoot, sizeof(SDRoot));
-		//if (pScene->pRoot->uNumNode  > 0)
-		//	ofs.write((char*)pScene->pRoot->pNodes, sizeof(unsigned int) * pScene->pRoot->uNumNode);
 		//
 		ofs.close();
 		return true;
@@ -494,11 +528,6 @@ public:
 		{
 			pScene->pBlob->pNode = new SDNode[pScene->uNumNode];
 			ifs.read((char*)pScene->pBlob->pNode, sizeof(SDNode) * pScene->uNumNode);
-			//for (unsigned int i = 0; i < pScene->uNumNode; i++)
-			//{
-			//	pScene->pBlob->pNode[i].pChildren = nullptr;
-			//	pScene->pBlob->pNode[i].mesh.pSubOther = nullptr;
-			//}
 		}
 
 		//pScene->pBlob->pMesh = nullptr;
@@ -515,15 +544,43 @@ public:
 		{
 			pScene->pBlob->pGeom = new SDGeometry[pScene->uNumGeom];
 			ifs.read((char*)pScene->pBlob->pGeom, sizeof(SDGeometry) * pScene->uNumGeom);
+			SDGeometry* pGeom = nullptr;
 			for (unsigned int i = 0; i < pScene->uNumGeom; i++)
 			{
-				pScene->pBlob->pGeom[i].pGemoBlob = nullptr;
-				//pScene->pBlob->pGeom[i].pVertices = nullptr;
-				//pScene->pBlob->pGeom[i].pIndex = nullptr;
-				//pScene->pBlob->pGeom[i].pUV = nullptr;
-				//pScene->pBlob->pGeom[i].pNormal = nullptr;
-				//pScene->pBlob->pGeom[i].pTangent = nullptr;
-				//pScene->pBlob->pGeom[i].pVerClr = nullptr;
+				pGeom = &pScene->pBlob->pGeom[i];
+				pGeom->pGeomBlob = new SDGeomBlob;
+				pGeom->pGeomBlob->pVertices = new float[pGeom->uNumVertex * 3];
+				ifs.read((char*)pGeom->pGeomBlob->pVertices, sizeof(float) * pGeom->uNumVertex * 3);
+				pGeom->pGeomBlob->pNormal = nullptr;
+				if (pGeom->bNormal)
+				{
+					pGeom->pGeomBlob->pNormal = new float[pGeom->uNumVertex * 3];
+					ifs.read((char*)pGeom->pGeomBlob->pNormal, sizeof(float) * pGeom->uNumVertex * 3);
+				}
+				pGeom->pGeomBlob->pTangent = nullptr;
+				if (pGeom->bTangent)
+				{
+					pGeom->pGeomBlob->pTangent = new float[pGeom->uNumVertex * 3];
+					ifs.read((char*)pGeom->pGeomBlob->pTangent, sizeof(float) * pGeom->uNumVertex * 3);
+				}
+				pGeom->pGeomBlob->pUV = nullptr;
+				if (pGeom->bUV)
+				{
+					pGeom->pGeomBlob->pUV = new float[pGeom->uNumVertex * 2];
+					ifs.read((char*)pGeom->pGeomBlob->pUV, sizeof(float) * pGeom->uNumVertex * 2);
+				}
+				pGeom->pGeomBlob->pVerClr = nullptr;
+				if (pGeom->bVerClr)
+				{
+					pGeom->pGeomBlob->pVerClr = new float[pGeom->uNumVertex * 3];
+					ifs.read((char*)pGeom->pGeomBlob->pVerClr, sizeof(float) * pGeom->uNumVertex * 3);
+				}
+				pGeom->pGeomBlob->pIndex = nullptr;
+				if (pGeom->uNumIndex > 0)
+				{
+					pGeom->pGeomBlob->pIndex = new unsigned int[pGeom->uNumIndex];
+					ifs.read((char*)pGeom->pGeomBlob->pIndex, sizeof(unsigned int) * pGeom->uNumIndex);
+				}
 			}
 		}
 
@@ -532,6 +589,13 @@ public:
 		{
 			pScene->pBlob->pMate = new SDMaterial[pScene->uNumMate];
 			ifs.read((char*)pScene->pBlob->pMate, sizeof(SDMaterial) * pScene->uNumMate);
+		}
+
+		pScene->pBlob->pAnim = nullptr;
+		if (pScene->uNumAnim > 0)
+		{
+			pScene->pBlob->pAnim = new SDAnimate[pScene->uNumAnim];
+			ifs.read((char*)pScene->pBlob->pAnim, sizeof(SDAnimate) * pScene->uNumAnim);
 		}
 
 		pScene->pBlob->pLitDire = nullptr;
@@ -556,12 +620,6 @@ public:
 		}
 		//
 		ifs.read((char*)pScene->pRoot, sizeof(SDRoot));
-		//pScene->pRoot->pNodes = nullptr;
-		//if (pScene->pRoot->uNumNode > 0)
-		//{
-		//	pScene->pRoot->pNodes = new unsigned int[pScene->pRoot->uNumNode];
-		//	ifs.read((char*)pScene->pRoot->pNodes, sizeof(unsigned int) * pScene->pRoot->uNumNode);
-		//}
 		//
 		ifs.close();
 		return true;
