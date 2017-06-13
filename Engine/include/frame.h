@@ -6,23 +6,32 @@ Copyright (c). All rights reserved.
 ------------------------------------------------------------*/
 
 #pragma once
-#include "frame.h"
+#include "world.h"
 
 namespace fisp
 {
 	namespace engine
 	{
 		/*-----------------------------------------------------------
-		class Fisp
+		class IFrame
 		------------------------------------------------------------*/
-		class Fisp : public IRoot
+		class IFrame : public IRoot
 		{
 		public:
-			Fisp();
-			virtual ~Fisp();
+			
+		};
+
+		/*-----------------------------------------------------------
+		class Frame
+		------------------------------------------------------------*/
+		class Frame : public IFrame
+		{
+		public:
+			Frame();
+			virtual ~Frame();
 
 		private:
-			
+
 		};
 
 

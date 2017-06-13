@@ -52,7 +52,6 @@ void FispAppMain::Update()
 		{
 			// Rotate the cube a small amount.
 			m_angle += static_cast<float>(mpTimer->delta());
-
 			m_sceneRenderer->Rotate(m_angle);
 		}
 	}

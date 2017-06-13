@@ -159,11 +159,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\fisp.h" />
+    <ClInclude Include="include\frame.h" />
     <ClInclude Include="include\useEngine.h" />
     <ClInclude Include="include\world.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\fisp.cpp" />
+    <ClCompile Include="src\frame.cpp" />
     <ClCompile Include="src\world.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

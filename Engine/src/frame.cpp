@@ -5,25 +5,22 @@ Date:		2016.12
 Copyright (c). All rights reserved.
 ------------------------------------------------------------*/
 
-#pragma once
-#include "frame.h"
+#include "../include/frame.h"
 
 namespace fisp
 {
 	namespace engine
 	{
 		/*-----------------------------------------------------------
-		class Fisp
+		class Frame
 		------------------------------------------------------------*/
-		class Fisp : public IRoot
+		Frame::Frame()
 		{
-		public:
-			Fisp();
-			virtual ~Fisp();
+		}
 
-		private:
-			
-		};
+		Frame::~Frame()
+		{
+		}
 
 
 	}
