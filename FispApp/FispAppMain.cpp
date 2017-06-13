@@ -51,7 +51,7 @@ void FispAppMain::Update()
 		if (!m_tracking)
 		{
 			// Rotate the cube a small amount.
-			m_angle += static_cast<float>(mpTimer->elapse()) * 0.0007853f; //PIDIV4//m_radiansPerSecond;
+			m_angle += static_cast<float>(mpTimer->delta());
 
 			m_sceneRenderer->Rotate(m_angle);
 		}
@@ -151,9 +151,7 @@ std::shared_ptr<DX::DeviceResources> FispAppMain::GetDeviceResources(IUnknown* w
 {
 	if (m_deviceResources != nullptr && m_deviceResources->IsDeviceRemoved())
 	{
-		// All references to the existing D3D device must be released before a new device
-		// can be created.
-
+		// All references to the existing D3D device must be released before a new device can be created.
 		m_deviceResources = nullptr;
 		OnDeviceRemoved();
 
@@ -169,17 +167,8 @@ std::shared_ptr<DX::DeviceResources> FispAppMain::GetDeviceResources(IUnknown* w
 	if (m_deviceResources == nullptr)
 	{
 		m_deviceResources = std::make_shared<DX::DeviceResources>();
-//		Windows::UI::Core::CoreWindow^ window = CoreWindow::GetForCurrentThread();
-//		Platform::Agile<Windows::UI::Core::CoreWindow>	wnd(window);
-//		DisplayInformation^ di = DisplayInformation::GetForCurrentView();
-//		DX::EDisplayOrientation eNat = (DX::EDisplayOrientation)getOrientation(di->NativeOrientation);
-//		DX::EDisplayOrientation eCur = (DX::EDisplayOrientation)getOrientation(di->CurrentOrientation);
-//		m_deviceResources->SetWindow(reinterpret_cast<IUnknown*>(wnd.Get()), window->Bounds.Width, window->Bounds.Height, eNat, eCur, di->LogicalDpi);
-//		m_main->CreateRenderers(m_deviceResources);
-
 		m_deviceResources->SetWindow(reinterpret_cast<IUnknown*>(wnd), w, h, eNat, eCur, LogicalDpi);
 		CreateRenderers(m_deviceResources);
-
 	}
 	return m_deviceResources;
 }
