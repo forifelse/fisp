@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "FispAppMain.h"
-#include "../Share/include/useShare.h"
-#include "../Render/include/useRender.h"
+using Microsoft::WRL::ComPtr;
 
 using namespace FispApp;
 using namespace Windows::Foundation;
@@ -148,28 +147,28 @@ void FispAppMain::LoadState()
 	}
 }
 
-std::shared_ptr<DX::DeviceResources> FispAppMain::GetDeviceResources()
+std::shared_ptr<DX::DeviceResources> FispAppMain::GetDeviceResources(IUnknown* wnd, DX::EDisplayOrientation eNat, DX::EDisplayOrientation eCur, float w, float h, float LogicalDpi)
 {
-//	if (m_deviceResources != nullptr && m_deviceResources->IsDeviceRemoved())
-//	{
-//		// All references to the existing D3D device must be released before a new device
-//		// can be created.
-//
-//		m_deviceResources = nullptr;
-//		m_main->OnDeviceRemoved();
-//
-//#if defined(_DEBUG)
-//		ComPtr<IDXGIDebug1> dxgiDebug;
-//		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&dxgiDebug))))
-//		{
-//			dxgiDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_FLAGS(DXGI_DEBUG_RLO_SUMMARY | DXGI_DEBUG_RLO_IGNORE_INTERNAL));
-//		}
-//#endif
-//	}
-//
-//	if (m_deviceResources == nullptr)
-//	{
-//		m_deviceResources = std::make_shared<DX::DeviceResources>();
+	if (m_deviceResources != nullptr && m_deviceResources->IsDeviceRemoved())
+	{
+		// All references to the existing D3D device must be released before a new device
+		// can be created.
+
+		m_deviceResources = nullptr;
+		OnDeviceRemoved();
+
+#if defined(_DEBUG)
+		ComPtr<IDXGIDebug1> dxgiDebug;
+		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&dxgiDebug))))
+		{
+			dxgiDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_FLAGS(DXGI_DEBUG_RLO_SUMMARY | DXGI_DEBUG_RLO_IGNORE_INTERNAL));
+		}
+#endif
+	}
+
+	if (m_deviceResources == nullptr)
+	{
+		m_deviceResources = std::make_shared<DX::DeviceResources>();
 //		Windows::UI::Core::CoreWindow^ window = CoreWindow::GetForCurrentThread();
 //		Platform::Agile<Windows::UI::Core::CoreWindow>	wnd(window);
 //		DisplayInformation^ di = DisplayInformation::GetForCurrentView();
@@ -177,7 +176,11 @@ std::shared_ptr<DX::DeviceResources> FispAppMain::GetDeviceResources()
 //		DX::EDisplayOrientation eCur = (DX::EDisplayOrientation)getOrientation(di->CurrentOrientation);
 //		m_deviceResources->SetWindow(reinterpret_cast<IUnknown*>(wnd.Get()), window->Bounds.Width, window->Bounds.Height, eNat, eCur, di->LogicalDpi);
 //		m_main->CreateRenderers(m_deviceResources);
-//	}
+
+		m_deviceResources->SetWindow(reinterpret_cast<IUnknown*>(wnd), w, h, eNat, eCur, LogicalDpi);
+		CreateRenderers(m_deviceResources);
+
+	}
 	return m_deviceResources;
 }
 

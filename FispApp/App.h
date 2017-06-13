@@ -42,7 +42,6 @@ namespace FispApp
 		// Private accessor for m_deviceResources, protects against device removed errors.
 		std::shared_ptr<DX::DeviceResources> GetDeviceResources();
 
-		std::shared_ptr<DX::DeviceResources> m_deviceResources;
 		std::unique_ptr<FispAppMain> m_main;
 		bool m_windowClosed;
 		bool m_windowVisible;

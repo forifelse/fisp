@@ -20,7 +20,7 @@ namespace FispApp
 		void OnResuming();
 		void OnDeviceRemoved();
 
-		std::shared_ptr<DX::DeviceResources> GetDeviceResources();
+		std::shared_ptr<DX::DeviceResources> GetDeviceResources(IUnknown* wnd, DX::EDisplayOrientation eNat, DX::EDisplayOrientation eCur, float w, float h, float LogicalDpi);
 
 	protected:
 		void SaveState();
