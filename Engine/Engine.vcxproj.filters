@@ -20,9 +20,15 @@
     <ClInclude Include="include\useEngine.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\fisp.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\world.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fisp.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
