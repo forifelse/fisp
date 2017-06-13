@@ -239,6 +239,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="..\Debug\Win32\scene.fisp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </None>
     <None Include="FispApp_StoreKey.pfx" />
     <None Include="FispApp_TemporaryKey.pfx" />
   </ItemGroup>

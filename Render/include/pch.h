@@ -15,3 +15,6 @@
 #if defined(_DEBUG)
 #include <dxgidebug.h>
 #endif
+
+#include "../../Utility/include/useUtility.h"
+#include "../../Share/include/useShare.h"

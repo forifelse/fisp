@@ -6,20 +6,20 @@ Copyright (c). All rights reserved.
 ------------------------------------------------------------*/
 
 #pragma once
-#include "../../Render/include/useRender.h"
+#include "pch.h"
 
 namespace fisp
 {
-	namespace engine
+	namespace render
 	{
 		/*-----------------------------------------------------------
-		class World
+		class Render
 		------------------------------------------------------------*/
-		class World : public IWorld
+		class Render : public IRoot
 		{
 		public:
-			World();
-			virtual ~World();
+			Render();
+			virtual ~Render();
 
 		private:
 			

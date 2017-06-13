@@ -1,6 +1,5 @@
 ﻿//#include "pch.h"
 #include "../include/Sample3DSceneRenderer.h"
-#include "../../Utility/include/useUtility.h"
 //#include <ppltasks.h>
 //#include <synchapi.h>
 

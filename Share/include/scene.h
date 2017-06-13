@@ -6,8 +6,8 @@ Copyright (c). All rights reserved.
 ------------------------------------------------------------*/
 
 #pragma once
-#include "useShare.h"
 #include "scenedata.h"
+#include "renderif.h"
 
 namespace fisp
 {
@@ -16,7 +16,7 @@ namespace fisp
 		/*-----------------------------------------------------------
 		class Scene
 		------------------------------------------------------------*/
-		class Scene : public IRoot
+		class Scene : public IScene
 		{
 		public:
 			Scene();

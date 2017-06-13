@@ -29,6 +29,9 @@
     <Filter Include="shader">
       <UniqueIdentifier>baa2285a-e62a-4bc5-8ed5-9a73189f8899</UniqueIdentifier>
     </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{a5d87208-6f31-45e3-8c9a-61e6857f61ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -47,6 +50,9 @@
     <None Include="FispApp_TemporaryKey.pfx" />
     <None Include="Package.StoreAssociation.xml" />
     <None Include="FispApp_StoreKey.pfx" />
+    <None Include="..\Debug\Win32\scene.fisp">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Render\shader\SamplePixelShader.hlsl">

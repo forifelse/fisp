@@ -32,12 +32,18 @@
     <ClInclude Include="include\Sample3DSceneRenderer.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\render.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DeviceResources.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Sample3DSceneRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

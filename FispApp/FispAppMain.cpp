@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "FispAppMain.h"
+#include "../Share/include/useShare.h"
 #include "../Render/include/useRender.h"
 
 using namespace FispApp;

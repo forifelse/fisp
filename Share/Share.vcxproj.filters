@@ -32,6 +32,9 @@
     <ClInclude Include="include\scene.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\renderif.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\netdb.cpp">

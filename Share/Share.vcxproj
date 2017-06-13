@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="include\inShare.h" />
     <ClInclude Include="include\netdbif.h" />
+    <ClInclude Include="include\renderif.h" />
     <ClInclude Include="include\scene.h" />
     <ClInclude Include="include\scenedata.h" />
     <ClInclude Include="include\useShare.h" />

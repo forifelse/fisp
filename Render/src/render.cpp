@@ -5,25 +5,23 @@ Date:		2016.12
 Copyright (c). All rights reserved.
 ------------------------------------------------------------*/
 
-#pragma once
-#include "../../Render/include/useRender.h"
+#include "../include/render.h"
 
 namespace fisp
 {
-	namespace engine
+	namespace render
 	{
 		/*-----------------------------------------------------------
-		class World
+		class Render
 		------------------------------------------------------------*/
-		class World : public IWorld
+		Render::Render()
 		{
-		public:
-			World();
-			virtual ~World();
+		}
 
-		private:
-			
-		};
+		Render::~Render()
+		{
+		}
+
 
 
 	}
