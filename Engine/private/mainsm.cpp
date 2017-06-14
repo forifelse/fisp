@@ -5,34 +5,49 @@ Date:		2016.12
 Copyright (c). All rights reserved.
 ------------------------------------------------------------*/
 
-#include "../include/fisp.h"
+#include "mainsm.h"
 
 namespace fisp
 {
 	namespace engine
 	{
 		/*-----------------------------------------------------------
-		class Fisp
+		class MainStateMachine
 		------------------------------------------------------------*/
-		Fisp::Fisp()
+		MainSM::MainSM()
+			: mpAppFrame(nullptr)
 		{
 		}
 
-		Fisp::~Fisp()
+		MainSM::~MainSM()
 		{
+			mpAppFrame = nullptr;
 		}
 
-		Fisp* Fisp::root()
+		bool MainSM::setup()
 		{
-			static Fisp gFisp;
-			return &gFisp;
+			return false;
 		}
 
-		void Fisp::appFrame(IFrame* pApp)
+		bool MainSM::startup()
+		{
+			return false;
+		}
+
+		void MainSM::cleanup()
 		{
 
 		}
 
+		void MainSM::render()
+		{
+
+		}
+
+		void MainSM::appFrame(IFrame* pAppFrame)
+		{
+			mpAppFrame = pAppFrame;
+		}
 
 
 	}

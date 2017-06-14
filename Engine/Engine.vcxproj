@@ -162,8 +162,10 @@
     <ClInclude Include="include\frame.h" />
     <ClInclude Include="include\useEngine.h" />
     <ClInclude Include="include\world.h" />
+    <ClInclude Include="private\mainsm.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="private\mainsm.cpp" />
     <ClCompile Include="src\fisp.cpp" />
     <ClCompile Include="src\frame.cpp" />
     <ClCompile Include="src\world.cpp" />

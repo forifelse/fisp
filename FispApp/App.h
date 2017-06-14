@@ -40,17 +40,16 @@ namespace FispApp
 
 	private:
 		// Private accessor for m_deviceResources, protects against device removed errors.
-		std::shared_ptr<DX::DeviceResources> GetDeviceResources();
-
+		DX::DeviceResources::DeviceParam getDeviceParam();
 		std::unique_ptr<FispAppMain> m_main;
+
 		bool m_windowClosed;
 		bool m_windowVisible;
-
 		Platform::Agile<Windows::UI::Core::CoreWindow>	m_window;
 	};
 }
 
-ref class Direct3DApplicationSource sealed : Windows::ApplicationModel::Core::IFrameworkViewSource
+ref class ViewSource sealed : Windows::ApplicationModel::Core::IFrameworkViewSource
 {
 public:
 	virtual Windows::ApplicationModel::Core::IFrameworkView^ CreateView();

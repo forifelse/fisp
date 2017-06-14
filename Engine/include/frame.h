@@ -70,17 +70,17 @@ namespace fisp
 			// The render method will be invoked once per frame.
 			virtual void render() = 0;
 
-			// Optional UI (overlay) rendering pass.  This is LDR.  The buffer is already cleared.
-			virtual void renderUI(class GraphicsContext& Context) {};
-
-			// Decide if you want the app to exit.  By default, app continues until the 'ESC' key is pressed.
-			virtual bool isQuit() = 0;
-			virtual bool* isRunning() = 0;
-			virtual IFrame* appFrame() = 0;
-			virtual const IFrame* appFrame() const = 0;
+			//// Optional UI (overlay) rendering pass.  This is LDR.  The buffer is already cleared.
+			//virtual void renderUI(class GraphicsContext& Context) {};
+			//
+			//// Decide if you want the app to exit.  By default, app continues until the 'ESC' key is pressed.
+			//virtual bool isQuit() = 0;
+			//virtual bool* isRunning() = 0;
+			//virtual IFrame* appFrame() = 0;
+			//virtual const IFrame* appFrame() const = 0;
 			virtual void appFrame(IFrame* pAppFrame) = 0;
-			virtual IDBPath* dbPath() = 0;
-			virtual const IDBPath* dbPath() const = 0;
+			//virtual IDBPath* dbPath() = 0;
+			//virtual const IDBPath* dbPath() const = 0;
 		};
 
 		/*-----------------------------------------------------------

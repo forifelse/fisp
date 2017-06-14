@@ -23,12 +23,14 @@ using Microsoft::WRL::ComPtr;
 [Platform::MTAThread]
 int main(Platform::Array<Platform::String^>^)
 {
-	auto direct3DApplicationSource = ref new Direct3DApplicationSource();
-	CoreApplication::Run(direct3DApplicationSource);
+	Fisp::root()->appFrame(new FispAppMain);
+	//
+	auto viewSource = ref new ViewSource();
+	CoreApplication::Run(viewSource);
 	return 0;
 }
 
-IFrameworkView^ Direct3DApplicationSource::CreateView()
+IFrameworkView^ ViewSource::CreateView()
 {
 	return ref new App();
 }
@@ -96,7 +98,7 @@ void App::Run()
 		{
 			CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
 
-			auto commandQueue = GetDeviceResources()->GetCommandQueue();
+			auto commandQueue = m_main->GetDeviceResources(getDeviceParam())->GetCommandQueue();
 			//PIXBeginEvent(commandQueue, 0, L"Update");
 			{
 				m_main->Update();
@@ -107,7 +109,7 @@ void App::Run()
 			{
 				if (m_main->Render())
 				{
-					GetDeviceResources()->Present();
+					m_main->GetDeviceResources(getDeviceParam())->Present();
 				}
 			}
 			//PIXEndEvent(commandQueue);
@@ -162,7 +164,7 @@ void App::OnResuming(Platform::Object^ sender, Platform::Object^ args)
 
 void App::OnWindowSizeChanged(CoreWindow^ sender, WindowSizeChangedEventArgs^ args)
 {
-	GetDeviceResources()->SetLogicalSize(sender->Bounds.Width, sender->Bounds.Height);
+	m_main->GetDeviceResources(getDeviceParam())->SetLogicalSize(sender->Bounds.Width, sender->Bounds.Height);
 	m_main->OnWindowSizeChanged();
 }
 
@@ -186,31 +188,37 @@ void App::OnDpiChanged(DisplayInformation^ sender, Object^ args)
 	// if it is being scaled for high resolution devices. Once the DPI is set on DeviceResources,
 	// you should always retrieve it using the GetDpi method.
 	// See DeviceResources.cpp for more details.
-	GetDeviceResources()->SetDpi(sender->LogicalDpi, m_window->Bounds.Width, m_window->Bounds.Height);
+	m_main->GetDeviceResources(getDeviceParam())->SetDpi(sender->LogicalDpi, m_window->Bounds.Width, m_window->Bounds.Height);
 	m_main->OnWindowSizeChanged();
 }
 
 void App::OnOrientationChanged(DisplayInformation^ sender, Object^ args)
 {
 	DX::EDisplayOrientation eOri = (DX::EDisplayOrientation)getOrientation(sender->CurrentOrientation);
-	GetDeviceResources()->SetCurrentOrientation(eOri);
+	m_main->GetDeviceResources(getDeviceParam())->SetCurrentOrientation(eOri);
 	m_main->OnWindowSizeChanged();
 }
 
 void App::OnDisplayContentsInvalidated(DisplayInformation^ sender, Object^ args)
 {
-	GetDeviceResources()->ValidateDevice();
+	m_main->GetDeviceResources(getDeviceParam())->ValidateDevice();
 }
 
-std::shared_ptr<DX::DeviceResources> App::GetDeviceResources()
+DX::DeviceResources::DeviceParam App::getDeviceParam()
 {
+	DX::DeviceResources::DeviceParam param;
+
 	Windows::UI::Core::CoreWindow^ window = CoreWindow::GetForCurrentThread();
 	Platform::Agile<Windows::UI::Core::CoreWindow>	wnd(window);
 	DisplayInformation^ di = DisplayInformation::GetForCurrentView();
-	DX::EDisplayOrientation eNat = (DX::EDisplayOrientation)getOrientation(di->NativeOrientation);
-	DX::EDisplayOrientation eCur = (DX::EDisplayOrientation)getOrientation(di->CurrentOrientation);
+	param.eNative = (DX::EDisplayOrientation)getOrientation(di->NativeOrientation);
+	param.eCurrent = (DX::EDisplayOrientation)getOrientation(di->CurrentOrientation);
 
-	return m_main->GetDeviceResources(reinterpret_cast<IUnknown*>(wnd.Get()),eNat,eCur, window->Bounds.Width, window->Bounds.Height,di->LogicalDpi);
+	param.pWnd = reinterpret_cast<IUnknown*>(wnd.Get());
+	param.width = window->Bounds.Width;
+	param.height = window->Bounds.Height;
+	param.dpi = di->LogicalDpi;
+	return param;
 }
 
 WORD App::getOrientation(const Windows::Graphics::Display::DisplayOrientations& eOri)

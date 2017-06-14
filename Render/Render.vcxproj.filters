@@ -12,6 +12,9 @@
     <Filter Include="shader">
       <UniqueIdentifier>{5280adb0-b779-4cbe-9bd5-457b2f8208a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="private">
+      <UniqueIdentifier>{ab1352d0-56ee-4e55-9a2f-977a672621e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

@@ -30,6 +30,31 @@ FispAppMain::~FispAppMain()
 	Timer::destroyMem<ITimer>(mpTimer);
 }
 
+void FispAppMain::setup()
+{
+
+}
+
+void FispAppMain::startup()
+{
+
+}
+
+void FispAppMain::cleanup()
+{
+
+}
+
+void FispAppMain::update(float delta)
+{
+
+}
+
+void FispAppMain::render(float delta)
+{
+
+}
+
 // Creates and initializes the renderers.
 void FispAppMain::CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources)
 {
@@ -146,7 +171,7 @@ void FispAppMain::LoadState()
 	}
 }
 
-std::shared_ptr<DX::DeviceResources> FispAppMain::GetDeviceResources(IUnknown* wnd, DX::EDisplayOrientation eNat, DX::EDisplayOrientation eCur, float w, float h, float LogicalDpi)
+std::shared_ptr<DX::DeviceResources> FispAppMain::GetDeviceResources(const DX::DeviceResources::DeviceParam& param)
 {
 	if (m_deviceResources != nullptr && m_deviceResources->IsDeviceRemoved())
 	{
@@ -166,7 +191,8 @@ std::shared_ptr<DX::DeviceResources> FispAppMain::GetDeviceResources(IUnknown* w
 	if (m_deviceResources == nullptr)
 	{
 		m_deviceResources = std::make_shared<DX::DeviceResources>();
-		m_deviceResources->SetWindow(reinterpret_cast<IUnknown*>(wnd), w, h, eNat, eCur, LogicalDpi);
+		//m_deviceResources->SetWindow(reinterpret_cast<IUnknown*>(wnd), w, h, eNat, eCur, LogicalDpi);
+		m_deviceResources->SetWindow(param);
 		CreateRenderers(m_deviceResources);
 	}
 	return m_deviceResources;

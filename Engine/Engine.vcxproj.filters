@@ -9,6 +9,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="private">
+      <UniqueIdentifier>{82a62c96-0f5e-4266-8a40-820159f69495}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -26,6 +29,9 @@
     <ClInclude Include="include\frame.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="private\mainsm.h">
+      <Filter>private</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\world.cpp">
@@ -36,6 +42,9 @@
     </ClCompile>
     <ClCompile Include="src\frame.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="private\mainsm.cpp">
+      <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

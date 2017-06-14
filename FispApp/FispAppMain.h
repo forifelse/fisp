@@ -2,15 +2,23 @@
 
 #include "../Utility/include/useUtility.h"
 #include "../Render/include/useRender.h"
+#include "../Engine/include/useEngine.h"
 
 // Renders Direct3D content on the screen.
 namespace FispApp
 {
-	class FispAppMain
+	class FispAppMain : public IFrame
 	{
 	public:
 		FispAppMain();
 		~FispAppMain();
+
+		virtual void setup() override;
+		virtual void startup() override;
+		virtual void cleanup() override;
+		virtual void update(float delta) override;
+		virtual void render(float delta) override;
+
 		void CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources);
 		void Update();
 		bool Render();
@@ -20,7 +28,7 @@ namespace FispApp
 		void OnResuming();
 		void OnDeviceRemoved();
 
-		std::shared_ptr<DX::DeviceResources> GetDeviceResources(IUnknown* wnd, DX::EDisplayOrientation eNat, DX::EDisplayOrientation eCur, float w, float h, float LogicalDpi);
+		std::shared_ptr<DX::DeviceResources> GetDeviceResources(const DX::DeviceResources::DeviceParam& param);
 
 	protected:
 		void SaveState();

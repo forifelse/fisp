@@ -386,14 +386,14 @@ void DX::DeviceResources::UpdateRenderTargetSize()
 	m_OutHeight = max(m_OutHeight, 1);
 }
 
-void DX::DeviceResources::SetWindow(IUnknown* pWnd, float cx, float cy, const EDisplayOrientation& eNative, const EDisplayOrientation& eCurrent, float dpi)
+void DX::DeviceResources::SetWindow(const DeviceResources::DeviceParam& param)
 {
-	m_wnd = pWnd;
-	m_LgcWidth = cx;
-	m_LgcHeight = cy;
-	m_eCurrentRotation = eCurrent;
-	m_eNativeRotation = eNative;
-	m_dpi = dpi;
+	m_wnd = param.pWnd;
+	m_LgcWidth = param.width;
+	m_LgcHeight = param.height;
+	m_eCurrentRotation = param.eCurrent;
+	m_eNativeRotation = param.eNative;
+	m_dpi = param.dpi;
 	//
 	CreateWindowSizeDependentResources();
 }

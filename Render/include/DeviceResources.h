@@ -19,8 +19,19 @@ namespace DX
 	class DeviceResources
 	{
 	public:
+		struct DeviceParam
+		{
+			IUnknown* pWnd;
+			float width;
+			float height;
+			EDisplayOrientation eNative;
+			EDisplayOrientation eCurrent;
+			float dpi;
+		};
+
+	public:
 		DeviceResources(DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT);
-		void SetWindow(IUnknown* pWnd, float cx, float cy, const EDisplayOrientation& eNative, const EDisplayOrientation& eCurrent, float dpi);
+		void SetWindow(const DeviceResources::DeviceParam& param);
 		void SetLogicalSize(float cx, float cy);
 		void SetCurrentOrientation(const EDisplayOrientation& eCurrentRotation);
 		void SetDpi(float dpi, float cx, float cy);
