@@ -15,13 +15,13 @@ namespace fisp
 		class MainStateMachine
 		------------------------------------------------------------*/
 		MainSM::MainSM()
-			: mpAppFrame(nullptr)
+			: mpAppRef(nullptr)
 		{
 		}
 
 		MainSM::~MainSM()
 		{
-			mpAppFrame = nullptr;
+			mpAppRef = nullptr;
 		}
 
 		bool MainSM::setup()
@@ -44,9 +44,44 @@ namespace fisp
 
 		}
 
+		void MainSM::ready()
+		{
+
+		}
+
+		IFrame* MainSM::appFrame()
+		{
+			return mpAppRef;
+		}
+
+		const IFrame* MainSM::appFrame() const
+		{
+			return mpAppRef;
+		}
+
 		void MainSM::appFrame(IFrame* pAppFrame)
 		{
-			mpAppFrame = pAppFrame;
+			mpAppRef = pAppFrame;
+		}
+
+		IDBPath* MainSM::dbPath()
+		{
+			return mpDBPath;
+		}
+
+		const IDBPath* MainSM::dbPath() const
+		{
+			return mpDBPath;
+		}
+
+		void MainSM::createStatic()
+		{
+
+		}
+
+		void MainSM::destroyStatic()
+		{
+
 		}
 
 

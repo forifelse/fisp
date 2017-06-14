@@ -15,7 +15,7 @@ namespace fisp
 		/*-----------------------------------------------------------
 		class Render
 		------------------------------------------------------------*/
-		class Render : public IRoot
+		class Render : public IRender
 		{
 		public:
 			Render();

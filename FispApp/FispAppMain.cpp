@@ -55,6 +55,31 @@ void FispAppMain::render(float delta)
 
 }
 
+Render::InitParam* FispAppMain::initParamRnd()
+{
+	return &mRndParam;
+}
+
+const Render::InitParam& FispAppMain::initParamRnd() const
+{
+	return mRndParam;
+}
+
+IScene* FispAppMain::scene()
+{
+	return mpSceneRef;
+}
+
+const IScene* FispAppMain::scene() const
+{
+	return mpSceneRef;
+}
+
+void FispAppMain::scene(IScene* pScene)
+{
+	mpSceneRef = pScene;
+}
+
 // Creates and initializes the renderers.
 void FispAppMain::CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources)
 {

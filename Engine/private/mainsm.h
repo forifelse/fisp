@@ -40,18 +40,30 @@ namespace fisp
 			//// Decide if you want the app to exit.  By default, app continues until the 'ESC' key is pressed.
 			//virtual bool isQuit() override;
 			//virtual bool* isRunning() override;
-			//virtual IFrame* appFrame() override;
-			//virtual const IFrame* appFrame() const override;
+			virtual IFrame* appFrame() override;
+			virtual const IFrame* appFrame() const override;
 			virtual void appFrame(IFrame* pAppFrame) override;
-			//virtual IDBPath* dbPath() override;
-			//virtual const IDBPath* dbPath() const override;
+			virtual IDBPath* dbPath() override;
+			virtual const IDBPath* dbPath() const override;
+
+		public:
+			static void createStatic();
+			static void destroyStatic();
 
 		public:
 			MainSM();
 			virtual ~MainSM();
 
 		private:
-			IFrame* mpAppFrame;
+			void ready();
+
+		private:
+			IRender*	mpRender;
+			IFrame*		mpAppRef;
+			ITimer*		mpTimer;
+			bool		mbRunning;
+			//
+			IDBPath*	mpDBPath;
 		};
 
 

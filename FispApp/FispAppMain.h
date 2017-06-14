@@ -18,6 +18,14 @@ namespace FispApp
 		virtual void cleanup() override;
 		virtual void update(float delta) override;
 		virtual void render(float delta) override;
+		// init param for render and window
+		Render::InitParam* initParamRnd() override;
+		// init param for render and window
+		const Render::InitParam& initParamRnd() const override;
+		IScene* scene() override;
+		const IScene* scene() const override;
+		void scene(IScene* pScene);
+
 
 		void CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources);
 		void Update();
@@ -40,6 +48,8 @@ namespace FispApp
 		std::shared_ptr<DX::DeviceResources> m_deviceResources;
 		// Rendering loop timer.
 		ITimer*		mpTimer;
+		Render::InitParam	mRndParam;
+		IScene*				mpSceneRef;
 
 		//
 		float	m_angle;
