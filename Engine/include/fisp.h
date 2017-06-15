@@ -20,11 +20,13 @@ namespace fisp
 		public:
 			virtual ~Fisp();
 			static Fisp* root();
-			void appFrame(IFrame* pApp);
-			void run(IWnd* pWnd);
+			void init(IFrame* pApp, IWnd* pWnd);
+			void run();
 
 			IMainSM* mainSM();
 			const IMainSM* mainSM() const;
+			IWnd* wnd();
+			const IWnd* wnd() const;
 
 		private:
 			Fisp();

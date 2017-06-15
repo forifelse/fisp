@@ -55,4 +55,44 @@ namespace FispApp
 		float	m_angle;
 		bool	m_tracking;
 	};
+
+	class MainWnd : public IWnd
+	{
+	public:
+		MainWnd();
+		~MainWnd();
+
+		virtual void mainSM(IMainSM* pMainSM) override;
+		virtual void run() override;
+		virtual void show(bool bShow) override;
+		virtual String exePath() override;
+		virtual bool isUWP() const override;
+
+		void CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources);
+		void Update();
+		bool Render();
+
+		void OnWindowSizeChanged();
+		void OnSuspending();
+		void OnResuming();
+		void OnDeviceRemoved();
+
+		std::shared_ptr<DX::DeviceResources> GetDeviceResources(const DX::DeviceResources::DeviceParam& param);
+
+	protected:
+		void SaveState();
+		void LoadState();
+
+	private:
+		// TODO: Replace with your own content renderers.
+		std::unique_ptr<Sample3DSceneRenderer> m_sceneRenderer;
+		std::shared_ptr<DX::DeviceResources> m_deviceResources;
+		// Rendering loop timer.
+		ITimer*		mpTimer;
+
+		//
+		float	m_angle;
+		bool	m_tracking;
+	};
+
 }

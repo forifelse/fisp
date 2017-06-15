@@ -90,7 +90,7 @@ namespace fisp
 		{
 		public:
 			virtual void mainSM(IMainSM* pMainSM) = 0;
-			virtual void runLoop() = 0;
+			virtual void run() = 0;
 			virtual void show(bool bShow) = 0;
 			virtual String exePath() = 0;
 			virtual bool isUWP() const = 0;

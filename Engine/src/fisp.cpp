@@ -49,7 +49,7 @@ namespace fisp
 			return &gFisp;
 		}
 
-		void Fisp::appFrame(IFrame* pApp)
+		void Fisp::init(IFrame* pApp, IWnd* pWnd)
 		{
 			if (nullptr == pApp)
 			{
@@ -58,33 +58,33 @@ namespace fisp
 				pApp = mpAppDefault;
 			}
 			mpMainSM->appFrame(pApp);
+			mpWnd = pWnd;
 		}
 
-		void Fisp::run(IWnd* pWnd)
+		void Fisp::run()
 		{
-			if (nullptr == pWnd)
+			if (nullptr == mpWnd)
 				return;
-			mpWnd = pWnd;
-			mpMainSM->dbPath()->exePath(pWnd->exePath());
+			mpMainSM->dbPath()->exePath(mpWnd->exePath());
 			mpMainSM->dbPath()->dataPath(0);
 			if (!mpMainSM->setup())
 				return;
 			//
 			IRender::InitParam* pInitParam = mpMainSM->appFrame()->initParamRnd();
-			pWnd->create(pInitParam);
-			pWnd->mainSM(mpMainSM);
-			pWnd->show(true);
-			if (pWnd->isUWP())
+			mpWnd->create(pInitParam);
+			mpWnd->mainSM(mpMainSM);
+			mpWnd->show(true);
+			if (mpWnd->isUWP())
 			{
-				pWnd->runLoop();
+				mpWnd->run();
 			}
 			else
 			{
 				mpMainSM->startup();
-				pWnd->runLoop();
+				mpWnd->run();
 				mpMainSM->cleanup();
 			}
-			IWnd::destroyMem<IWnd>(pWnd);
+			IWnd::destroyMem<IWnd>(mpWnd);
 		}
 
 		IMainSM* Fisp::mainSM()
@@ -97,13 +97,23 @@ namespace fisp
 			return mpMainSM;
 		}
 
+		IWnd* Fisp::wnd()
+		{
+			return mpWnd;
+		}
+
+		const IWnd* Fisp::wnd() const
+		{
+			return mpWnd;
+		}
+
 		/*-----------------------------------------------------------
 		Global Function
 		------------------------------------------------------------*/
 		void RunApp(IFrame* pApp, IWnd* pWnd)
 		{
-			Fisp::root()->appFrame(pApp);
-			Fisp::root()->run(pWnd);
+			Fisp::root()->init(pApp, pWnd);
+			Fisp::root()->run();
 		}
 
 

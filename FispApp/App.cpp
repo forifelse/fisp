@@ -23,7 +23,7 @@ using Microsoft::WRL::ComPtr;
 [Platform::MTAThread]
 int main(Platform::Array<Platform::String^>^)
 {
-	Fisp::root()->appFrame(new FispAppMain);
+	Fisp::root()->init(new FispAppMain, new MainWnd);
 	//
 	auto viewSource = ref new ViewSource();
 	CoreApplication::Run(viewSource);
@@ -98,8 +98,9 @@ void App::Run()
 		{
 			CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
 
-			auto commandQueue = m_main->GetDeviceResources(getDeviceParam())->GetCommandQueue();
+			//auto commandQueue = m_main->GetDeviceResources(getDeviceParam())->GetCommandQueue();
 			//PIXBeginEvent(commandQueue, 0, L"Update");
+			m_main->GetDeviceResources(getDeviceParam());
 			{
 				m_main->Update();
 			}
