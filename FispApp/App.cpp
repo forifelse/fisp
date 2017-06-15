@@ -83,10 +83,6 @@ void App::SetWindow(CoreWindow^ window)
 // Initializes scene resources, or loads a previously saved app state.
 void App::Load(Platform::String^ entryPoint)
 {
-	if (m_main == nullptr)
-	{
-		m_main = std::unique_ptr<FispAppMain>(new FispAppMain());
-	}
 }
 
 // This method is called after the window becomes active.
@@ -100,6 +96,7 @@ void App::Run()
 
 			//auto commandQueue = m_main->GetDeviceResources(getDeviceParam())->GetCommandQueue();
 			//PIXBeginEvent(commandQueue, 0, L"Update");
+			FispAppMain* m_main = (FispAppMain*)Fisp::root()->mainSM()->appFrame();
 			m_main->GetDeviceResources(getDeviceParam());
 			{
 				m_main->Update();
@@ -147,6 +144,7 @@ void App::OnSuspending(Platform::Object^ sender, SuspendingEventArgs^ args)
 
 	create_task([this, deferral]()
 	{
+		FispAppMain* m_main = (FispAppMain*)Fisp::root()->mainSM()->appFrame();
 		m_main->OnSuspending();
 		deferral->Complete();
 	});
@@ -158,6 +156,7 @@ void App::OnResuming(Platform::Object^ sender, Platform::Object^ args)
 	// and state are persisted when resuming from suspend. Note that this event
 	// does not occur if the app was previously terminated.
 
+	FispAppMain* m_main = (FispAppMain*)Fisp::root()->mainSM()->appFrame();
 	m_main->OnResuming();
 }
 
@@ -165,6 +164,7 @@ void App::OnResuming(Platform::Object^ sender, Platform::Object^ args)
 
 void App::OnWindowSizeChanged(CoreWindow^ sender, WindowSizeChangedEventArgs^ args)
 {
+	FispAppMain* m_main = (FispAppMain*)Fisp::root()->mainSM()->appFrame();
 	m_main->GetDeviceResources(getDeviceParam())->SetLogicalSize(sender->Bounds.Width, sender->Bounds.Height);
 	m_main->OnWindowSizeChanged();
 }
@@ -189,12 +189,15 @@ void App::OnDpiChanged(DisplayInformation^ sender, Object^ args)
 	// if it is being scaled for high resolution devices. Once the DPI is set on DeviceResources,
 	// you should always retrieve it using the GetDpi method.
 	// See DeviceResources.cpp for more details.
+
+	FispAppMain* m_main = (FispAppMain*)Fisp::root()->mainSM()->appFrame();
 	m_main->GetDeviceResources(getDeviceParam())->SetDpi(sender->LogicalDpi, m_window->Bounds.Width, m_window->Bounds.Height);
 	m_main->OnWindowSizeChanged();
 }
 
 void App::OnOrientationChanged(DisplayInformation^ sender, Object^ args)
 {
+	FispAppMain* m_main = (FispAppMain*)Fisp::root()->mainSM()->appFrame();
 	DX::EDisplayOrientation eOri = (DX::EDisplayOrientation)getOrientation(sender->CurrentOrientation);
 	m_main->GetDeviceResources(getDeviceParam())->SetCurrentOrientation(eOri);
 	m_main->OnWindowSizeChanged();
@@ -202,6 +205,7 @@ void App::OnOrientationChanged(DisplayInformation^ sender, Object^ args)
 
 void App::OnDisplayContentsInvalidated(DisplayInformation^ sender, Object^ args)
 {
+	FispAppMain* m_main = (FispAppMain*)Fisp::root()->mainSM()->appFrame();
 	m_main->GetDeviceResources(getDeviceParam())->ValidateDevice();
 }
 

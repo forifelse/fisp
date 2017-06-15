@@ -68,25 +68,25 @@ namespace FispApp
 		virtual String exePath() override;
 		virtual bool isUWP() const override;
 
-		void CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources);
-		void Update();
-		bool Render();
+		//void CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources);
+		//void Update();
+		//bool Render();
 
 		void OnWindowSizeChanged();
 		void OnSuspending();
 		void OnResuming();
 		void OnDeviceRemoved();
 
-		std::shared_ptr<DX::DeviceResources> GetDeviceResources(const DX::DeviceResources::DeviceParam& param);
+		//std::shared_ptr<DX::DeviceResources> GetDeviceResources(const DX::DeviceResources::DeviceParam& param);
 
 	protected:
 		void SaveState();
 		void LoadState();
 
 	private:
-		// TODO: Replace with your own content renderers.
-		std::unique_ptr<Sample3DSceneRenderer> m_sceneRenderer;
-		std::shared_ptr<DX::DeviceResources> m_deviceResources;
+		//// TODO: Replace with your own content renderers.
+		//std::unique_ptr<Sample3DSceneRenderer> m_sceneRenderer;
+		//std::shared_ptr<DX::DeviceResources> m_deviceResources;
 		// Rendering loop timer.
 		ITimer*		mpTimer;
 

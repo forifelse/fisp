@@ -269,49 +269,49 @@ bool MainWnd::isUWP() const
 	return true;
 }
 
-// Creates and initializes the renderers.
-void MainWnd::CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources)
-{
-	m_deviceResources = deviceResources;
-	// TODO: Replace this with your app's content initialization.
-	m_sceneRenderer = std::unique_ptr<Sample3DSceneRenderer>(new Sample3DSceneRenderer(deviceResources));
-	LoadState();
-	OnWindowSizeChanged();
-}
-
-// Updates the application state once per frame.
-void MainWnd::Update()
-{
-	// Update scene objects.
-	mpTimer->tick();
-	//
-	if (m_sceneRenderer->loadingComplete())
-	{
-		if (!m_tracking)
-		{
-			// Rotate the cube a small amount.
-			m_angle += static_cast<float>(mpTimer->delta());
-			m_sceneRenderer->Rotate(m_angle);
-		}
-	}
-	// TODO: Replace this with your app's content update functions.
-	m_sceneRenderer->Update();
-}
-
-// Renders the current frame according to the current application state.
-// Returns true if the frame was rendered and is ready to be displayed.
-bool MainWnd::Render()
-{
-	// Don't try to render anything before the first Update.
-	if (mpTimer->elapse() <= 0)
-	{
-		return false;
-	}
-
-	// Render the scene objects.
-	// TODO: Replace this with your app's content rendering functions.
-	return m_sceneRenderer->Render();
-}
+//// Creates and initializes the renderers.
+//void MainWnd::CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources)
+//{
+//	m_deviceResources = deviceResources;
+//	// TODO: Replace this with your app's content initialization.
+//	m_sceneRenderer = std::unique_ptr<Sample3DSceneRenderer>(new Sample3DSceneRenderer(deviceResources));
+//	LoadState();
+//	OnWindowSizeChanged();
+//}
+//
+//// Updates the application state once per frame.
+//void MainWnd::Update()
+//{
+//	// Update scene objects.
+//	mpTimer->tick();
+//	//
+//	if (m_sceneRenderer->loadingComplete())
+//	{
+//		if (!m_tracking)
+//		{
+//			// Rotate the cube a small amount.
+//			m_angle += static_cast<float>(mpTimer->delta());
+//			m_sceneRenderer->Rotate(m_angle);
+//		}
+//	}
+//	// TODO: Replace this with your app's content update functions.
+//	m_sceneRenderer->Update();
+//}
+//
+//// Renders the current frame according to the current application state.
+//// Returns true if the frame was rendered and is ready to be displayed.
+//bool MainWnd::Render()
+//{
+//	// Don't try to render anything before the first Update.
+//	if (mpTimer->elapse() <= 0)
+//	{
+//		return false;
+//	}
+//
+//	// Render the scene objects.
+//	// TODO: Replace this with your app's content rendering functions.
+//	return m_sceneRenderer->Render();
+//}
 
 // Updates application state when the window's size changes (e.g. device orientation change)
 void MainWnd::OnWindowSizeChanged()
@@ -385,31 +385,31 @@ void MainWnd::LoadState()
 	}
 }
 
-std::shared_ptr<DX::DeviceResources> MainWnd::GetDeviceResources(const DX::DeviceResources::DeviceParam& param)
-{
-	if (m_deviceResources != nullptr && m_deviceResources->IsDeviceRemoved())
-	{
-		// All references to the existing D3D device must be released before a new device can be created.
-		m_deviceResources = nullptr;
-		OnDeviceRemoved();
-
-#if defined(_DEBUG)
-		ComPtr<IDXGIDebug1> dxgiDebug;
-		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&dxgiDebug))))
-		{
-			dxgiDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_FLAGS(DXGI_DEBUG_RLO_SUMMARY | DXGI_DEBUG_RLO_IGNORE_INTERNAL));
-		}
-#endif
-	}
-
-	if (m_deviceResources == nullptr)
-	{
-		m_deviceResources = std::make_shared<DX::DeviceResources>();
-		//m_deviceResources->SetWindow(reinterpret_cast<IUnknown*>(wnd), w, h, eNat, eCur, LogicalDpi);
-		m_deviceResources->SetWindow(param);
-		CreateRenderers(m_deviceResources);
-	}
-	return m_deviceResources;
-}
+//std::shared_ptr<DX::DeviceResources> MainWnd::GetDeviceResources(const DX::DeviceResources::DeviceParam& param)
+//{
+//	if (m_deviceResources != nullptr && m_deviceResources->IsDeviceRemoved())
+//	{
+//		// All references to the existing D3D device must be released before a new device can be created.
+//		m_deviceResources = nullptr;
+//		OnDeviceRemoved();
+//
+//#if defined(_DEBUG)
+//		ComPtr<IDXGIDebug1> dxgiDebug;
+//		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&dxgiDebug))))
+//		{
+//			dxgiDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_FLAGS(DXGI_DEBUG_RLO_SUMMARY | DXGI_DEBUG_RLO_IGNORE_INTERNAL));
+//		}
+//#endif
+//	}
+//
+//	if (m_deviceResources == nullptr)
+//	{
+//		m_deviceResources = std::make_shared<DX::DeviceResources>();
+//		//m_deviceResources->SetWindow(reinterpret_cast<IUnknown*>(wnd), w, h, eNat, eCur, LogicalDpi);
+//		m_deviceResources->SetWindow(param);
+//		CreateRenderers(m_deviceResources);
+//	}
+//	return m_deviceResources;
+//}
 
 
