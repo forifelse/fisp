@@ -81,8 +81,50 @@ namespace ScreenRotation
 		);
 };
 
-// Constructor for DeviceResources.
-DX::DeviceResources::DeviceResources(DXGI_FORMAT backBufferFormat, DXGI_FORMAT depthBufferFormat) :
+
+void DX::DeviceD12::fullscreen(bool bFullscreen)
+{
+
+}
+
+void DX::DeviceD12::clearRT()
+{
+
+}
+
+void DX::DeviceD12::present(uint uSyncInterval /* = 0 */, uint uFlags /* = 0 */)
+{
+	// The first argument instructs DXGI to block until VSync, putting the application
+	// to sleep until the next VSync. This ensures we don't waste any cycles rendering
+	// frames that will never be displayed to the screen.
+	HRESULT hr = m_swapChain->Present(1, 0);
+
+	// If the device was removed either by a disconnection or a driver upgrade, we 
+	// must recreate all device resources.
+	if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
+	{
+		m_deviceRemoved = true;
+	}
+	else
+	{
+		ThrowIfFailed(hr);
+
+		MoveToNextFrame();
+	}
+}
+
+void* DX::DeviceD12::deviceHW()
+{
+	return nullptr;
+}
+
+uint DX::DeviceD12::backbufferCount() const
+{
+	return 0;
+}
+
+// Constructor for DeviceD12.
+DX::DeviceD12::DeviceD12(DXGI_FORMAT backBufferFormat, DXGI_FORMAT depthBufferFormat) :
 	m_currentFrame(0),
 	m_screenViewport(),
 	m_rtvDescriptorSize(0),
@@ -108,12 +150,12 @@ DX::DeviceResources::DeviceResources(DXGI_FORMAT backBufferFormat, DXGI_FORMAT d
 }
 
 // Configures resources that don't depend on the Direct3D device.
-void DX::DeviceResources::CreateDeviceIndependentResources()
+void DX::DeviceD12::CreateDeviceIndependentResources()
 {
 }
 
 // Configures the Direct3D device, and stores handles to it and the device context.
-void DX::DeviceResources::CreateDeviceResources()
+void DX::DeviceD12::CreateDeviceResources()
 {
 #if defined(_DEBUG)
 	// If the project is in a debug build, enable debugging via SDK Layers.
@@ -198,7 +240,7 @@ void DX::DeviceResources::CreateDeviceResources()
 }
 
 // These resources need to be recreated every time the window size is changed.
-void DX::DeviceResources::CreateWindowSizeDependentResources()
+void DX::DeviceD12::CreateWindowSizeDependentResources()
 {
 	// Wait until all previous GPU work is complete.
 	WaitForGpu();
@@ -356,7 +398,7 @@ void DX::DeviceResources::CreateWindowSizeDependentResources()
 }
 
 // Determine the dimensions of the render target and whether it will be scaled down.
-void DX::DeviceResources::UpdateRenderTargetSize()
+void DX::DeviceD12::UpdateRenderTargetSize()
 {
 	m_effectiveDpi = m_dpi;
 
@@ -386,7 +428,7 @@ void DX::DeviceResources::UpdateRenderTargetSize()
 	m_OutHeight = max(m_OutHeight, 1);
 }
 
-void DX::DeviceResources::SetWindow(const DeviceResources::DeviceParam& param)
+void DX::DeviceD12::SetWindow(const DeviceD12::DeviceParam& param)
 {
 	m_wnd = param.pWnd;
 	m_LgcWidth = param.width;
@@ -398,7 +440,7 @@ void DX::DeviceResources::SetWindow(const DeviceResources::DeviceParam& param)
 	CreateWindowSizeDependentResources();
 }
 
-void DX::DeviceResources::SetLogicalSize(float cx, float cy)
+void DX::DeviceD12::SetLogicalSize(float cx, float cy)
 {
 	if (m_LgcWidth != cx || m_LgcHeight != cy)
 	{
@@ -409,7 +451,7 @@ void DX::DeviceResources::SetLogicalSize(float cx, float cy)
 }
 
 // This method is called in the event handler for the DpiChanged event.
-void DX::DeviceResources::SetDpi(float dpi, float cx, float cy)
+void DX::DeviceD12::SetDpi(float dpi, float cx, float cy)
 {
 	if (dpi != m_dpi)
 	{
@@ -423,7 +465,7 @@ void DX::DeviceResources::SetDpi(float dpi, float cx, float cy)
 	}
 }
 
-void DX::DeviceResources::SetCurrentOrientation(const EDisplayOrientation& eCurrentRotation)
+void DX::DeviceD12::SetCurrentOrientation(const EDisplayOrientation& eCurrentRotation)
 {
 	if (m_eCurrentRotation != eCurrentRotation)
 	{
@@ -433,7 +475,7 @@ void DX::DeviceResources::SetCurrentOrientation(const EDisplayOrientation& eCurr
 }
 
 // This method is called in the event handler for the DisplayContentsInvalidated event.
-void DX::DeviceResources::ValidateDevice()
+void DX::DeviceD12::ValidateDevice()
 {
 	// The D3D Device is no longer valid if the default adapter changed since the device
 	// was created or if the device has been removed.
@@ -472,30 +514,8 @@ void DX::DeviceResources::ValidateDevice()
 	}
 }
 
-// Present the contents of the swap chain to the screen.
-void DX::DeviceResources::Present()
-{
-	// The first argument instructs DXGI to block until VSync, putting the application
-	// to sleep until the next VSync. This ensures we don't waste any cycles rendering
-	// frames that will never be displayed to the screen.
-	HRESULT hr = m_swapChain->Present(1, 0);
-
-	// If the device was removed either by a disconnection or a driver upgrade, we 
-	// must recreate all device resources.
-	if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
-	{
-		m_deviceRemoved = true;
-	}
-	else
-	{
-		ThrowIfFailed(hr);
-
-		MoveToNextFrame();
-	}
-}
-
 // Wait for pending GPU work to complete.
-void DX::DeviceResources::WaitForGpu()
+void DX::DeviceD12::WaitForGpu()
 {
 	// Schedule a Signal command in the queue.
 	ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), m_fenceValues[m_currentFrame]));
@@ -509,7 +529,7 @@ void DX::DeviceResources::WaitForGpu()
 }
 
 // Prepare to render the next frame.
-void DX::DeviceResources::MoveToNextFrame()
+void DX::DeviceD12::MoveToNextFrame()
 {
 	// Schedule a Signal command in the queue.
 	const UINT64 currentFenceValue = m_fenceValues[m_currentFrame];
@@ -531,7 +551,7 @@ void DX::DeviceResources::MoveToNextFrame()
 
 // This method determines the rotation between the display device's native Orientation and the
 // current display orientation.
-DXGI_MODE_ROTATION DX::DeviceResources::ComputeDisplayRotation()
+DXGI_MODE_ROTATION DX::DeviceD12::ComputeDisplayRotation()
 {
 	DXGI_MODE_ROTATION rotation = DXGI_MODE_ROTATION_UNSPECIFIED;
 
@@ -587,7 +607,7 @@ DXGI_MODE_ROTATION DX::DeviceResources::ComputeDisplayRotation()
 
 // This method acquires the first available hardware adapter that supports Direct3D 12.
 // If no such adapter can be found, *ppAdapter will be set to nullptr.
-void DX::DeviceResources::GetHardwareAdapter(IDXGIAdapter1** ppAdapter)
+void DX::DeviceD12::GetHardwareAdapter(IDXGIAdapter1** ppAdapter)
 {
 	ComPtr<IDXGIAdapter1> adapter;
 	*ppAdapter = nullptr;

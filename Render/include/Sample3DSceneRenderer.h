@@ -61,36 +61,32 @@ namespace FispApp
 	};
 
 	// This sample renderer instantiates a basic rendering pipeline.
-	class Sample3DSceneRenderer
+	class MeshD12 : public IMeshRender
 	{
 	public:
-		Sample3DSceneRenderer(const std::shared_ptr<DX::DeviceResources>& deviceResources);
-		~Sample3DSceneRenderer();
-		void CreateDeviceDependentResources();
-		void CreateWindowSizeDependentResources();
-		void Update();
-		bool Render();
-		bool loadingComplete() const { return m_loadingComplete; }
-		//void SaveState();
+		MeshD12(IDevice* pDevice);
+		~MeshD12();
 
-		//void StartTracking();
-		//void TrackingUpdate(float positionX);
-		//void StopTracking();
-		//bool IsTracking() { return m_tracking; }
+	public:
+		void device(IDevice* pDevice) override;
+		void build(IEntity*	pEntity) override;
+		void update(float delta) override;
+		void render(float delta) override;
 
-	//private:
-		//void LoadState();
-		void Rotate(float radians);
+	private:
+		IDevice*	mpDeviceRef;
 
-		//
-		//Blob loadFile(const std::string& strFile);
+	public:
+		void onSize();
+		bool isLoaded() const { return m_loadingComplete; }
+		void rotate(float radians);
 
 	private:
 		// Constant buffers must be 256-byte aligned.
 		static const UINT c_alignedConstantBufferSize = (sizeof(ModelViewProjectionConstantBuffer) + 255) & ~255;
 
 		// Cached pointer to device resources.
-		std::shared_ptr<DX::DeviceResources> m_deviceResources;
+		std::shared_ptr<DX::DeviceD12> m_deviceResources;
 
 		// Direct3D resources for cube geometry.
 		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>	m_commandList;

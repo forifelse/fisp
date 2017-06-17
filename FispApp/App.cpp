@@ -107,7 +107,7 @@ void App::Run()
 			{
 				if (m_main->Render())
 				{
-					m_main->GetDeviceResources(getDeviceParam())->Present();
+					m_main->GetDeviceResources(getDeviceParam())->present();
 				}
 			}
 			//PIXEndEvent(commandQueue);
@@ -209,9 +209,9 @@ void App::OnDisplayContentsInvalidated(DisplayInformation^ sender, Object^ args)
 	m_main->GetDeviceResources(getDeviceParam())->ValidateDevice();
 }
 
-DX::DeviceResources::DeviceParam App::getDeviceParam()
+DX::DeviceD12::DeviceParam App::getDeviceParam()
 {
-	DX::DeviceResources::DeviceParam param;
+	DX::DeviceD12::DeviceParam param;
 
 	Windows::UI::Core::CoreWindow^ window = CoreWindow::GetForCurrentThread();
 	Platform::Agile<Windows::UI::Core::CoreWindow>	wnd(window);

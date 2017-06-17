@@ -49,6 +49,26 @@ namespace fisp
 		};
 
 		/*-----------------------------------------------------------
+		class IEntity
+		------------------------------------------------------------*/
+		class IEntity : public IRoot
+		{
+		public:
+		};
+
+		/*-----------------------------------------------------------
+		class IMeshRender
+		------------------------------------------------------------*/
+		class IMeshRender : public IRoot
+		{
+		public:
+			virtual void device(IDevice* pDevice) = 0;
+			virtual void build(IEntity*	pEntity) = 0;
+			virtual void update(float delta) = 0;
+			virtual void render(float delta) = 0;
+		};
+
+		/*-----------------------------------------------------------
 		class IRender
 		------------------------------------------------------------*/
 		class IRender : public IRoot
@@ -91,8 +111,8 @@ namespace fisp
 			virtual void render(float delta) = 0;
 
 		public:
-			virtual void fullscreen(bool bFullscreen) = 0;
-			virtual void dbPath(IDBPath* pDBPath) = 0;
+			//virtual void fullscreen(bool bFullscreen) = 0;
+			//virtual void dbPath(IDBPath* pDBPath) = 0;
 			//virtual void eventPreRender(IDelegate* pEvent) = 0;
 			//virtual void eventPostRender(IDelegate* pEvent) = 0;
 			//virtual bool createPipelineState(ShaderState* pState) = 0;
@@ -117,7 +137,8 @@ namespace fisp
 		------------------------------------------------------------*/
 		class IScene : public IRoot
 		{
-		public:			
+		public:
+			virtual void onSize() = 0;
 		};
 
 		/*-----------------------------------------------------------

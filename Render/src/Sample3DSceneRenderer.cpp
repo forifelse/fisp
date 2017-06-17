@@ -30,28 +30,30 @@ inline void SetName(ID3D12Object*, LPCWSTR)
 #define NAME_D3D12_OBJECT(x) SetName(x.Get(), L#x)
 
 // Loads vertex and pixel shaders from files and instantiates the cube geometry.
-Sample3DSceneRenderer::Sample3DSceneRenderer(const std::shared_ptr<DX::DeviceResources>& deviceResources) :
-	m_loadingComplete(false),
-	m_radiansPerSecond(XM_PIDIV4),	// rotate 45 degrees per second
+MeshD12::MeshD12(IDevice* pDevice)
+	: mpDeviceRef(pDevice)
+	, m_loadingComplete(false)
+	, m_radiansPerSecond(XM_PIDIV4)	// rotate 45 degrees per second
 	//m_angle(0),
 	//m_tracking(false),
-	m_mappedConstantBuffer(nullptr),
-	m_deviceResources(deviceResources)
+	, m_mappedConstantBuffer(nullptr)
+	, m_deviceResources(nullptr)
 {
+	m_deviceResources = std::shared_ptr<DX::DeviceD12>((DX::DeviceD12*)pDevice);
 	//LoadState();
 	ZeroMemory(&m_constantBufferData, sizeof(m_constantBufferData));
-
-	CreateDeviceDependentResources();
-	CreateWindowSizeDependentResources();
+	build(nullptr);
+	onSize();
 }
 
-Sample3DSceneRenderer::~Sample3DSceneRenderer()
+MeshD12::~MeshD12()
 {
+	mpDeviceRef = nullptr;
 	m_constantBuffer->Unmap(0, nullptr);
 	m_mappedConstantBuffer = nullptr;
 }
 
-void Sample3DSceneRenderer::CreateDeviceDependentResources()
+void MeshD12::build(IEntity* pEntity)//CreateDeviceDependentResources()
 {
 	auto d3dDevice = m_deviceResources->GetD3DDevice();
 
@@ -302,7 +304,7 @@ void Sample3DSceneRenderer::CreateDeviceDependentResources()
 }
 
 // Initializes view parameters when the window size changes.
-void Sample3DSceneRenderer::CreateWindowSizeDependentResources()
+void MeshD12::onSize()
 {
 	float cx, cy;
 	m_deviceResources->OutSize(cx, cy);
@@ -350,18 +352,10 @@ void Sample3DSceneRenderer::CreateWindowSizeDependentResources()
 }
 
 // Called once per frame, rotates the cube and calculates the model and view matrices.
-void Sample3DSceneRenderer::Update()
+void MeshD12::update(float delta)
 {
 	if (m_loadingComplete)
 	{
-		//if (!m_tracking)
-		//{
-		//	// Rotate the cube a small amount.
-		//	m_angle += static_cast<float>(timer.GetElapsedSeconds()) * m_radiansPerSecond;
-
-		//	Rotate(m_angle);
-		//}
-
 		// Update the constant buffer resource.
 		UINT8* destination = m_mappedConstantBuffer + (m_deviceResources->GetCurrentFrameIndex() * c_alignedConstantBufferSize);
 		memcpy(destination, &m_constantBufferData, sizeof(m_constantBufferData));
@@ -369,7 +363,7 @@ void Sample3DSceneRenderer::Update()
 }
 
 //// Saves the current state of the renderer.
-//void Sample3DSceneRenderer::SaveState()
+//void Renderdx12::SaveState()
 //{
 //	auto state = ApplicationData::Current->LocalSettings->Values;
 //
@@ -387,7 +381,7 @@ void Sample3DSceneRenderer::Update()
 //}
 //
 //// Restores the previous state of the renderer.
-//void Sample3DSceneRenderer::LoadState()
+//void Renderdx12::LoadState()
 //{
 //	auto state = ApplicationData::Current->LocalSettings->Values;
 //	if (state->HasKey(AngleKey))
@@ -403,19 +397,19 @@ void Sample3DSceneRenderer::Update()
 //}
 
 // Rotate the 3D cube model a set amount of radians.
-void Sample3DSceneRenderer::Rotate(float radians)
+void MeshD12::rotate(float radians)
 {
 	// Prepare to pass the updated model matrix to the shader.
 	XMStoreFloat4x4(&m_constantBufferData.model, XMMatrixTranspose(XMMatrixRotationY(radians)));
 }
 
-//void Sample3DSceneRenderer::StartTracking()
+//void Renderdx12::StartTracking()
 //{
 //	m_tracking = true;
 //}
 //
 //// When tracking, the 3D cube can be rotated around its Y axis by tracking pointer position relative to the output screen width.
-//void Sample3DSceneRenderer::TrackingUpdate(float positionX)
+//void Renderdx12::TrackingUpdate(float positionX)
 //{
 //	if (m_tracking)
 //	{
@@ -426,19 +420,27 @@ void Sample3DSceneRenderer::Rotate(float radians)
 //	}
 //}
 //
-//void Sample3DSceneRenderer::StopTracking()
+//void Renderdx12::StopTracking()
 //{
 //	m_tracking = false;
 //}
 
+void MeshD12::device(IDevice* pDevice)
+{
+
+}
+
+//void MeshD12::build(IEntity* pEntity)
+//{
+//
+//}
+
 // Renders one frame using the vertex and pixel shaders.
-bool Sample3DSceneRenderer::Render()
+void MeshD12::render(float delta)
 {
 	// Loading is asynchronous. Only draw geometry after it's loaded.
 	if (!m_loadingComplete)
-	{
-		return false;
-	}
+		return;
 
 	ThrowIfFailed(m_deviceResources->GetCommandAllocator()->Reset());
 
@@ -494,10 +496,10 @@ bool Sample3DSceneRenderer::Render()
 	ID3D12CommandList* ppCommandLists[] = { m_commandList.Get() };
 	m_deviceResources->GetCommandQueue()->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
-	return true;
+	return;
 }
 
-//Blob Sample3DSceneRenderer::loadFile(const std::string& strFile)
+//Blob Renderdx12::loadFile(const std::string& strFile)
 //{
 //	Blob blob;
 //	if (strFile.length() <= 0)

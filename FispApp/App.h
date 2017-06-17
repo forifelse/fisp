@@ -40,7 +40,7 @@ namespace FispApp
 
 	private:
 		// Private accessor for m_deviceResources, protects against device removed errors.
-		DX::DeviceResources::DeviceParam getDeviceParam();
+		DX::DeviceD12::DeviceParam getDeviceParam();
 
 		bool m_windowClosed;
 		bool m_windowVisible;

@@ -27,7 +27,7 @@ namespace FispApp
 		void scene(IScene* pScene);
 
 
-		void CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources);
+		void CreateRenderers(const std::shared_ptr<DX::DeviceD12>& deviceResources);
 		void Update();
 		bool Render();
 
@@ -36,7 +36,7 @@ namespace FispApp
 		void OnResuming();
 		void OnDeviceRemoved();
 
-		std::shared_ptr<DX::DeviceResources> GetDeviceResources(const DX::DeviceResources::DeviceParam& param);
+		std::shared_ptr<DX::DeviceD12> GetDeviceResources(const DX::DeviceD12::DeviceParam& param);
 
 	protected:
 		void SaveState();
@@ -44,8 +44,8 @@ namespace FispApp
 
 	private:
 		// TODO: Replace with your own content renderers.
-		std::unique_ptr<Sample3DSceneRenderer> m_sceneRenderer;
-		std::shared_ptr<DX::DeviceResources> m_deviceResources;
+		std::unique_ptr<MeshD12> m_pMeshD12;
+		std::shared_ptr<DX::DeviceD12> m_deviceResources;
 		// Rendering loop timer.
 		ITimer*		mpTimer;
 		Render::InitParam	mRndParam;
@@ -62,11 +62,13 @@ namespace FispApp
 		MainWnd();
 		~MainWnd();
 
-		virtual void mainSM(IMainSM* pMainSM) override;
 		virtual void run() override;
 		virtual void show(bool bShow) override;
 		virtual String exePath() override;
 		virtual bool isUWP() const override;
+		virtual IMainSM* mainSM() override;
+		virtual const IMainSM* mainSM() const override;
+		virtual void mainSM(IMainSM* pMainSM) override;
 
 		//void CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources);
 		//void Update();
@@ -89,7 +91,7 @@ namespace FispApp
 		//std::shared_ptr<DX::DeviceResources> m_deviceResources;
 		// Rendering loop timer.
 		ITimer*		mpTimer;
-
+		IMainSM*	mpMainSM;
 		//
 		float	m_angle;
 		bool	m_tracking;

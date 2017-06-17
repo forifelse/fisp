@@ -81,11 +81,12 @@ void FispAppMain::scene(IScene* pScene)
 }
 
 // Creates and initializes the renderers.
-void FispAppMain::CreateRenderers(const std::shared_ptr<DX::DeviceResources>& deviceResources)
+void FispAppMain::CreateRenderers(const std::shared_ptr<DX::DeviceD12>& deviceResources)
 {
 	m_deviceResources = deviceResources;
 	// TODO: Replace this with your app's content initialization.
-	m_sceneRenderer = std::unique_ptr<Sample3DSceneRenderer>(new Sample3DSceneRenderer(deviceResources));
+	//m_pMeshD12 = std::unique_ptr<MeshD12>(new MeshD12(deviceResources));
+	m_pMeshD12 = std::unique_ptr<MeshD12>(new MeshD12(deviceResources.get()));
 	LoadState();
 	OnWindowSizeChanged();
 }
@@ -94,19 +95,19 @@ void FispAppMain::CreateRenderers(const std::shared_ptr<DX::DeviceResources>& de
 void FispAppMain::Update()
 {
 	// Update scene objects.
-	mpTimer->tick();
+	float delta = mpTimer->tick();
 	//
-	if (m_sceneRenderer->loadingComplete())
+	if (m_pMeshD12->isLoaded())
 	{
 		if (!m_tracking)
 		{
 			// Rotate the cube a small amount.
 			m_angle += static_cast<float>(mpTimer->delta());
-			m_sceneRenderer->Rotate(m_angle);
+			m_pMeshD12->rotate(m_angle);
 		}
 	}
 	// TODO: Replace this with your app's content update functions.
-	m_sceneRenderer->Update();
+	m_pMeshD12->update(delta);
 }
 
 // Renders the current frame according to the current application state.
@@ -114,21 +115,21 @@ void FispAppMain::Update()
 bool FispAppMain::Render()
 {
 	// Don't try to render anything before the first Update.
-	if (mpTimer->elapse() <= 0)
-	{
+	const float delta = mpTimer->elapse();
+	if (delta <= 0)
 		return false;
-	}
 
 	// Render the scene objects.
 	// TODO: Replace this with your app's content rendering functions.
-	return m_sceneRenderer->Render();
+	m_pMeshD12->render(delta);
+	return true;
 }
 
 // Updates application state when the window's size changes (e.g. device orientation change)
 void FispAppMain::OnWindowSizeChanged()
 {
 	// TODO: Replace this with the size-dependent initialization of your app's content.
-	m_sceneRenderer->CreateWindowSizeDependentResources();
+	m_pMeshD12->onSize();// > CreateWindowSizeDependentResources();
 }
 
 // Notifies the app that it is being suspended.
@@ -159,7 +160,7 @@ void FispAppMain::OnDeviceRemoved()
 	// and its resources which are no longer valid.
 	//m_sceneRenderer->SaveState();
 	SaveState();
-	m_sceneRenderer = nullptr;
+	m_pMeshD12 = nullptr;
 }
 
 // Saves the current state of the renderer.
@@ -196,7 +197,7 @@ void FispAppMain::LoadState()
 	}
 }
 
-std::shared_ptr<DX::DeviceResources> FispAppMain::GetDeviceResources(const DX::DeviceResources::DeviceParam& param)
+std::shared_ptr<DX::DeviceD12> FispAppMain::GetDeviceResources(const DX::DeviceD12::DeviceParam& param)
 {
 	if (m_deviceResources != nullptr && m_deviceResources->IsDeviceRemoved())
 	{
@@ -215,7 +216,7 @@ std::shared_ptr<DX::DeviceResources> FispAppMain::GetDeviceResources(const DX::D
 
 	if (m_deviceResources == nullptr)
 	{
-		m_deviceResources = std::make_shared<DX::DeviceResources>();
+		m_deviceResources = std::make_shared<DX::DeviceD12>();
 		//m_deviceResources->SetWindow(reinterpret_cast<IUnknown*>(wnd), w, h, eNat, eCur, LogicalDpi);
 		m_deviceResources->SetWindow(param);
 		CreateRenderers(m_deviceResources);
@@ -244,11 +245,6 @@ MainWnd::~MainWnd()
 	Timer::destroyMem<ITimer>(mpTimer);
 }
 
-void MainWnd::mainSM(IMainSM* pMainSM)
-{
-
-}
-
 void MainWnd::run()
 {
 
@@ -267,6 +263,21 @@ String MainWnd::exePath()
 bool MainWnd::isUWP() const
 {
 	return true;
+}
+
+IMainSM* MainWnd::mainSM()
+{
+	return 0;
+}
+
+const IMainSM* MainWnd::mainSM() const
+{
+	return 0;
+}
+
+void MainWnd::mainSM(IMainSM* pMainSM)
+{
+
 }
 
 //// Creates and initializes the renderers.
@@ -317,7 +328,9 @@ bool MainWnd::isUWP() const
 void MainWnd::OnWindowSizeChanged()
 {
 	// TODO: Replace this with the size-dependent initialization of your app's content.
-	m_sceneRenderer->CreateWindowSizeDependentResources();
+	mpMainSM->appFrame()->scene()->onSize();
+	//m_sceneRenderer->CreateWindowSizeDependentResources();
+
 }
 
 // Notifies the app that it is being suspended.
@@ -348,7 +361,7 @@ void MainWnd::OnDeviceRemoved()
 	// and its resources which are no longer valid.
 	//m_sceneRenderer->SaveState();
 	SaveState();
-	m_sceneRenderer = nullptr;
+	//m_sceneRenderer = nullptr;
 }
 
 // Saves the current state of the renderer.

@@ -16,7 +16,7 @@ namespace DX
 	static const UINT c_frameCount = 3;		// Use triple buffering.
 
 	// Controls all the DirectX device resources.
-	class DeviceResources
+	class DeviceD12 : public IDevice
 	{
 	public:
 		struct DeviceParam
@@ -30,13 +30,19 @@ namespace DX
 		};
 
 	public:
-		DeviceResources(DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT);
-		void SetWindow(const DeviceResources::DeviceParam& param);
+		virtual void fullscreen(bool bFullscreen) override;
+		virtual void clearRT() override;
+		virtual void present(uint uSyncInterval = 0, uint uFlags = 0) override;
+		virtual void* deviceHW() override;
+		virtual uint backbufferCount() const override;
+
+	public:
+		DeviceD12(DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT);
+		void SetWindow(const DeviceD12::DeviceParam& param);
 		void SetLogicalSize(float cx, float cy);
 		void SetCurrentOrientation(const EDisplayOrientation& eCurrentRotation);
 		void SetDpi(float dpi, float cx, float cy);
 		void ValidateDevice();
-		void Present();
 		void WaitForGpu();
 
 		// The size of the render target, in pixels.

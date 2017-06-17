@@ -22,7 +22,7 @@ namespace fisp
 			virtual ~Render();
 
 		private:
-			
+			IDevice*	mpDevice;
 		};
 
 

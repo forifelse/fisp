@@ -89,11 +89,14 @@ namespace fisp
 		class IWnd : public IRoot
 		{
 		public:
-			virtual void mainSM(IMainSM* pMainSM) = 0;
 			virtual void run() = 0;
 			virtual void show(bool bShow) = 0;
 			virtual String exePath() = 0;
 			virtual bool isUWP() const = 0;
+		public:
+			virtual IMainSM* mainSM() = 0;
+			virtual const IMainSM* mainSM() const = 0;
+			virtual void mainSM(IMainSM* pMainSM) = 0;
 		};
 
 		/*-----------------------------------------------------------
