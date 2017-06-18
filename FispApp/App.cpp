@@ -85,40 +85,42 @@ void App::SetWindow(CoreWindow^ window)
 // Initializes scene resources, or loads a previously saved app state.
 void App::Load(Platform::String^ entryPoint)
 {
+	Fisp::root()->mainSM()->startup();
 }
 
 // This method is called after the window becomes active.
 void App::Run()
 {
-	while (!m_windowClosed)
-	{
-		if (m_windowVisible)
-		{
-			CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
+	return Fisp::root()->run();
+	//while (!m_windowClosed)
+	//{
+	//	if (m_windowVisible)
+	//	{
+	//		CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
 
-			//auto commandQueue = m_main->GetDeviceResources(getDeviceParam())->GetCommandQueue();
-			//PIXBeginEvent(commandQueue, 0, L"Update");
-			FispAppMain* m_main = (FispAppMain*)Fisp::root()->mainSM()->appFrame();
-			m_main->GetDeviceResources(getDeviceParam());
-			{
-				m_main->Update();
-			}
-			//PIXEndEvent(commandQueue);
+	//		//auto commandQueue = m_main->GetDeviceResources(getDeviceParam())->GetCommandQueue();
+	//		//PIXBeginEvent(commandQueue, 0, L"Update");
+	//		FispAppMain* m_main = (FispAppMain*)Fisp::root()->mainSM()->appFrame();
+	//		m_main->GetDeviceResources(getDeviceParam());
+	//		{
+	//			m_main->Update();
+	//		}
+	//		//PIXEndEvent(commandQueue);
 
-			//PIXBeginEvent(commandQueue, 0, L"Render");
-			{
-				if (m_main->Render())
-				{
-					m_main->GetDeviceResources(getDeviceParam())->present();
-				}
-			}
-			//PIXEndEvent(commandQueue);
-		}
-		else
-		{
-			CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessOneAndAllPending);
-		}
-	}
+	//		//PIXBeginEvent(commandQueue, 0, L"Render");
+	//		{
+	//			if (m_main->Render())
+	//			{
+	//				m_main->GetDeviceResources(getDeviceParam())->present();
+	//			}
+	//		}
+	//		//PIXEndEvent(commandQueue);
+	//	}
+	//	else
+	//	{
+	//		CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessOneAndAllPending);
+	//	}
+	//}
 }
 
 // Required for IFrameworkView.

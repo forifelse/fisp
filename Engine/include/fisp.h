@@ -15,18 +15,20 @@ namespace fisp
 		/*-----------------------------------------------------------
 		class Fisp
 		------------------------------------------------------------*/
-		class Fisp : public IRoot
+		class Fisp //: public IRoot
 		{
 		public:
-			virtual ~Fisp();
 			static Fisp* root();
-			void init(IFrame* pAppRef, IWnd* pWndRef);
+			bool init(IFrame* pAppRef, IWnd* pWndRef);
 			void run();
+			void unInit();
 
 			IMainSM* mainSM();
 			const IMainSM* mainSM() const;
 			IWnd* wnd();
 			const IWnd* wnd() const;
+
+			~Fisp();
 
 		private:
 			Fisp();
@@ -36,6 +38,7 @@ namespace fisp
 			IMainSM*	mpMainSM;
 			IFrame*		mpAppDefault;
 			IWnd*		mpWnd;
+			bool		mbInited;
 			
 		};
 
@@ -67,8 +70,8 @@ MAIN_FUNCTION() \
 #define FISP_RUN( AppClass, WndClass ) \
 MAIN_FUNCTION() \
 { \
-	IAppFrame* pApp = AppClass::createMem<AppClass>(); \
-	IWnd* pWnd      = WndClass::createMem<WndClass>(); \
+	IFrame* pApp = AppClass::createMem<AppClass>(); \
+	IWnd* pWnd   = WndClass::createMem<WndClass>(); \
 	fisp::engine::RunApp( pApp, pWnd ); \
 	return 0; \
 }

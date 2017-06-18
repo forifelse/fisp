@@ -49,8 +49,9 @@ namespace fisp
 			return &gFisp;
 		}
 
-		void Fisp::init(IFrame* pAppRef, IWnd* pWndRef)
+		bool Fisp::init(IFrame* pAppRef, IWnd* pWndRef)
 		{
+			// init
 			if (nullptr == pAppRef)
 			{
 				if (nullptr == mpAppDefault)
@@ -59,32 +60,33 @@ namespace fisp
 			}
 			mpMainSM->appFrame(pAppRef);
 			mpWnd = pWndRef;
-		}
-
-		void Fisp::run()
-		{
+			// setup
+			mbInited = false;
 			if (nullptr == mpWnd)
-				return;
+				return false;
 			mpMainSM->dbPath()->exePath(mpWnd->exePath());
 			mpMainSM->dbPath()->dataPath(0);
 			if (!mpMainSM->setup())
-				return;
-			//
+				return false;
+			// startup
 			IRender::InitParam* pInitParam = mpMainSM->appFrame()->initParamRnd();
 			mpWnd->create(pInitParam);
 			mpWnd->mainSM(mpMainSM);
 			mpWnd->show(true);
-			if (mpWnd->isUWP())
-			{
-				mpWnd->run();
-			}
-			else
-			{
-				mpMainSM->startup();
-				mpWnd->run();
-				mpMainSM->cleanup();
-			}
-			//IWnd::destroyMem<IWnd>(mpWnd);
+			mpMainSM->startup();
+			//
+			mbInited = true;
+			return mbInited;
+		}
+
+		void Fisp::run()
+		{
+			mpWnd->run();		
+		}
+
+		void Fisp::unInit()
+		{
+			mpMainSM->cleanup();
 			mpWnd = nullptr;
 		}
 
@@ -115,6 +117,7 @@ namespace fisp
 		{
 			Fisp::root()->init(pApp, pWnd);
 			Fisp::root()->run();
+			Fisp::root()->unInit();
 		}
 
 
