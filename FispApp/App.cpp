@@ -23,7 +23,9 @@ using Microsoft::WRL::ComPtr;
 [Platform::MTAThread]
 int main(Platform::Array<Platform::String^>^)
 {
-	Fisp::root()->init(new FispAppMain, new MainWnd);
+	FispAppMain app;
+	MainWnd wnd;
+	Fisp::root()->init(&app, &wnd);
 	//
 	auto viewSource = ref new ViewSource();
 	CoreApplication::Run(viewSource);

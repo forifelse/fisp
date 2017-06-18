@@ -49,16 +49,16 @@ namespace fisp
 			return &gFisp;
 		}
 
-		void Fisp::init(IFrame* pApp, IWnd* pWnd)
+		void Fisp::init(IFrame* pAppRef, IWnd* pWndRef)
 		{
-			if (nullptr == pApp)
+			if (nullptr == pAppRef)
 			{
 				if (nullptr == mpAppDefault)
 					mpAppDefault = Frame::createMem<Frame>();
-				pApp = mpAppDefault;
+				pAppRef = mpAppDefault;
 			}
-			mpMainSM->appFrame(pApp);
-			mpWnd = pWnd;
+			mpMainSM->appFrame(pAppRef);
+			mpWnd = pWndRef;
 		}
 
 		void Fisp::run()
@@ -84,7 +84,8 @@ namespace fisp
 				mpWnd->run();
 				mpMainSM->cleanup();
 			}
-			IWnd::destroyMem<IWnd>(mpWnd);
+			//IWnd::destroyMem<IWnd>(mpWnd);
+			mpWnd = nullptr;
 		}
 
 		IMainSM* Fisp::mainSM()

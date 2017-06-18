@@ -20,7 +20,7 @@ namespace fisp
 		public:
 			virtual ~Fisp();
 			static Fisp* root();
-			void init(IFrame* pApp, IWnd* pWnd);
+			void init(IFrame* pAppRef, IWnd* pWndRef);
 			void run();
 
 			IMainSM* mainSM();
