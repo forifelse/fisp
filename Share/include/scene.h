@@ -7,8 +7,7 @@ Copyright (c). All rights reserved.
 
 #pragma once
 #include "scenedata.h"
-#include "renderif.h"
-//#include "entity.h"
+#include "sceneif.h"
 
 namespace fisp
 {

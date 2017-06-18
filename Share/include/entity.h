@@ -6,34 +6,30 @@ Copyright (c). All rights reserved.
 ------------------------------------------------------------*/
 
 #pragma once
-#include "pch.h"
+#include "scenedata.h"
+#include "entityif.h"
 
 namespace fisp
 {
-	namespace render
+	namespace share
 	{
 		/*-----------------------------------------------------------
-		class Render
+		class Entity
 		------------------------------------------------------------*/
-		class Render : public IRender
+		class Entity : public IEntity
 		{
 		public:
-			Render();
-			virtual ~Render();
+			Entity();
+			virtual ~Entity();
 
 			void update(float delta) override;
 			void render(float delta) override;
 
-			ICamera* camera() override;
-			const ICamera* camera() const override;
-			//void scene(IScene* pScene) override;
-			IScene* scene() override;
-			const IScene* scene() const override;
+			//void makePrimi(IPrimiMaker* pPrimiMaker) override;
+			void buildMesh(IMeshRender* pMeshRender) override;
 
 		private:
-			IDevice*	mpDevice;
-			ICamera*	mpCamera;
-			IScene*		mpScene;
+			
 		};
 
 

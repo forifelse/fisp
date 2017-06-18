@@ -22,6 +22,31 @@ namespace fisp
 		{
 		}
 
+		void Scene::clear()
+		{
+
+		}
+
+		void Scene::flush()
+		{
+
+		}
+
+		void Scene::update(float delta)
+		{
+
+		}
+
+		void Scene::render(float delta)
+		{
+
+		}
+
+		void Scene::onSize()
+		{
+
+		}
+
 		bool Scene::writeScene(const SDScene* pScene, const std::string& strPathFile)
 		{
 			if (nullptr == pScene || nullptr == pScene->pRoot)

@@ -32,7 +32,19 @@
     <ClInclude Include="include\scene.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\entityif.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sceneif.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hwif.h">
+      <Filter>include</Filter>
+    </ClInclude>
     <ClInclude Include="include\renderif.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\entity.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,6 +53,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\scene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

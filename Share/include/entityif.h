@@ -7,7 +7,7 @@ Copyright (c). All rights reserved.
 
 #pragma once
 #include "scenedata.h"
-#include "renderif.h"
+#include "hwif.h"
 
 namespace fisp
 {
@@ -37,25 +37,6 @@ namespace fisp
 			virtual void build(IEntity*	pEntity) = 0;
 			virtual void update(float delta) = 0;
 			virtual void render(float delta) = 0;
-		};
-
-		/*-----------------------------------------------------------
-		class Entity
-		------------------------------------------------------------*/
-		class Entity : public IEntity
-		{
-		public:
-			Entity();
-			virtual ~Entity();
-
-			void update(float delta) override;
-			void render(float delta) override;
-
-			//void makePrimi(IPrimiMaker* pPrimiMaker) override;
-			void buildMesh(IMeshRender* pMeshRender) override;
-
-		private:
-			
 		};
 
 
