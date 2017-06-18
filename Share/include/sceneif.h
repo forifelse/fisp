@@ -20,7 +20,7 @@ namespace fisp
 		{
 		public:
 			virtual void clear() = 0;
-			virtual void flush() = 0;
+			virtual void build() = 0;
 			virtual void update(float delta) = 0;
 			virtual void render(float delta) = 0;
 			virtual void onSize() = 0;

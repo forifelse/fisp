@@ -73,9 +73,9 @@ namespace fisp
 			//// Optional UI (overlay) rendering pass.  This is LDR.  The buffer is already cleared.
 			//virtual void renderUI(class GraphicsContext& Context) {};
 			//
-			//// Decide if you want the app to exit.  By default, app continues until the 'ESC' key is pressed.
-			//virtual bool isQuit() = 0;
-			//virtual bool* isRunning() = 0;
+			// Decide if you want the app to exit.  By default, app continues until the 'ESC' key is pressed.
+			virtual bool isQuit() = 0;
+			virtual bool* isRunning() = 0;
 			virtual IFrame* appFrame() = 0;
 			virtual const IFrame* appFrame() const = 0;
 			virtual void appFrame(IFrame* pAppFrame) = 0;

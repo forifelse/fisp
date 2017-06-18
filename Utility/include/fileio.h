@@ -1,5 +1,11 @@
-#pragma once
+/*-----------------------------------------------------------
+Name:		fisp
+Author:		fisper@163.com
+Date:		2016.12
+Copyright (c). All rights reserved.
+------------------------------------------------------------*/
 
+#pragma once
 #include <string>
 #include <fstream>
 #include "base.h"
@@ -163,10 +169,108 @@ namespace fisp
 		/*-----------------------------------------------------------
 		class FileStream
 		------------------------------------------------------------*/
-		class FileStream
+		class FileStream : public FileIOBase
 		{
 		public:
+			FileStream();
+			FileStream(const String& strFile, const EFileMode& eMode = EFileMode::File_Mode_Read);
+			virtual ~FileStream();
+
+			virtual bool open(const String& strFile, const EFileMode& eMode);
+			virtual void close();
+			virtual bool read(String &strRead) const;
+			virtual bool read(String &strRead, ulong uSize, ulong uFrom = 0) const;
+			virtual bool write(const String& strWrite);
+			virtual void writeEnter();
+			virtual void flush();
+			Blob getBlob() const;
+			ulong getSize() const;
+			void setReadPos(ulong uIndex);
+			void setReadPosOffset(long uOffset, bool bForward = true);
+			void setWritePos(ulong uIndex);
+			void setWritePosOffset(long uOffset, bool bForward = true);
+			virtual void setWritePosAtBegin();
+			virtual void setWritePosAtEnd();
+			ulong getReadPos() const;
+			ulong getWritePos() const;
+			bool saveAs(const String& strFile);
+
+			void readLine(String& strRead, ulong uSize);
+			void readLine(String& strRead, const String& strDelimit);
+
+		public:
 			static Blob loadFile(const std::string& strFile);
+
+		protected:
+
+		private:
+			void doDestroy() override;
+
+		private:
+			std::fstream*	mpStream;
+		
 		};
+
+		/*-----------------------------------------------------------
+		class Log
+		------------------------------------------------------------*/
+		class Log : public IRoot//ILog
+		{
+		public:
+			enum ELogPlace
+			{
+				Log_Console,
+				Log_DebugOutput,
+				Log_File,
+				Log_UI,
+				Log_ALL,
+				Log_Max
+			};
+			enum ETimeType
+			{
+				Time_None,
+				Time_System,
+				Time_Elapse,
+				Time_Max
+			};
+
+			Log();
+
+		public:
+			virtual ~Log();
+			static Log* singleton();
+			static void destroyStatic();
+
+			void open();
+			void close();
+			Log* crateSubLogger(const String& strLogName);
+			void write(const String& strMsg, bool bOnlyForDebug = true, const ETimeType& eTime = Log::ETimeType::Time_Elapse);
+			void writeLine();
+			//static void sShow(char* szMsg, ...);
+			//static void sShow(const ELogPlace& eLog, char* szMsg, ...);
+			void setLogFilePath(const String& strLogFilePath);
+			const String& getLogFilePath() const;
+			void flush();
+
+		private:
+			virtual bool doCreate(void* pData = NULL) override;
+			virtual void doDestroy() override;
+			void showMsgOnConsole(const String& strMsg);
+			//void allocConsole(const String& strTitle = "");
+
+		private:
+			String					mstrLogFilePath;
+			FileStream				mIOStream;
+			TMap<String, Log*>*		mpLogMap;
+			//
+			bool					mbAllocConsole;
+		};
+
+		//
+#ifndef gLog
+#define gLog Log::singleton()
+#endif
+
+
 	}
 }

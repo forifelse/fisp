@@ -27,7 +27,7 @@ namespace fisp
 
 		}
 
-		void Scene::flush()
+		void Scene::build()
 		{
 
 		}

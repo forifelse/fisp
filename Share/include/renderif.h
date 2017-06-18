@@ -88,7 +88,7 @@ namespace fisp
 			//virtual void eventPreRender(IDelegate* pEvent) = 0;
 			//virtual void eventPostRender(IDelegate* pEvent) = 0;
 			//virtual bool createPipelineState(ShaderState* pState) = 0;
-			//virtual void flushScene() = 0;
+			virtual void buildScene() = 0;
 
 			////virtual void populateCmdList() = 0;
 			////virtual void waitForPreFrame() = 0;

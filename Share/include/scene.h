@@ -23,7 +23,7 @@ namespace fisp
 			virtual ~Scene();
 
 			virtual void clear() override;
-			virtual void flush() override;
+			virtual void build() override;
 			virtual void update(float delta) override;
 			virtual void render(float delta) override;
 			void onSize() override;

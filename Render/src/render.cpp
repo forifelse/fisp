@@ -37,6 +37,16 @@ namespace fisp
 			mpScene->render(delta);
 		}
 
+		void Render::buildScene()
+		{
+			if (nullptr != mpScene)
+			{
+				//IDrawWorker* pImp = mpDevice->drawWorker();
+				//mpScene->drawWorker(pImp);
+				mpScene->build();
+			}
+		}
+
 		ICamera* Render::camera()
 		{
 			return mpCamera;
@@ -60,6 +70,16 @@ namespace fisp
 		const IScene* Render::scene() const
 		{
 			return mpScene;
+		}
+
+		void Render::dbPath(IDBPath* pDBPath)
+		{
+			mpDBPath = pDBPath;
+		}
+
+		void Render::timer(ITimer* pTimer)
+		{
+			mpTimer = pTimer;
 		}
 
 	}
