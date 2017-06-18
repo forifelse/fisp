@@ -8,6 +8,7 @@ Copyright (c). All rights reserved.
 #pragma once
 #include "scenedata.h"
 #include "renderif.h"
+//#include "entity.h"
 
 namespace fisp
 {
@@ -22,11 +23,18 @@ namespace fisp
 			Scene();
 			virtual ~Scene();
 
+			virtual void clear() override;
+			virtual void flush() override;
+			virtual void update(float delta) override;
+			virtual void render(float delta) override;
+			void onSize() override;
+
 		public:
 			static bool writeScene(const SDScene* pScene, const std::string& strPathFile);
 			static bool readScene(SDScene* pScene, const std::string& strPathFile);
 
 		private:
+			IEntity* mpEntity;
 			
 		};
 
