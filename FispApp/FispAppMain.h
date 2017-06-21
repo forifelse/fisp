@@ -56,11 +56,11 @@ namespace FispApp
 		bool	m_tracking;
 	};
 
-	class MainWnd : public IWnd
+	class UWPWnd : public IWnd
 	{
 	public:
-		MainWnd();
-		~MainWnd();
+		UWPWnd();
+		~UWPWnd();
 
 		virtual void run() override;
 		virtual void show(bool bShow) override;

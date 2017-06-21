@@ -229,7 +229,7 @@ std::shared_ptr<DX::DeviceD12> FispAppMain::GetDeviceResources(const DX::DeviceD
 
 
 // Loads and initializes application assets when the application is loaded.
-MainWnd::MainWnd()
+UWPWnd::UWPWnd()
 {
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
@@ -240,42 +240,42 @@ MainWnd::MainWnd()
 	mpTimer = Timer::createMem<Timer>();
 }
 
-MainWnd::~MainWnd()
+UWPWnd::~UWPWnd()
 {
 	Timer::destroyMem<ITimer>(mpTimer);
 }
 
-void MainWnd::run()
+void UWPWnd::run()
 {
 
 }
 
-void MainWnd::show(bool bShow)
+void UWPWnd::show(bool bShow)
 {
 
 }
 
-String MainWnd::exePath()
+String UWPWnd::exePath()
 {
 	return "";
 }
 
-bool MainWnd::isUWP() const
+bool UWPWnd::isUWP() const
 {
 	return true;
 }
 
-IMainSM* MainWnd::mainSM()
+IMainSM* UWPWnd::mainSM()
 {
 	return 0;
 }
 
-const IMainSM* MainWnd::mainSM() const
+const IMainSM* UWPWnd::mainSM() const
 {
 	return 0;
 }
 
-void MainWnd::mainSM(IMainSM* pMainSM)
+void UWPWnd::mainSM(IMainSM* pMainSM)
 {
 
 }
@@ -325,7 +325,7 @@ void MainWnd::mainSM(IMainSM* pMainSM)
 //}
 
 // Updates application state when the window's size changes (e.g. device orientation change)
-void MainWnd::OnWindowSizeChanged()
+void UWPWnd::OnWindowSizeChanged()
 {
 	// TODO: Replace this with the size-dependent initialization of your app's content.
 	mpMainSM->appFrame()->scene()->onSize();
@@ -334,7 +334,7 @@ void MainWnd::OnWindowSizeChanged()
 }
 
 // Notifies the app that it is being suspended.
-void MainWnd::OnSuspending()
+void UWPWnd::OnSuspending()
 {
 	// TODO: Replace this with your app's suspending logic.
 
@@ -349,13 +349,13 @@ void MainWnd::OnSuspending()
 }
 
 // Notifes the app that it is no longer suspended.
-void MainWnd::OnResuming()
+void UWPWnd::OnResuming()
 {
 	// TODO: Replace this with your app's resuming logic.
 }
 
 // Notifies renderers that device resources need to be released.
-void MainWnd::OnDeviceRemoved()
+void UWPWnd::OnDeviceRemoved()
 {
 	// TODO: Save any necessary application or renderer state and release the renderer
 	// and its resources which are no longer valid.
@@ -365,7 +365,7 @@ void MainWnd::OnDeviceRemoved()
 }
 
 // Saves the current state of the renderer.
-void MainWnd::SaveState()
+void UWPWnd::SaveState()
 {
 	auto state = ApplicationData::Current->LocalSettings->Values;
 
@@ -383,7 +383,7 @@ void MainWnd::SaveState()
 }
 
 // Restores the previous state of the renderer.
-void MainWnd::LoadState()
+void UWPWnd::LoadState()
 {
 	auto state = ApplicationData::Current->LocalSettings->Values;
 	if (state->HasKey(AngleKey))

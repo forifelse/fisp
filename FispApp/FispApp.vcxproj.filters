@@ -37,6 +37,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="FispAppMain.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />

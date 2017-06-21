@@ -70,8 +70,8 @@ MAIN_FUNCTION() \
 #define FISP_RUN( AppClass, WndClass ) \
 MAIN_FUNCTION() \
 { \
-	IFrame* pApp = AppClass::createMem<AppClass>(); \
-	IWnd* pWnd   = WndClass::createMem<WndClass>(); \
-	fisp::engine::RunApp( pApp, pWnd ); \
+	AppClass app; \
+	WndClass wnd; \
+	fisp::engine::RunApp( &app, &wnd ); \
 	return 0; \
 }

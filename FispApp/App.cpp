@@ -19,18 +19,18 @@ using Microsoft::WRL::ComPtr;
 
 // The DirectX 12 Application template is documented at https://go.microsoft.com/fwlink/?LinkID=613670&clcid=0x409
 
-// The main function is only used to initialize our IFrameworkView class.
-[Platform::MTAThread]
-int main(Platform::Array<Platform::String^>^)
-{
-	FispAppMain app;
-	MainWnd wnd;
-	Fisp::root()->init(&app, &wnd);
-	//
-	auto viewSource = ref new ViewSource();
-	CoreApplication::Run(viewSource);
-	return 0;
-}
+//// The main function is only used to initialize our IFrameworkView class.
+//[Platform::MTAThread]
+//int main(Platform::Array<Platform::String^>^)
+//{
+//	FispAppMain app;
+//	MainWnd wnd;
+//	Fisp::root()->init(&app, &wnd);
+//	//
+//	auto viewSource = ref new ViewSource();
+//	CoreApplication::Run(viewSource);
+//	return 0;
+//}
 
 IFrameworkView^ ViewSource::CreateView()
 {
@@ -128,6 +128,7 @@ void App::Run()
 // class is torn down while the app is in the foreground.
 void App::Uninitialize()
 {
+	Fisp::root()->unInit();
 }
 
 // Application lifecycle event handlers.
