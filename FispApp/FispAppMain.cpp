@@ -247,7 +247,7 @@ UWPWnd::~UWPWnd()
 
 void UWPWnd::run()
 {
-
+	mpMainSM->render();
 }
 
 void UWPWnd::show(bool bShow)
@@ -277,7 +277,7 @@ const IMainSM* UWPWnd::mainSM() const
 
 void UWPWnd::mainSM(IMainSM* pMainSM)
 {
-
+	mpMainSM = pMainSM;
 }
 
 //// Creates and initializes the renderers.
